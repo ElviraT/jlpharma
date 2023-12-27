@@ -63,8 +63,9 @@
                                                     <div class="col-8">
                                                         <div class="input-group">
                                                             <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
-                                                                type="number" id="cant" min="1"
-                                                                class="form-control" value="1" onchange="add_cant()">
+                                                                type="number" id="cant{{ $pro->id }}" min="1"
+                                                                class="form-control" value="1"
+                                                                onchange="add_cant({{ $pro->id }})">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -74,7 +75,8 @@
                                                     <form action="{{ route('order.store') }}" method="post">
                                                         @csrf
                                                         <input type="hidden" name="id" value="{{ $pro->id }}">
-                                                        <input type="hidden" name="cant" id="cantidad" value="1">
+                                                        <input type="hidden" name="cant" id="cantidad{{ $pro->id }}"
+                                                            value="1">
                                                         <input type="submit" name="add" class="btn btn-outline-success"
                                                             value="Agregar">
                                                     </form>
@@ -100,9 +102,9 @@
             });
         });
 
-        function add_cant() {
-            var cant = document.getElementById("cant").value;
-            $('#cantidad').val(cant);
+        function add_cant(id) {
+            var cant = document.getElementById("cant" + id).value;
+            $('#cantidad' + id).val(cant);
         }
     </script>
 @endsection
