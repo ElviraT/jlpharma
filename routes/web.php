@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\configuracion\users\DrugstoreController;
 use App\Http\Controllers\Admin\configuracion\users\JluserController;
 use App\Http\Controllers\Admin\configuracion\users\PharmacyController;
 use App\Http\Controllers\Admin\configuracion\users\SellerController;
+use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -33,9 +34,7 @@ Route::get('/lang/{language}', function ($language) {
 })->name('language');
 
 Route::middleware(['auth', 'translate'])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('roles', RoleController::class)->except(['show'])->names('roles');
     Route::resource('countries', CountryController::class)->except(['show'])->names('countries');
     Route::resource('zones', ZoneController::class)->except(['show'])->names('zones');
@@ -68,6 +67,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::post('/order/remove', [OrderController::class, 'remove'])->name('order.remove');
     Route::post('/order/pedido', [OrderController::class, 'pedido'])->name('order.pedido');
     Route::post('/order/send', [OrderController::class, 'send'])->name('order.send');
+    Route::get('/order/{order}/detail', [OrderController::class, 'detalle'])->name('order.detalle');
 
     Route::controller(ComboController::class)->prefix('combo')->group(function () {
         Route::match(['get', 'post'], '/{country}/state', 'state')->name('combo_estado');

@@ -13,7 +13,15 @@ return new class extends Migration
     {
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('idSend');
+            $table->unsignedBigInteger('idReceives');
+            $table->unsignedBigInteger('idUser');
+            $table->float('total', 10, 2);
             $table->timestamps();
+
+            $table->foreign('idSend')->references('id')->on('users');
+            $table->foreign('idReceives')->references('id')->on('users');
+            $table->foreign('idUser')->references('id')->on('users');
         });
     }
 

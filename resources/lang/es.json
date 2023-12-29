@@ -1129,7 +1129,7 @@
     "Åland Islands": "Islas Åland",
     "List Roles": "Lista de roles",
     "Add Role": "Agregar Rol",
-    "Registered Medical": " Médicos Registrados",
+    "Registered Users": " Usuarios Registrados",
     "Registered Patients": "Pacientes Registrados",
     "Consultations of the month": "Consultas del Mes",
     "Consulting room": "Consultorios",
@@ -1198,5 +1198,7 @@
     "List Seller": "Lista de Vendedores",
     "Edit Seller": "Editar Vendedor",
     "Delete Seller": "Eliminar Vendedor",
-    "Products In Our Store": "Productos Disponibles"
+    "Products In Our Store": "Productos Disponibles",
+    "List Order": "Lista de Pedidos",
+    "Orders Total": "Pedidos Totales"
 }

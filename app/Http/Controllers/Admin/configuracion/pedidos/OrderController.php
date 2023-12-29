@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin\configuracion\pedidos;
 use App\Http\Controllers\Controller;
 use App\Models\Drugstore;
 use App\Models\Jluser;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Pharmacy;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
@@ -51,11 +53,38 @@ class OrderController extends Controller
     }
     public function checkout()
     {
-        return view('order.checkout');
+        $pedido = Order::select('nOrder')->orderBy('id', 'desc')->first();
+        return view('order.checkout', compact('pedido'));
     }
-    public function send()
+    public function send(Request $request)
     {
-        return view('order.checkout');
+        try {
+            $item = [
+                'nOrder' => $request['nOrder'],
+                'idSend' => $request['idSend'],
+                'idReceives' => $request['idReceives'],
+                'idUser' => auth()->user()->id,
+                'total' => $request['total']
+            ];
+            $order = Order::create($item);
+            for ($i = 0; $i < count($request['name']); $i++) {
+                $detalle = [
+                    'idOrder' => $order['id'],
+                    'name' => $request['name'][$i],
+                    'cant' => $request['cant'][$i],
+                    'price' => $request['price'][$i],
+                    'importe' => $request['importe'][$i],
+                ];
+                OrderDetail::create($detalle);
+            }
+
+            Cart::destroy();
+            Toastr::success('Pedido solicitado con exito', 'Success');
+        } catch (\Throwable $th) {
+            dd($th);
+            Toastr::error('Intente de nuevo', 'error');
+        }
+        return to_route('order.index');
     }
     public function remove(Request $request)
     {
@@ -75,5 +104,10 @@ class OrderController extends Controller
     {
 
         return to_route('order.index');
+    }
+
+    public function detalle(Order $order)
+    {
+        return view('order.detalle', compact('order'));
     }
 }

@@ -120,17 +120,17 @@
                                         <form action="{{ route('order.send') }}" method="post">
                                             @csrf
                                             @foreach (Cart::content() as $enviar)
-                                                <input type="hidden" name="nombre[]" value="{{ $enviar->name }}" required>
-                                                <input type="hidden" name="cantidad[]" value="{{ $enviar->qty }}"
-                                                    required>
-                                                <input type="hidden" name="precio_u[]"
+                                                <input type="hidden" name="name[]" value="{{ $enviar->name }}" required>
+                                                <input type="hidden" name="cant[]" value="{{ $enviar->qty }}" required>
+                                                <input type="hidden" name="price[]"
                                                     value="{{ number_format($enviar->price, 2) }}" required>
                                                 <input type="hidden" name="importe[]"
                                                     value="{{ number_format($enviar->qty * $enviar->price, 2) }}" required>
                                             @endforeach
                                             <input type="hidden" name="total" value="{{ Cart::total() }}" required>
-                                            <input type="text" name="envia" id="envia" value="" required>
-                                            <input type="text" name="recibe" id="recibe" value="" required>
+                                            <input type="text" name="idSend" id="envia" value="" required>
+                                            <input type="text" name="idReceives" id="recibe" value="" required>
+                                            <input type="text" name="nOrder" id="order" value="" required>
                                             <button type="submit"
                                                 class="btn btn-outline-info btn-sm text-center">{{ 'Solicitar Pedido' }}</button>
                                         </form>
@@ -146,12 +146,28 @@
             </div>
         </div>
     </div>
-    </div>
+    <input type="hidden" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : '000' }}" id="contador">
 @endsection
 @section('js')
     <script src="{{ asset('js/selectize.js') }}" type="text/javascript"></script>
     <script>
         $("input[name='de']").change(function() {
+            // ASIGNAR NUMERO DE PEDIDO
+            var codigo = 0;
+            var letras;
+            letras = $('#contador').val().slice(1);
+            var contador = parseInt(letras) + parseInt(1);
+            if (contador < 10) {
+                codigo = ('PE-000' + contador);
+            } else if (contador < 100) {
+                codigo = ('PE-00' + contador);
+            } else if (contador < 1000) {
+                codigo = ('PE-0' + contador);
+            } else if (contador < 10000) {
+                codigo = ('PE-' + contador);
+            }
+            $('#order').val(codigo);
+            // FIN
             var combo = $(this).val();
             $('#idDe').val('');
             $.ajax({
@@ -185,7 +201,7 @@
             var combo = $(this).val();
             $('#idPara').val('');
             $.ajax({
-                url: '../combo/' + combo + '/combo_pedido'
+                url: '../combo/' + combo + '/combo_pedido',
                 type: 'GET',
 
                 error: function(err) {

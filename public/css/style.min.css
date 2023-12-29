@@ -51071,3 +51071,12 @@ a.paginate_button.current{
 .table tr{
     width: 10px !important;
   }
+
+  .primary{
+  background-color: #04c38c;
+  color: white;
+  }
+
+  .pedido{
+    border: 1px solid #04c38c !important;
+  }
