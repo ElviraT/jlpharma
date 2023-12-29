@@ -67,12 +67,14 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::get('/order/clear', [OrderController::class, 'clear'])->name('order.clear');
     Route::post('/order/remove', [OrderController::class, 'remove'])->name('order.remove');
     Route::post('/order/pedido', [OrderController::class, 'pedido'])->name('order.pedido');
+    Route::post('/order/send', [OrderController::class, 'send'])->name('order.send');
 
     Route::controller(ComboController::class)->prefix('combo')->group(function () {
         Route::match(['get', 'post'], '/{country}/state', 'state')->name('combo_estado');
         Route::match(['get', 'post'], '/{state}/city', 'city')->name('combo_ciudad');
         Route::match(['get', 'post'], '/{state}/municipality', 'municipality')->name('combo_municipio');
         Route::match(['get', 'post'], '/{municipality}/parish', 'parish')->name('combo_parroquia');
+        Route::match(['get', 'post'], '/{pedido}/combo_pedido', 'pedido');
     });
 });
 

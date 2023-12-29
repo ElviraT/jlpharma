@@ -3,6 +3,9 @@
 namespace App\Http\Controllers\Admin\configuracion\pedidos;
 
 use App\Http\Controllers\Controller;
+use App\Models\Drugstore;
+use App\Models\Jluser;
+use App\Models\Pharmacy;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -22,7 +25,10 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         $products = Product::all();
-        return view('order.index', compact('products'));
+        $pharmacy = Pharmacy::pluck('name', 'id');
+        $drugstore = Drugstore::pluck('name', 'id');
+        $jl = Jluser::pluck('name', 'id');
+        return view('order.index', compact('products', 'pharmacy', 'drugstore', 'jl'));
     }
 
     public function store(Request $request)
@@ -44,6 +50,10 @@ class OrderController extends Controller
         return to_route('order.index');
     }
     public function checkout()
+    {
+        return view('order.checkout');
+    }
+    public function send()
     {
         return view('order.checkout');
     }

@@ -7,6 +7,7 @@ use App\Models\City;
 use App\Models\Municipality;
 use App\Models\Parish;
 use App\Models\State;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class ComboController extends Controller
@@ -33,5 +34,10 @@ class ComboController extends Controller
     {
         $municipalities = Parish::select(['id', 'name'])->where('idMunicipality', $municipality)->get();
         return response()->json($municipalities);
+    }
+    public function pedido($pedido)
+    {
+        $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+        return response()->json($result);
     }
 }
