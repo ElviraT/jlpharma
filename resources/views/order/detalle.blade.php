@@ -13,7 +13,11 @@
                 </div>
                 <div class="card sombra p-2">
                     <div class="col-12" align="center">
-                        <a href="#" class="btn btn-primary">{{ 'Aceptar Pedido' }}</a> &nbsp;&nbsp;
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-sm"
+                            data-record-id="{{ $order->id }}"
+                            data-record-title="{{ 'Aceptar el pedido de ' }}{{ $order->userSend->name }}">
+                            {{ 'Aceptar Pedido' }}
+                        </button> &nbsp;&nbsp;
                         <a href="#" class="btn btn-danger">{{ 'Rechazar Pedido' }}</a> &nbsp;&nbsp;
                         <a href="{{ route('dashboard') }}" class="btn btn-info">{{ 'Volver' }}</a>
                     </div>
@@ -51,7 +55,9 @@
         </div>
     </div>
 @endsection
-
+@section('modal')
+    @include('order.aceptar_modal')
+@endsection
 @section('js')
-    @include('admin.configuracion.productos.category.js.js')
+    @include('order.js.js')
 @endsection

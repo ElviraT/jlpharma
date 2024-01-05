@@ -3,10 +3,14 @@
 namespace App\Http\Controllers\Admin\configuracion\users;
 
 use App\Http\Controllers\Controller;
+use App\Models\Inventary;
+use App\Models\Order;
+use App\Models\Product;
 use App\Models\Seller;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -111,5 +115,48 @@ class SellerController extends Controller
         User::where('id', $seller->idUser)->delete();
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('seller.index');
+    }
+
+    public function aceptar(Request $request)
+    {
+        $order = Order::where('id', $request->id)->where('idStatus', 1)->first();
+        try {
+            DB::beginTransaction();
+            foreach ($order->detalle as $value) {
+                if (Auth::user()->hasAnyRole('Drogueria', 'Farmacia')) {
+                    $stock = Inventary::where('Product', $value->name)->where('idUser', $order['idReceives'])->first();
+                } else {
+                    $stock = Product::where('name', $value->name)->first();
+                }
+                if (empty($stock) || $stock->quantity < $value['cant']) {
+                    DB::rollBack();
+                    Toastr::error(__('No hay cantidad suficiente para uno de los productos'), 'error');
+                    return to_route('dashboard');
+                }
+                $data_inventary = [
+                    "Product" => $value['name'],
+                    "idUser" => $order['idSend'],
+                    "quantity" => $value['cant']
+                ];
+                $inv = Inventary::where('Product', $value['name'])->where('idUser', $order['idSend'])->first();
+                if (isset($inv)) {
+                    $inv->increment('quantity', $value['cant']);
+                } else {
+                    Inventary::create($data_inventary);
+                }
+
+                $order->idStatus = '4';
+                $order->save();
+
+                $stock->decrement('quantity', $value['cant']);
+            }
+            DB::commit();
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            dd($e);
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return to_route('dashboard');
     }
 }

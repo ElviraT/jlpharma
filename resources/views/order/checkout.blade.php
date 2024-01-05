@@ -17,7 +17,7 @@
                 <div class="card sombra p-2">
                     <div class="col-12 mb-3">
                         <div class="row">
-                            @role(['Admin', 'SuperAdmin', 'Vendedor'])
+                            @role(['SuperAdmin', 'JL', 'Vendedor'])
                                 <div class="col-6">
                                     <legend>DE:</legend>
                                     <fieldset>
@@ -46,8 +46,19 @@
                                             <input type="radio" name="para" value="JL"> JL
                                         </label>
                                     </fieldset>
-                                    <select id="idPara" name="idPara" class="form-control" required></select>
+                                    <select id="idPara" name="idPara" class="form-control"></select>
 
+                                </div>
+                            @endrole
+                            @role(['Drogueria', 'Farmacia'])
+                                <div class="col-6">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <h4>PARA:</h4>
+                                            <select id="idPara" name="otro" class="form-control otro"></select>
+                                        </div>
+
+                                    </div>
                                 </div>
                             @endrole
                         </div>
@@ -128,9 +139,10 @@
                                                     value="{{ number_format($enviar->qty * $enviar->price, 2) }}" required>
                                             @endforeach
                                             <input type="hidden" name="total" value="{{ Cart::total() }}" required>
-                                            <input type="text" name="idSend" id="envia" value="" required>
-                                            <input type="text" name="idReceives" id="recibe" value="" required>
-                                            <input type="text" name="nOrder" id="order" value="" required>
+                                            <input type="hidden" name="idSend" id="envia"
+                                                value="{{ auth()->user()->id }}" required>
+                                            <input type="hidden" name="idReceives" id="recibe" value="" required>
+                                            <input type="hidden" name="nOrder" id="order" value="" required>
                                             <button type="submit"
                                                 class="btn btn-outline-info btn-sm text-center">{{ 'Solicitar Pedido' }}</button>
                                         </form>
@@ -147,87 +159,8 @@
         </div>
     </div>
     <input type="hidden" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : '000' }}" id="contador">
+    <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo">
 @endsection
 @section('js')
-    <script src="{{ asset('js/selectize.js') }}" type="text/javascript"></script>
-    <script>
-        $("input[name='de']").change(function() {
-            // ASIGNAR NUMERO DE PEDIDO
-            var codigo = 0;
-            var letras;
-            letras = $('#contador').val().slice(1);
-            var contador = parseInt(letras) + parseInt(1);
-            if (contador < 10) {
-                codigo = ('PE-000' + contador);
-            } else if (contador < 100) {
-                codigo = ('PE-00' + contador);
-            } else if (contador < 1000) {
-                codigo = ('PE-0' + contador);
-            } else if (contador < 10000) {
-                codigo = ('PE-' + contador);
-            }
-            $('#order').val(codigo);
-            // FIN
-            var combo = $(this).val();
-            $('#idDe').val('');
-            $.ajax({
-                url: '../combo/' + combo + '/combo_pedido',
-                type: 'GET',
-
-                error: function(err) {
-                    console.log(err);
-                },
-
-                success: function(options) {
-                    $('#idDe').selectize()[0].selectize.destroy();
-                    $('#idDe').selectize({
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        preload: true,
-                        options: options,
-                        create: true,
-                    });
-                }
-            });
-        });
-        $('#idDe').change(function() {
-            var idDe = $(this).val();
-            if (idDe != '') {
-                $("#envia").val(idDe);
-            }
-        });
-        $("input[name='para']").change(function() {
-            var combo = $(this).val();
-            $('#idPara').val('');
-            $.ajax({
-                url: '../combo/' + combo + '/combo_pedido',
-                type: 'GET',
-
-                error: function(err) {
-                    console.log(err);
-                },
-
-                success: function(options) {
-                    $('#idPara').selectize()[0].selectize.destroy();
-                    $('#idPara').selectize({
-                        valueField: 'id',
-                        labelField: 'name',
-                        searchField: 'name',
-                        preload: true,
-                        options: options,
-                        create: true,
-                    });
-                }
-            });
-        });
-        $('#idPara').change(function() {
-            var idPara = $(this).val();
-            if (idPara != '') {
-                $("#recibe").val(idPara);
-            }
-        });
-
-        function enviar() {}
-    </script>
+    @include('order.js.js')
 @endsection

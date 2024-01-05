@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\configuracion\direccion\ParishController;
 use App\Http\Controllers\Admin\configuracion\direccion\ZoneController;
 use App\Http\Controllers\Admin\configuracion\pedidos\OrderController;
 use App\Http\Controllers\Admin\configuracion\productos\CategoryController;
+use App\Http\Controllers\Admin\configuracion\productos\MisProductosController;
 use App\Http\Controllers\Admin\configuracion\productos\ProductController;
 use App\Http\Controllers\Admin\configuracion\productos\SpecialityController;
 use App\Http\Controllers\Admin\configuracion\users\DrugstoreController;
@@ -53,8 +54,13 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::resource('pharmacy', PharmacyController::class)->except(['show'])->names('pharmacy');
     Route::resource('drugstore', DrugstoreController::class)->except(['show'])->names('drugstore');
     Route::resource('jluser', JluserController::class)->except(['show'])->names('jluser');
-    Route::resource('seller', SellerController::class)->except(['show'])->names('seller');
     Route::resource('product', ProductController::class)->except(['show'])->names('product');
+    Route::resource('mis-productos', MisProductosController::class)->except(['show', 'update', 'create', 'destroy'])->names('mis_productos');
+
+    Route::resource('seller', SellerController::class)->except(['show'])->names('seller');
+
+
+    Route::post('seller/aceptar', [SellerController::class, 'aceptar'])->name('seller.aceptar');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

@@ -12,6 +12,7 @@ use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class OrderController extends Controller
 {
@@ -54,7 +55,8 @@ class OrderController extends Controller
     public function checkout()
     {
         $pedido = Order::select('nOrder')->orderBy('id', 'desc')->first();
-        return view('order.checkout', compact('pedido'));
+        $combo = Auth::user()->getRoleNames();
+        return view('order.checkout', compact('pedido', 'combo'));
     }
     public function send(Request $request)
     {
@@ -81,7 +83,6 @@ class OrderController extends Controller
             Cart::destroy();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
-            dd($th);
             Toastr::error('Intente de nuevo', 'error');
         }
         return to_route('order.index');

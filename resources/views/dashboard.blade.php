@@ -21,17 +21,19 @@
                         </div>
                         <!-- col -->
                         <!-- col -->
-                        <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                            <div class="d-flex align-items-center sombra" style="border: 1px solid cyan;">
-                                <div class="me-2">
-                                    <span class="text-cyan display-5"><i class="ri-team-line"></i></span>
-                                </div>
-                                <div>
-                                    <span>{{ __('Registered Users') }}</span>
-                                    <h3 class="font-medium mb-0">{{ count($user) }}</h3>
+                        @role(['SuperAdmin', 'JL'])
+                            <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                                <div class="d-flex align-items-center sombra" style="border: 1px solid cyan;">
+                                    <div class="me-2">
+                                        <span class="text-cyan display-5"><i class="ri-team-line"></i></span>
+                                    </div>
+                                    <div>
+                                        <span>{{ __('Registered Users') }}</span>
+                                        <h3 class="font-medium mb-0">{{ count($user) }}</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endrole
                         <!-- col -->
                         <!-- col -->
                         {{-- <div class="col-lg-3 col-md-6 mb-3 mb-md-0">
