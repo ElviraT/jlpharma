@@ -18,7 +18,11 @@
                             data-record-title="{{ 'Aceptar el pedido de ' }}{{ $order->userSend->name }}">
                             {{ 'Aceptar Pedido' }}
                         </button> &nbsp;&nbsp;
-                        <a href="#" class="btn btn-danger">{{ 'Rechazar Pedido' }}</a> &nbsp;&nbsp;
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target=".bd-example-rechazo-sm" data-record-id="{{ $order->id }}"
+                            data-record-title="{{ 'Rechazar el pedido de ' }}{{ $order->userSend->name }}">
+                            {{ 'Rechazar Pedido' }}
+                        </button> &nbsp;&nbsp;
                         <a href="{{ route('dashboard') }}" class="btn btn-info">{{ 'Volver' }}</a>
                     </div>
                     <div class="col-md-12 mt-3">
@@ -57,6 +61,7 @@
 @endsection
 @section('modal')
     @include('order.aceptar_modal')
+    @include('order.rechazar_modal')
 @endsection
 @section('js')
     @include('order.js.js')

@@ -16,7 +16,8 @@ class Order extends Model
         'idReceives',
         'idUser',
         'total',
-        'idStatus'
+        'idStatus',
+        'observation'
     ];
 
     public function userSend(): BelongsTo
@@ -30,5 +31,9 @@ class Order extends Model
     public function detalle(): HasMany
     {
         return $this->hasMany(OrderDetail::class, 'idOrder');
+    }
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(Status::class, 'idStatus');
     }
 }

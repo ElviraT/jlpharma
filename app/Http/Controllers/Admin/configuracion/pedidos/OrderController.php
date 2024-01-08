@@ -23,6 +23,7 @@ class OrderController extends Controller
         $this->middleware('permission:order.checkout', ['only' => ['checkout', 'update']]);
         $this->middleware('permission:order.remove', ['only' => ['remove']]);
         $this->middleware('permission:order.clear', ['only' => ['clear']]);
+        $this->middleware('permission:order.state', ['only' => ['state']]);
     }
 
     public function index(Request $request)
@@ -110,5 +111,14 @@ class OrderController extends Controller
     public function detalle(Order $order)
     {
         return view('order.detalle', compact('order'));
+    }
+    public function state()
+    {
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $order = Order::all();
+        } else {
+            $order = Order::where('idSend', Auth::user()->id)->get();
+        }
+        return view('order.state', compact('order'));
     }
 }

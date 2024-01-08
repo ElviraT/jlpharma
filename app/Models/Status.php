@@ -18,4 +18,8 @@ class Status extends Model
     {
         return $this->hasMany(Pharmacy::class, 'idstatus');
     }
+    public function order(): HasMany
+    {
+        return $this->hasMany(Order::class, 'idStatus');
+    }
 }

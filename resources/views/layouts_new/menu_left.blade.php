@@ -259,16 +259,25 @@
                         </ul>
                     </li>
                 @endcanany
-                @canany(['order.index'])
+                @canany(['order.index', 'order.state'])
                     <li class="nav-small-cap">
                         <i data-feather="more-horizontal" class="feather-icon"></i>
                         <span class="hide-menu">{{ __('menu.Order') }}</span>
                     </li>
-                    <li class="sidebar-item {{ @request()->routeIs('order') ? 'active' : ' ' }}">
-                        <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
-                            aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                class="hide-menu">{{ __('menu.Order') }}</span></a>
-                    </li>
+                    @can('order.index')
+                        <li class="sidebar-item {{ @request()->routeIs('order') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
+                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Realizar Pedido' }}</span></a>
+                        </li>
+                    @endcan
+                    @can('order.state')
+                        <li class="sidebar-item {{ @request()->routeIs('order.state') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.state') }}"
+                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Estado de Pedido' }}</span></a>
+                        </li>
+                    @endcan
                 @endcanany
                 <li class="sidebar-item">
                     <a class="dropdown-item"

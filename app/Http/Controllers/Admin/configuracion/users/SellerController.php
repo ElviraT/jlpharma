@@ -159,4 +159,22 @@ class SellerController extends Controller
         }
         return to_route('dashboard');
     }
+
+    public function rechazar(Request $request)
+    {
+        $order = Order::where('id', $request->id)->where('idStatus', 1)->first();
+        try {
+            DB::beginTransaction();
+
+            $order->idStatus = '5';
+            $order->observation = $request->observation;
+            $order->save();
+            DB::commit();
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return to_route('dashboard');
+    }
 }

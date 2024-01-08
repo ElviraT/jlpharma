@@ -61,6 +61,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
 
 
     Route::post('seller/aceptar', [SellerController::class, 'aceptar'])->name('seller.aceptar');
+    Route::post('seller/rechazar', [SellerController::class, 'rechazar'])->name('seller.rechazar');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -74,6 +75,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::post('/order/pedido', [OrderController::class, 'pedido'])->name('order.pedido');
     Route::post('/order/send', [OrderController::class, 'send'])->name('order.send');
     Route::get('/order/{order}/detail', [OrderController::class, 'detalle'])->name('order.detalle');
+    Route::get('/order/state', [OrderController::class, 'state'])->name('order.state');
 
     Route::controller(ComboController::class)->prefix('combo')->group(function () {
         Route::match(['get', 'post'], '/{country}/state', 'state')->name('combo_estado');
