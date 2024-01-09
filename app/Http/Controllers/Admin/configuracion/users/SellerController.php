@@ -22,6 +22,8 @@ class SellerController extends Controller
         $this->middleware('permission:seller.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:seller.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:seller.destroy', ['only' => ['destroy']]);
+        $this->middleware('permission:seller.aceptar', ['only' => ['aceptar']]);
+        $this->middleware('permission:seller.rechazar', ['only' => ['rechazar']]);
     }
 
     public function index(Request $request)
@@ -134,11 +136,12 @@ class SellerController extends Controller
                     return to_route('dashboard');
                 }
                 $data_inventary = [
+                    "idProduct" => $value['idProduct'],
                     "Product" => $value['name'],
                     "idUser" => $order['idSend'],
                     "quantity" => $value['cant']
                 ];
-                $inv = Inventary::where('Product', $value['name'])->where('idUser', $order['idSend'])->first();
+                $inv = Inventary::where('idProduct', $value['idProduct'])->where('idUser', $order['idSend'])->first();
                 if (isset($inv)) {
                     $inv->increment('quantity', $value['cant']);
                 } else {

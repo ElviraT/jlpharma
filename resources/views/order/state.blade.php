@@ -16,11 +16,11 @@
                         <table id="AllDataTable" class="table table-bordered" width="100%">
                             <thead>
                                 <tr>
-                                    <th width="40%">{{ __('Número de Orden') }}</th>
+                                    <th width="15%">{{ __('No. Orden') }}</th>
                                     <th width="20%">{{ __('Para') }}</th>
-                                    <th width="20%">{{ __('Total') }}</th>
-                                    <th width="20%">{{ __('Estado') }}</th>
-                                    <th width="20%">{{ __('Observación') }}</th>
+                                    <th width="15%">{{ __('Total') }}</th>
+                                    <th width="10%">{{ __('Estado') }}</th>
+                                    <th width="40%">{{ __('Observación') }}</th>
                                 </tr>
                             </thead>
                             <tbody>

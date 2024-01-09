@@ -57,9 +57,13 @@
                                             </div>
                                             <div class="col-12">
                                                 <div class="row">
-                                                    <div class="col-4">
-                                                        <p>${{ $pro->price_tf }}</p>
-                                                    </div>
+                                                    @if (Auth::user()->hasRole('Farmacia'))
+                                                        <div class="col-4"></div>
+                                                    @else
+                                                        <div class="col-4">
+                                                            <p>${{ $pro->price_tf }}</p>
+                                                        </div>
+                                                    @endif
                                                     <div class="col-8">
                                                         <div class="input-group">
                                                             <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input

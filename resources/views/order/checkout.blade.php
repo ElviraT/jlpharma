@@ -133,6 +133,8 @@
                                             @foreach (Cart::content() as $enviar)
                                                 <input type="hidden" name="name[]" value="{{ $enviar->name }}" required>
                                                 <input type="hidden" name="cant[]" value="{{ $enviar->qty }}" required>
+                                                <input type="hidden" name="idProduct[]" value="{{ $enviar->id }}"
+                                                    required>
                                                 <input type="hidden" name="price[]"
                                                     value="{{ number_format($enviar->price, 2) }}" required>
                                                 <input type="hidden" name="importe[]"
@@ -141,7 +143,8 @@
                                             <input type="hidden" name="total" value="{{ Cart::total() }}" required>
                                             <input type="hidden" name="idSend" id="envia"
                                                 value="{{ auth()->user()->id }}" required>
-                                            <input type="hidden" name="idReceives" id="recibe" value="" required>
+                                            <input type="hidden" name="idReceives" id="recibe" value=""
+                                                required>
                                             <input type="hidden" name="nOrder" id="order" value="" required>
                                             <button type="submit"
                                                 class="btn btn-outline-info btn-sm text-center">{{ 'Solicitar Pedido' }}</button>

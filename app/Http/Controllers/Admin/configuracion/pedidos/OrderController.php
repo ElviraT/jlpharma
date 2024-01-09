@@ -73,6 +73,7 @@ class OrderController extends Controller
             for ($i = 0; $i < count($request['name']); $i++) {
                 $detalle = [
                     'idOrder' => $order['id'],
+                    'idProduct' => $request['idProduct'][$i],
                     'name' => $request['name'][$i],
                     'cant' => $request['cant'][$i],
                     'price' => $request['price'][$i],
