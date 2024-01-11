@@ -147,7 +147,7 @@
                                                 required>
                                             <input type="hidden" name="nOrder" id="order" value="" required>
                                             <button type="submit"
-                                                class="btn btn-outline-info btn-sm text-center">{{ 'Solicitar Pedido' }}</button>
+                                                class="btn btn-outline-info btn-sm text-center">{{ 'Realizar Pedido' }}</button>
                                         </form>
                                     </div>
                                 </div>

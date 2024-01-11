@@ -3,16 +3,19 @@
 namespace App\Http\Controllers\Admin\configuracion\pedidos;
 
 use App\Http\Controllers\Controller;
+use App\Mail\OrderMail;
 use App\Models\Drugstore;
 use App\Models\Jluser;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Pharmacy;
 use App\Models\Product;
+use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
 {
@@ -81,10 +84,12 @@ class OrderController extends Controller
                 ];
                 OrderDetail::create($detalle);
             }
-
+            $receiver = User::where('id', $request['idReceives'])->first();
+            Mail::to($receiver->email)->send(new OrderMail($order));
             Cart::destroy();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
+            dd($th);
             Toastr::error('Intente de nuevo', 'error');
         }
         return to_route('order.index');

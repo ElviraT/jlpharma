@@ -11,6 +11,7 @@ class OrderDetail extends Model
     use HasFactory;
 
     protected $fillable = [
+        'idProduct',
         'idOrder',
         'name',
         'cant',
