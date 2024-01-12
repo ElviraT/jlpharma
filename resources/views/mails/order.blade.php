@@ -20,7 +20,7 @@
             background-color: #04c38c;
         }
 
-        p {
+        body {
             font-family: "Segoe UI";
             font-size: 16px;
         }

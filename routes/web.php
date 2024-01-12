@@ -24,6 +24,7 @@ use App\Http\Controllers\Admin\configuracion\users\DrugstoreController;
 use App\Http\Controllers\Admin\configuracion\users\JluserController;
 use App\Http\Controllers\Admin\configuracion\users\PharmacyController;
 use App\Http\Controllers\Admin\configuracion\users\SellerController;
+use App\Http\Controllers\Admin\DrugstorexPharmacyController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
@@ -76,6 +77,9 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::post('/order/send', [OrderController::class, 'send'])->name('order.send');
     Route::get('/order/{order}/detail', [OrderController::class, 'detalle'])->name('order.detalle');
     Route::get('/order/state', [OrderController::class, 'state'])->name('order.state');
+
+    Route::get('/request/permission', [DrugstorexPharmacyController::class, 'index'])->name('request.index');
+    Route::post('/request/permission/add', [DrugstorexPharmacyController::class, 'store'])->name('request.store');
 
     Route::controller(ComboController::class)->prefix('combo')->group(function () {
         Route::match(['get', 'post'], '/{country}/state', 'state')->name('combo_estado');

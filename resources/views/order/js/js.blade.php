@@ -57,7 +57,7 @@
         var combo = $(this).val();
         $('#idDe').val('');
         $.ajax({
-            url: '../combo/' + combo + '/combo_pedido',
+            url: './combo/' + combo + '/combo_pedido',
             type: 'GET',
 
             error: function(err) {
@@ -87,7 +87,7 @@
         var combo = $(this).val();
         $('#idPara').val('');
         $.ajax({
-            url: '../combo/' + combo + '/combo_pedido',
+            url: './combo/' + combo + '/combo_pedido',
             type: 'GET',
 
             error: function(err) {

@@ -15,54 +15,6 @@
                     </div>
                 </div>
                 <div class="card sombra p-2">
-                    <div class="col-12 mb-3">
-                        <div class="row">
-                            @role(['SuperAdmin', 'JL', 'Vendedor'])
-                                <div class="col-6">
-                                    <legend>DE:</legend>
-                                    <fieldset>
-                                        <label>
-                                            <input type="radio" name="de" value="Farmacia"> Farmacia
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="de" value="Droguería"> Droguería
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="de" value="JL"> JL
-                                        </label>
-                                    </fieldset>
-                                    <select id="idDe" name="idDe" class="form-control" required></select>
-                                </div>
-                                <div class="col-6">
-                                    <fieldset>
-                                        <legend>PARA:</legend>
-                                        <label>
-                                            <input type="radio" name="para" value="Farmacia"> Farmacia
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="para" value="Droguería"> Droguería
-                                        </label>
-                                        <label>
-                                            <input type="radio" name="para" value="JL"> JL
-                                        </label>
-                                    </fieldset>
-                                    <select id="idPara" name="idPara" class="form-control"></select>
-
-                                </div>
-                            @endrole
-                            @role(['Drogueria', 'Farmacia'])
-                                <div class="col-6">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <h4>PARA:</h4>
-                                            <select id="idPara" name="otro" class="form-control otro"></select>
-                                        </div>
-
-                                    </div>
-                                </div>
-                            @endrole
-                        </div>
-                    </div>
                     <div class="col-lg-12">
                         @if (Cart::count())
                             <table id="AllDataTable" class="table table-striped table-bordered" width="100%">
@@ -143,8 +95,7 @@
                                             <input type="hidden" name="total" value="{{ Cart::total() }}" required>
                                             <input type="hidden" name="idSend" id="envia"
                                                 value="{{ auth()->user()->id }}" required>
-                                            <input type="hidden" name="idReceives" id="recibe" value=""
-                                                required>
+                                            <input type="hidden" name="idReceives" id="recibe" value="" required>
                                             <input type="hidden" name="nOrder" id="order" value="" required>
                                             <button type="submit"
                                                 class="btn btn-outline-info btn-sm text-center">{{ 'Realizar Pedido' }}</button>
