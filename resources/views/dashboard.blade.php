@@ -36,17 +36,19 @@
                         @endrole
                         <!-- col -->
                         <!-- col -->
-                        {{-- <div class="col-lg-3 col-md-6 mb-3 mb-md-0">
-                            <div class="d-flex align-items-center sombra" style="border: 1px solid green; ">
-                                <div class="me-2">
-                                    <span class="text-green display-5"><i class="ri-health-book-line"></i></span>
-                                </div>
-                                <div>
-                                    <span>{{ __('Consultations of the month') }}</span>
-                                    <h3 class="font-medium mb-0">5489</h3>
+                        @role(['Drogueria', 'SueperAdmin'])
+                            <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
+                                <div class="d-flex align-items-center sombra" style="border: 1px solid cyan;">
+                                    <div class="me-2">
+                                        <span class="text-cyan display-5"><i class="ri-list-check-2"></i></span>
+                                    </div>
+                                    <div>
+                                        <span>{{ 'Solicitud de Permiso' }}</span>
+                                        <h3 class="font-medium mb-0">{{ count($solicitud) }}</h3>
+                                    </div>
                                 </div>
                             </div>
-                        </div> --}}
+                        @endrole
                         <!-- col -->
                         <!-- col -->
                         {{-- <div class="col-lg-3 col-md-6">

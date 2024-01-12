@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Drugstore;
+use App\Models\DrugstorexPharmacy;
 use App\Models\Order;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -22,8 +24,9 @@ class DashboardController extends Controller
         } else {
             $pedidos = Order::where('idReceives', Auth::user()->id)->where('idStatus', 1)->get();
         }
+        $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)->where('permission', 0)->get();
 
         $user = User::select('id')->where('last_name', '<>', 'web')->get();
-        return view('dashboard', compact('pedidos', 'user'));
+        return view('dashboard', compact('pedidos', 'user', 'solicitud'));
     }
 }

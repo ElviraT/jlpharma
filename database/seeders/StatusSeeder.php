@@ -13,7 +13,7 @@ class StatusSeeder extends Seeder
      */
     public function run(): void
     {
-        $prefixes = array("Activo", "Inactivo", "Pendiente");
+        $prefixes = array("Activo", "Inactivo", "Pendiente", "Aceptado", "Rechazado");
 
         foreach ($prefixes as $prefix) {
             Status::create([

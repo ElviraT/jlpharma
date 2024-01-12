@@ -12,7 +12,7 @@
                     </div>
                     <div class="col-md-12 p-2">
 
-                        <form action="{{ route('request.store') }}">
+                        <form action="{{ route('request.store') }}" method="post">
                             @csrf
                             <div class="row">
                                 <div class="col-md-6 mb-3">
@@ -25,7 +25,7 @@
                                     ]) !!}
                                 </div>
                                 <div class="col-md-6 mb-3 mt-4">
-                                    <button type="submit" class="btn btn-primary sombra">{{ 'Enviar Solicitud' }}</button>
+                                    <button type="submit" class="btn btn-primary">{{ 'Enviar Solicitud' }}</button>
                                 </div>
                             </div>
                         </form>

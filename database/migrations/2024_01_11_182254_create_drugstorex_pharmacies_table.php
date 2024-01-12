@@ -18,8 +18,8 @@ return new class extends Migration
             $table->boolean('permission')->default(0);
             $table->timestamps();
 
-            $table->foreign('idDrugstore')->references('id')->on('drugstores');
-            $table->foreign('idPharmacy')->references('id')->on('pharmacies');
+            $table->foreign('idDrugstore')->references('id')->on('users');
+            $table->foreign('idPharmacy')->references('id')->on('users');
         });
     }
 
