@@ -11,11 +11,11 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            $table->string('nOrder')->after('id');
-            $table->unsignedBigInteger('idStatus')->after('total')->default(1);
-
-            $table->foreign('idStatus')->references('id')->on('status_pedidos');
+        Schema::create('status_pedidos', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique();
+            $table->string('color');
+            $table->timestamps();
         });
     }
 
@@ -24,8 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('orders', function (Blueprint $table) {
-            //
-        });
+        Schema::dropIfExists('status_pedidos');
     }
 };

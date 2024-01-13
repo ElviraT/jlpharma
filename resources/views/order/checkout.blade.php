@@ -82,6 +82,18 @@
                                     <div class="col-6">
                                         <form action="{{ route('order.send') }}" method="post">
                                             @csrf
+                                            <div class="col-md-12 mb-3">
+                                                <label>{{ 'Status' }}</label>
+                                                <select name="idStatus" id="idStatus" class="form-control status">
+                                                    @foreach ($status as $item)
+                                                        @if ($item->name == 'Procesado')
+                                                            <option value="{{ $item->id }}" selected>
+                                                                {{ $item->name }}</option>
+                                                        @endif
+                                                        <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                             @foreach (Cart::content() as $enviar)
                                                 <input type="hidden" name="name[]" value="{{ $enviar->name }}" required>
                                                 <input type="hidden" name="cant[]" value="{{ $enviar->qty }}" required>
@@ -93,10 +105,12 @@
                                                     value="{{ number_format($enviar->qty * $enviar->price, 2) }}" required>
                                             @endforeach
                                             <input type="hidden" name="total" value="{{ Cart::total() }}" required>
-                                            <input type="hidden" name="idSend" id="envia"
-                                                value="{{ auth()->user()->id }}" required>
-                                            <input type="hidden" name="idReceives" id="recibe" value="" required>
+                                            <input type="hidden" name="idSend" id="envia" value="{{ $idSend }}"
+                                                required>
+                                            <input type="hidden" name="idReceives" id="recibe"
+                                                value="{{ $idReceives }}" required>
                                             <input type="hidden" name="nOrder" id="order" value="" required>
+
                                             <button type="submit"
                                                 class="btn btn-outline-info btn-sm text-center">{{ 'Realizar Pedido' }}</button>
                                         </form>
@@ -104,7 +118,7 @@
                                 </div>
                             </div>
                         @else
-                            <a href="{{ route('order.index') }}"
+                            <a href="{{ route('order.products') }}"
                                 class="btn btn-outline-primary">{{ 'Agregar Producto' }}</a>
                         @endif
                     </div>

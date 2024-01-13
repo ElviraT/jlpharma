@@ -14,6 +14,18 @@
                         <input type="hidden" name="id" id="id">
                         <h5><b><i class="title"></i></h5>
                         <hr>
+                        <div class="col-md-12 mb-3">
+                            <label>{{ 'Status' }}</label>
+                            <select name="idStatus" id="idStatus" class="form-control status">
+                                @foreach ($status as $item)
+                                    @if ($item->name == 'Despachado')
+                                        <option value="{{ $item->id }}" selected>
+                                            {{ $item->name }}</option>
+                                    @endif
+                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

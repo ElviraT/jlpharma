@@ -34,6 +34,6 @@ class Order extends Model
     }
     public function status(): BelongsTo
     {
-        return $this->belongsTo(Status::class, 'idStatus');
+        return $this->belongsTo(StatusPedido::class, 'idStatus');
     }
 }

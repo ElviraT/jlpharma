@@ -9,6 +9,7 @@ use App\Models\Parish;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ComboController extends Controller
 {
@@ -37,7 +38,18 @@ class ComboController extends Controller
     }
     public function pedido($pedido)
     {
-        $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+        // dd(is_numeric($pedido));
+        if (is_numeric($pedido)) {
+
+            $result = DB::table('users')
+                ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
+                ->select('users.id AS id', 'users.name AS name')
+                ->where('drugstorex_pharmacies.idPharmacy', $pedido)
+                ->where('drugstorex_pharmacies.permission', 1)
+                ->get();
+        } else {
+            $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+        }
         return response()->json($result);
     }
 }

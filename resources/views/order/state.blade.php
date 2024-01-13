@@ -46,9 +46,6 @@
         </div>
     </div>
 @endsection
-@section('modal')
-    @include('order.aceptar_modal')
-@endsection
 @section('js')
     @include('order.js.js')
 @endsection

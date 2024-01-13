@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\configuracion\combos\MaritalStatusController;
 use App\Http\Controllers\Admin\configuracion\combos\PrefixController;
 use App\Http\Controllers\Admin\configuracion\combos\SexController;
 use App\Http\Controllers\Admin\configuracion\combos\StatusController;
+use App\Http\Controllers\Admin\configuracion\combos\StatusPedidoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RoleController;
@@ -47,6 +48,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::resource('prefixes', PrefixController::class)->except(['show'])->names('prefixes');
     Route::resource('sexes', SexController::class)->except(['show'])->names('sexes');
     Route::resource('status', StatusController::class)->except(['show'])->names('status');
+    Route::resource('statusp', StatusPedidoController::class)->except(['show'])->names('statusp');
     Route::resource('maritalStatus', MaritalStatusController::class)->except(['show'])->names('maritalStatus');
     Route::resource('category', CategoryController::class)->except(['show'])->names('category');
     Route::resource('speciality', SpecialityController::class)->except(['show'])->names('speciality');
@@ -69,7 +71,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-    Route::get('/order/products/{id}', [OrderController::class, 'products'])->name('order.products');
+    Route::match(['get', 'post'], '/order/products', [OrderController::class, 'products'])->name('order.products');
     Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::get('/order/clear', [OrderController::class, 'clear'])->name('order.clear');

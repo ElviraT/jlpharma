@@ -74,7 +74,7 @@
                         </ul>
                     </li>
                 @endcanany
-                @canany(['prefixes.index', 'sexes.index', 'maritalStatus.index', 'status.index'])
+                @canany(['prefixes.index', 'sexes.index', 'maritalStatus.index', 'status.index', 'statusp.index'])
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('prefix*') || @request()->routeIs('sexes*') || @request()->routeIs('status*') || @request()->routeIs('maritalStatus*') ? 'active' : ' ' }}"
                             href="#" aria-expanded="false"><i data-feather="arrow-down-circle"
@@ -87,6 +87,14 @@
                                         class="sidebar-link {{ @request()->routeIs('status*') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Status') }} </span></a>
+                                </li>
+                            @endcan
+                            @can('statusp.index')
+                                <li class="sidebar-item">
+                                    <a href="{{ route('statusp.index') }}"
+                                        class="sidebar-link {{ @request()->routeIs('statusp*') ? 'active' : ' ' }}"><i
+                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
+                                            {{ 'Status de Pedidos' }} </span></a>
                                 </li>
                             @endcan
                             @can('prefixes.index')
@@ -120,8 +128,8 @@
                     'zones.index'])
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('countries*') || @request()->routeIs('states*') || @request()->routeIs('cities*') || @request()->routeIs('municipality*') || @request()->routeIs('parishes*') || @request()->routeIs('zones*') ? 'active' : ' ' }}"
-                            href="#" aria-expanded="false"><i data-feather="map-pin" class="feather-icon"></i><span
-                                class="hide-menu">{{ __('menu.Direction') }}
+                            href="#" aria-expanded="false"><i data-feather="map-pin"
+                                class="feather-icon"></i><span class="hide-menu">{{ __('menu.Direction') }}
                             </span></a>
                         <ul aria-expanded="false" class="collapse first-level">
                             @can('countries.index')

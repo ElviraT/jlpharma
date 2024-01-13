@@ -121,7 +121,7 @@ class SellerController extends Controller
 
     public function aceptar(Request $request)
     {
-        $order = Order::where('id', $request->id)->where('idStatus', 1)->first();
+        $order = Order::where('id', $request->id)->first();
         try {
             DB::beginTransaction();
             foreach ($order->detalle as $value) {
@@ -148,7 +148,7 @@ class SellerController extends Controller
                     Inventary::create($data_inventary);
                 }
 
-                $order->idStatus = '4';
+                $order->idStatus = $request['idStatus'];
                 $order->save();
 
                 $stock->decrement('quantity', $value['cant']);
@@ -164,11 +164,11 @@ class SellerController extends Controller
 
     public function rechazar(Request $request)
     {
-        $order = Order::where('id', $request->id)->where('idStatus', 1)->first();
+        $order = Order::where('id', $request->id)->first();
         try {
             DB::beginTransaction();
 
-            $order->idStatus = '5';
+            $order->idStatus = $request['idStatus'];
             $order->observation = $request->observation;
             $order->save();
             DB::commit();

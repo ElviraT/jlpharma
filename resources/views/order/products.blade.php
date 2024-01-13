@@ -41,7 +41,7 @@
                         </div>
                         <hr>
                         <div class="row">
-                            @foreach ($products as $pro)
+                            @foreach ($products['products'] as $pro)
                                 @if (isset($pro->img))
                                     <div class="col-lg-3">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
@@ -76,7 +76,8 @@
                                                     @can('order.store')
                                                         <form action="{{ route('order.store') }}" method="post">
                                                             @csrf
-                                                            <input type="hidden" name="product" value="{{ $drogueria }}">
+                                                            <input type="hidden" name="product"
+                                                                value="{{ $products['para'] }}">
                                                             <input type="hidden" name="id" value="{{ $pro->id }}">
                                                             <input type="hidden" name="cant"
                                                                 id="cantidad{{ $pro->id }}" value="1">
@@ -89,7 +90,6 @@
                                         </div>
                                     </div>
                                 @else
-                                    {{-- {{ dd($pro->product) }} --}}
                                     <div class="col-lg-3">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
                                             <img src="{{ str_replace('\\', '/', '../' . $pro->product->img) }}"
@@ -123,7 +123,8 @@
                                                     @can('order.store')
                                                         <form action="{{ route('order.store') }}" method="post">
                                                             @csrf
-                                                            <input type="hidden" name="inventary" value="{{ $drogueria }}">
+                                                            <input type="hidden" name="inventary"
+                                                                value="{{ $products['para'] }}">
                                                             <input type="hidden" name="id"
                                                                 value="{{ $pro->product->id }}">
                                                             <input type="hidden" name="cant"

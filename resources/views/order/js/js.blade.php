@@ -9,22 +9,14 @@
             closeAfterSelect: true
         });
     });
-
-    function enviar() {
-        var id = $('#idPara').val();
-        $.ajax({
-            url: './order/products/' + id,
-            type: 'GET',
-
-            error: function(err) {
-                console.log(err);
-            },
-
-            success: function(options) {
-                console.log('ok');
-            }
+    $(function() {
+        $('.status').selectize({
+            preload: true,
+            loadingClass: 'loading',
+            closeAfterSelect: true
         });
-    }
+    });
+
     $(document).ready(function() {
         // ASIGNAR NUMERO DE PEDIDO
         var codigo = 0;
@@ -80,6 +72,7 @@
     });
     $("input[name='de']").change(function() {
         var combo = $(this).val();
+        $('#idPara').attr('readonly', true);
         $('#idDe').val('');
         $.ajax({
             url: './combo/' + combo + '/combo_pedido',
@@ -106,10 +99,17 @@
         var idDe = $(this).val();
         if (idDe != '') {
             $("#envia").val(idDe);
+            $('#idPara').attr('readonly', false);
         }
     });
     $("input[name='para']").change(function() {
-        var combo = $(this).val();
+        // var combo = $(this).val();
+        if ($(this).val() == 'Droguería') {
+            var combo = $('#idDe').val();
+        } else {
+            var combo = $(this).val();
+        }
+
         $('#idPara').val('');
         $.ajax({
             url: './combo/' + combo + '/combo_pedido',

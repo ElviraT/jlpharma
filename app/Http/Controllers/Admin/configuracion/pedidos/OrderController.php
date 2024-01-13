@@ -11,6 +11,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Pharmacy;
 use App\Models\Product;
+use App\Models\StatusPedido;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -18,6 +19,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Session;
 
 class OrderController extends Controller
 {
@@ -34,6 +36,10 @@ class OrderController extends Controller
     public function index(Request $request)
     {
         // $products = Product::all();
+        Session::put('idPara', '');
+        Session::put('idDe', '');
+        Session::put('De', '');
+        Cart::destroy();
         if (Auth::user()->hasRole('Farmacia')) {
             $combo = DB::table('users')
                 ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
@@ -41,23 +47,70 @@ class OrderController extends Controller
                 ->where('drugstorex_pharmacies.idPharmacy', Auth::user()->id)
                 ->where('drugstorex_pharmacies.permission', 1)
                 ->pluck('name', 'id');
-        } elseif (Auth::user()->hasRole('Droguería')) {
+        } elseif (Auth::user()->hasRole('Drogueria')) {
             $combo = User::where('last_name', 'JL')->pluck('name', 'id');
+        } else {
+            $combo = [];
         }
 
         return view('order.index', compact('combo'));
     }
 
-    public function products($id)
+    public function products(Request $request)
     {
-        if (Auth::user()->hasRole('Farmacia') && isset($id)) {
-            $products = Inventary::where('idUser', $id)->get();
-            $drogueria = $id;
-        } elseif (Auth::user()->hasRole('Droguería')) {
-            $products = Product::all();
-            $drogueria = 0;
+        if (Auth::user()->hasAnyRole('Farmacia', 'Drogueria')) {
+            $products = $this->products1($request);
+        } else {
+            $products = $this->products2($request);
         }
-        return view('order.products', compact('products', 'drogueria'));
+
+        return view('order.products', compact('products'));
+    }
+
+    private function products1($request)
+    {
+        if (isset($request->idPara)) {
+            session(['idPara' => $request->idPara]);
+            session(['idDe' => Auth::user()->id]);
+            $id = Session::get('idPara');
+        } else {
+            $id = Session::get('idPara');
+        }
+        if (Auth::user()->hasRole('Farmacia')) {
+            $data['products'] = Inventary::where('idUser', $id)->get();
+            $data['para'] = $id;
+            $data['de'] = Auth::user()->id;
+        } elseif (Auth::user()->hasRole('Drogueria')) {
+            $data['products'] = Product::all();
+            $data['para'] = $id;
+            $data['de'] = Auth::user()->id;
+        }
+        return $data;
+    }
+    private function products2($request)
+    {
+        if (isset($request->idPara)) {
+            session(['idPara' => $request->idPara]);
+            session(['idDe' => $request->idDe]);
+            session(['De' => $request->de]);
+            $idPara = Session::get('idPara');
+            $idDe = Session::get('idDe');
+            $De = Session::get('De');
+        } else {
+            $idPara = Session::get('idPara');
+            $idDe = Session::get('idDe');
+            $De = Session::get('De');
+        }
+        if ($De == 'Farmacia') {
+            $data['products'] = Inventary::where('idUser', $idPara)->get();
+            $data['para'] = $idPara;
+            $data['de'] = $idDe;
+        } else {
+            $data['products'] = Product::all();
+            $data['para'] = $idPara;
+            $data['de'] = $idDe;
+        }
+        return $data;
     }
 
     public function store(Request $request)
@@ -92,13 +145,16 @@ class OrderController extends Controller
             }
         }
         Toastr::success('Producto agregado: ' . $products->name, 'Success');
-        return to_route('order.products', $request->inventary);
+        return to_route('order.products');
     }
     public function checkout()
     {
         $pedido = Order::select('nOrder')->orderBy('id', 'desc')->first();
+        $status = StatusPedido::all();
         $combo = Auth::user()->getRoleNames();
-        return view('order.checkout', compact('pedido', 'combo'));
+        $idReceives = Session::get('idPara');
+        $idSend = Session::get('idDe');
+        return view('order.checkout', compact('pedido', 'combo', 'idReceives', 'idSend', 'status'));
     }
     public function send(Request $request)
     {
@@ -108,7 +164,8 @@ class OrderController extends Controller
                 'idSend' => $request['idSend'],
                 'idReceives' => $request['idReceives'],
                 'idUser' => auth()->user()->id,
-                'total' => $request['total']
+                'total' => $request['total'],
+                'idStatus' => $request['idStatus']
             ];
             $order = Order::create($item);
             for ($i = 0; $i < count($request['name']); $i++) {
@@ -153,7 +210,8 @@ class OrderController extends Controller
 
     public function detalle(Order $order)
     {
-        return view('order.detalle', compact('order'));
+        $status = StatusPedido::all();
+        return view('order.detalle', compact('order', 'status'));
     }
     public function state()
     {
