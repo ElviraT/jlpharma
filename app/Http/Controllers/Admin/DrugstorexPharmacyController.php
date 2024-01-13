@@ -9,6 +9,7 @@ use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DrugstorexPharmacyController extends Controller
 {
@@ -16,6 +17,8 @@ class DrugstorexPharmacyController extends Controller
     {
         $this->middleware('permission:request.index', ['only' => ['index']]);
         $this->middleware('permission:request.store', ['only' => ['store']]);
+        $this->middleware('permission:request.aceptar', ['only' => ['aceptar']]);
+        $this->middleware('permission:request.rechazar', ['only' => ['rechazar']]);
     }
     public function index()
     {
@@ -37,5 +40,37 @@ class DrugstorexPharmacyController extends Controller
             Toastr::error(__('An error occurred please try again'), 'error');
         }
         return to_route('request.index');
+    }
+    public function aceptar(Request $request)
+    {
+        $solicitud = DrugstorexPharmacy::where('id', $request->id)->where('permission', 0)->first();
+        try {
+            DB::beginTransaction();
+
+            $solicitud->permission = 1;
+            $solicitud->save();
+            DB::commit();
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return to_route('dashboard');
+    }
+    public function rechazar(Request $request)
+    {
+        $solicitud = DrugstorexPharmacy::where('id', $request->id)->where('permission', 0)->first();
+        try {
+            DB::beginTransaction();
+
+            $solicitud->observation = $request->observation;
+            $solicitud->save();
+            DB::commit();
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return to_route('dashboard');
     }
 }

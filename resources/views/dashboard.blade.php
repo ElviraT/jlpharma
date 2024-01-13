@@ -1,6 +1,5 @@
 @extends('layouts_new.base')
 
-
 @section('content')
     <div class="row">
         <div class="col-lg-12 margin-tb">
@@ -9,9 +8,9 @@
                     <div class="row mb-0">
                         <!-- col -->
                         <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                            <div class="d-flex align-items-center sombra" style="border: 1px solid orange;">
+                            <div class="d-flex align-items-center sombra" style="border: 1px solid #04c38c;">
                                 <div class="me-2">
-                                    <span class="text-orange display-5"><i class="ri-file-fill"></i></span>
+                                    <span class="text-pedido display-5"><i class="ri-file-fill"></i></span>
                                 </div>
                                 <div>
                                     <span>{{ __('Orders Total') }}</span>
@@ -38,9 +37,9 @@
                         <!-- col -->
                         @role(['Drogueria', 'SueperAdmin'])
                             <div class="col-lg-3 col-md-6 mb-3 mb-lg-0">
-                                <div class="d-flex align-items-center sombra" style="border: 1px solid cyan;">
+                                <div class="d-flex align-items-center sombra" style="border: 1px solid #f4ec65;">
                                     <div class="me-2">
-                                        <span class="text-cyan display-5"><i class="ri-list-check-2"></i></span>
+                                        <span class="text-solicitud display-5"><i class="ri-list-check-2"></i></span>
                                     </div>
                                     <div>
                                         <span>{{ 'Solicitud de Permiso' }}</span>
@@ -92,9 +91,52 @@
                                 </div>
                             </div>
                         @endforeach
+                        {{ $pedidos->links('vendor.pagination.bootstrap-5') }}
                     </div>
                 </div>
             </div>
         </div>
+        @role(['Drogueria', 'SueperAdmin'])
+            <div class="col-lg-12 margin-tb">
+                <div class="card sombra p-3">
+                    <h3>{{ 'Solicitud de Permisos' }}</h3>
+                    <hr>
+                    <div class="col-12">
+                        <div class="row">
+                            @foreach ($solicitud as $result)
+                                <div class="col-lg-3">
+                                    <div class="card warning sombra">
+                                        <div class="card-body" align="center">
+                                            <br>
+                                            <h4>{{ $result->userPharmacy->name }}</h4>
+                                        </div>
+                                        <div class="card-footer" align="center">
+                                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                                data-target=".bd-example-modal-sm" data-record-id="{{ $result->id }}"
+                                                data-record-title="{{ 'Aceptar la solicitud de ' }}{{ $result->userPharmacy->name }}">
+                                                {{ 'Aceptar' }}
+                                            </button> &nbsp;&nbsp;
+                                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                                                data-target=".bd-example-rechazo-sm" data-record-id="{{ $result->id }}"
+                                                data-record-title="{{ 'Rechazar la solicitud de ' }}{{ $result->userPharmacy->name }}">
+                                                {{ 'Rechazar' }}
+                                            </button> &nbsp;&nbsp;
+                                        </div>
+                                    </div>
+                                </div>
+                            @endforeach
+                            {{ $solicitud->links('vendor.pagination.bootstrap-5') }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        @endrole
     </div>
+@endsection
+@section('modal')
+    @include('aceptar_modal')
+    @include('rechazar_modal')
+@endsection
+@section('js')
+    @include('js.js')
 @endsection

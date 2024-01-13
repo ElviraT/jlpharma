@@ -1,5 +1,30 @@
+<!-- Select2 -->
 <script src="{{ asset('js/selectize.js') }}" type="text/javascript"></script>
-<script>
+
+<script type="text/javascript">
+    $(function() {
+        $('.otro').selectize({
+            preload: true,
+            loadingClass: 'loading',
+            closeAfterSelect: true
+        });
+    });
+
+    function enviar() {
+        var id = $('#idPara').val();
+        $.ajax({
+            url: './order/products/' + id,
+            type: 'GET',
+
+            error: function(err) {
+                console.log(err);
+            },
+
+            success: function(options) {
+                console.log('ok');
+            }
+        });
+    }
     $(document).ready(function() {
         // ASIGNAR NUMERO DE PEDIDO
         var codigo = 0;

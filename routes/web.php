@@ -69,6 +69,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
+    Route::get('/order/products/{id}', [OrderController::class, 'products'])->name('order.products');
     Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::get('/order/clear', [OrderController::class, 'clear'])->name('order.clear');
@@ -80,6 +81,8 @@ Route::middleware(['auth', 'translate'])->group(function () {
 
     Route::get('/request/permission', [DrugstorexPharmacyController::class, 'index'])->name('request.index');
     Route::post('/request/permission/add', [DrugstorexPharmacyController::class, 'store'])->name('request.store');
+    Route::post('/request/permission/aceptar', [DrugstorexPharmacyController::class, 'aceptar'])->name('request.aceptar');
+    Route::post('/request/permission/rechazar', [DrugstorexPharmacyController::class, 'rechazar'])->name('request.rechazar');
 
     Route::controller(ComboController::class)->prefix('combo')->group(function () {
         Route::match(['get', 'post'], '/{country}/state', 'state')->name('combo_estado');

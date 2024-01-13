@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\configuracion\pedidos;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderMail;
 use App\Models\Drugstore;
+use App\Models\Inventary;
 use App\Models\Jluser;
 use App\Models\Order;
 use App\Models\OrderDetail;
@@ -15,6 +16,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 
 class OrderController extends Controller
@@ -31,30 +33,66 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        $products = Product::all();
-        $pharmacy = Pharmacy::pluck('name', 'id');
-        $drugstore = Drugstore::pluck('name', 'id');
-        $jl = Jluser::pluck('name', 'id');
-        return view('order.index', compact('products', 'pharmacy', 'drugstore', 'jl'));
+        // $products = Product::all();
+        if (Auth::user()->hasRole('Farmacia')) {
+            $combo = DB::table('users')
+                ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
+                ->select('users.id AS id', 'users.name AS name')
+                ->where('drugstorex_pharmacies.idPharmacy', Auth::user()->id)
+                ->where('drugstorex_pharmacies.permission', 1)
+                ->pluck('name', 'id');
+        } elseif (Auth::user()->hasRole('Droguería')) {
+            $combo = User::where('last_name', 'JL')->pluck('name', 'id');
+        }
+
+        return view('order.index', compact('combo'));
+    }
+
+    public function products($id)
+    {
+        if (Auth::user()->hasRole('Farmacia') && isset($id)) {
+            $products = Inventary::where('idUser', $id)->get();
+            $drogueria = $id;
+        } elseif (Auth::user()->hasRole('Droguería')) {
+            $products = Product::all();
+            $drogueria = 0;
+        }
+        return view('order.products', compact('products', 'drogueria'));
     }
 
     public function store(Request $request)
     {
-        $products = Product::find($request->id);
-        $cant = $request->cant;
-        if (empty($products)) {
-            return to_route('order.index');
+        if ($request->inventary != 0) {
+            $products = Inventary::where('idProduct', $request->id)->first();
+            $cant = $request->cant;
+            if (empty($products)) {
+                return to_route('order.index');
+            } else {
+                Cart::add(
+                    $products->id,
+                    $products->name,
+                    $cant,
+                    $products->price,
+                    ['image' => $products->product->img]
+                );
+            }
         } else {
-            Cart::add(
-                $products->id,
-                $products->name,
-                $cant,
-                $products->price_tf,
-                ['image' => $products->img]
-            );
+            $products = Product::find($request->id);
+            $cant = $request->cant;
+            if (empty($products)) {
+                return to_route('order.index');
+            } else {
+                Cart::add(
+                    $products->id,
+                    $products->name,
+                    $cant,
+                    $products->price_dg,
+                    ['image' => $products->img]
+                );
+            }
         }
         Toastr::success('Producto agregado: ' . $products->name, 'Success');
-        return to_route('order.index');
+        return to_route('order.products', $request->inventary);
     }
     public function checkout()
     {
@@ -89,7 +127,6 @@ class OrderController extends Controller
             Cart::destroy();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
-            dd($th);
             Toastr::error('Intente de nuevo', 'error');
         }
         return to_route('order.index');

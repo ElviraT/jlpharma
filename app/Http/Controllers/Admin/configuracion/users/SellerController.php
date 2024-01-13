@@ -126,7 +126,7 @@ class SellerController extends Controller
             DB::beginTransaction();
             foreach ($order->detalle as $value) {
                 if (Auth::user()->hasAnyRole('Drogueria', 'Farmacia')) {
-                    $stock = Inventary::where('Product', $value->name)->where('idUser', $order['idReceives'])->first();
+                    $stock = Inventary::where('name', $value->name)->where('idUser', $order['idReceives'])->first();
                 } else {
                     $stock = Product::where('name', $value->name)->first();
                 }
@@ -137,7 +137,7 @@ class SellerController extends Controller
                 }
                 $data_inventary = [
                     "idProduct" => $value['idProduct'],
-                    "Product" => $value['name'],
+                    "name" => $value['name'],
                     "idUser" => $order['idSend'],
                     "quantity" => $value['cant']
                 ];

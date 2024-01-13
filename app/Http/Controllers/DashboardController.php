@@ -20,11 +20,14 @@ class DashboardController extends Controller
     public function index()
     {
         if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $pedidos = Order::where('idStatus', 1)->get();
+            $pedidos = Order::where('idStatus', 1)->paginate(8);
         } else {
-            $pedidos = Order::where('idReceives', Auth::user()->id)->where('idStatus', 1)->get();
+            $pedidos = Order::where('idReceives', Auth::user()->id)->where('idStatus', 1)->paginate(8);
         }
-        $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)->where('permission', 0)->get();
+        $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)
+            ->where('permission', 0)
+            ->where('observation', null)
+            ->paginate(8);
 
         $user = User::select('id')->where('last_name', '<>', 'web')->get();
         return view('dashboard', compact('pedidos', 'user', 'solicitud'));
