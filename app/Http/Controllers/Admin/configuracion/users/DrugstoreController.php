@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Contact;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +24,11 @@ class DrugstoreController extends Controller
 
     public function index(Request $request)
     {
-        $drugstore = Drugstore::orderBy('id', 'ASC')->get();
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Vendedor')) {
+            $drugstore = Drugstore::orderBy('id', 'ASC')->get();
+        } else {
+            $drugstore = Drugstore::where('id', auth()->user()->drugstore->id)->orderBy('id', 'ASC')->get();
+        }
         return view('admin.configuracion.usuarios.drugstore.index', compact('drugstore'));
     }
     public function create()

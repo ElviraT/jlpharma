@@ -9,7 +9,6 @@ use App\Http\Controllers\Admin\configuracion\combos\StatusPedidoController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\configuracion\direccion\CountryController;
 use App\Http\Controllers\Admin\configuracion\direccion\StateController;
 use App\Http\Controllers\Admin\configuracion\direccion\CityController;
@@ -27,6 +26,7 @@ use App\Http\Controllers\Admin\configuracion\users\PharmacyController;
 use App\Http\Controllers\Admin\configuracion\users\SellerController;
 use App\Http\Controllers\Admin\DrugstorexPharmacyController;
 use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Session;
 
@@ -35,6 +35,10 @@ Route::get('/lang/{language}', function ($language) {
     Session::put('language', $language);
     return redirect()->back();
 })->name('language');
+
+// RUTAS DE VERIFICACIÓN DE CORREO //
+// Auth::routes(['verify' => true]);
+//FIN DE RUTAS VERIFICACIÓN//
 
 Route::middleware(['auth', 'translate'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
@@ -53,7 +57,7 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::resource('category', CategoryController::class)->except(['show'])->names('category');
     Route::resource('speciality', SpecialityController::class)->except(['show'])->names('speciality');
 
-    Route::resource('users', UserController::class)->names('users');
+    // Route::resource('users', UserController::class)->names('users');
     Route::resource('pharmacy', PharmacyController::class)->except(['show'])->names('pharmacy');
     Route::resource('drugstore', DrugstoreController::class)->except(['show'])->names('drugstore');
     Route::resource('jluser', JluserController::class)->except(['show'])->names('jluser');

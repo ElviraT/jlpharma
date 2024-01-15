@@ -3,7 +3,7 @@
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
             <div class="modal-header modal-header-success">
-                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Municipio</h5>
+                <h5 class="modal-title" id="exampleModalLongTitle">Agregar Parroquía</h5>
                 <button type="button" class="btn btn-ligth close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>

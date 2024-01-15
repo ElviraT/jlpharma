@@ -84,7 +84,8 @@
                                             @csrf
                                             <div class="col-md-12 mb-3">
                                                 <label>{{ 'Status' }}</label>
-                                                <select name="idStatus" id="idStatus" class="form-control status">
+                                                <select name="idStatus" id="idStatus" class="form-control status"
+                                                    reaadonly="true">
                                                     @foreach ($status as $item)
                                                         @if ($item->name == 'Procesado')
                                                             <option value="{{ $item->id }}" selected>
@@ -126,7 +127,7 @@
             </div>
         </div>
     </div>
-    <input type="hidden" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : '000' }}" id="contador">
+    <input type="text" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : 'PE-000' }}" id="contador">
     <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo">
 @endsection
 @section('js')

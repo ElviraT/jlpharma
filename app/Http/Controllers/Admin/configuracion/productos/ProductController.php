@@ -15,7 +15,7 @@ class ProductController extends Controller
     const UPLOAD_PATH = 'productos';
     function __construct()
     {
-        $this->middleware('permission:product.index|product.create|product.edit|product.destroy', ['only' => ['index', 'store']]);
+        $this->middleware('permission:product.index', ['only' => ['index']]);
         $this->middleware('permission:product.create', ['only' => ['create', 'store']]);
         $this->middleware('permission:product.edit', ['only' => ['edit', 'update']]);
         $this->middleware('permission:product.destroy', ['only' => ['destroy']]);

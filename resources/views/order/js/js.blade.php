@@ -23,6 +23,7 @@
         var letras;
         letras = $('#contador').val().slice(3);
         var contador = parseInt(letras) + parseInt(1);
+        console.log(letras);
         if (contador < 10) {
             codigo = ('PE-000' + contador);
         } else if (contador < 100) {

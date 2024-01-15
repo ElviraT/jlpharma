@@ -12,7 +12,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable
+class User extends Authenticatable //implements MustVerifyEmail
 {
     use HasApiTokens, HasFactory, Notifiable,  HasRoles;
 
@@ -56,6 +56,11 @@ class User extends Authenticatable
     public function pharmacy(): HasMany
     {
         return $this->hasMany(Pharmacy::class, 'id');
+    }
+
+    public function drugstore(): BelongsTo
+    {
+        return $this->belongsTo(Drugstore::class, 'id', 'idUser');
     }
 
     public function OrderSend(): HasMany
