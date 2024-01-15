@@ -37,10 +37,10 @@ Route::get('/lang/{language}', function ($language) {
 })->name('language');
 
 // RUTAS DE VERIFICACIÓN DE CORREO //
-// Auth::routes(['verify' => true]);
+Auth::routes(['verify' => true]);
 //FIN DE RUTAS VERIFICACIÓN//
 
-Route::middleware(['auth', 'translate'])->group(function () {
+Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('roles', RoleController::class)->except(['show'])->names('roles');
     Route::resource('countries', CountryController::class)->except(['show'])->names('countries');
