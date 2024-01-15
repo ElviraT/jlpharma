@@ -32,7 +32,7 @@
                                     @foreach (Cart::content() as $item)
                                         <tr>
                                             <td>
-                                                <img src="{{ str_replace('\\', '/', '../' . $item->options->image) }}"
+                                                <img src="{{ str_replace('\\', '/', '../storage/' . $item->options->image) }}"
                                                     alt=""class="img-responsive" style="width: 50%;">
                                             </td>
                                             <td>
@@ -127,7 +127,7 @@
             </div>
         </div>
     </div>
-    <input type="text" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : 'PE-000' }}" id="contador">
+    <input type="hidden" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : 'PE-000' }}" id="contador">
     <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo">
 @endsection
 @section('js')

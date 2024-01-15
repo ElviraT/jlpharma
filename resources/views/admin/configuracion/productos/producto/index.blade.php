@@ -45,8 +45,8 @@
                                 <tbody>
                                     @foreach ($product as $resultado)
                                         <tr>
-                                            <td><img src="{{ str_replace('\\', '/', $resultado->img) }}" alt="producto"
-                                                    class="rounded-circle shadow-4-strong img">
+                                            <td><img src="{{ str_replace('\\', '/', './storage/' . $resultado->img) }}"
+                                                    alt="producto" class="rounded-circle shadow-4-strong img">
                                             </td>
                                             <td>{{ $resultado->codigo }}</td>
                                             <td>{{ $resultado->name }}</td>

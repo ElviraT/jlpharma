@@ -9,6 +9,8 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -54,10 +56,13 @@ class ProductController extends Controller
             if ($tmp->isValid()) {
                 $extension = $tmp->extension();
                 $name = Str::slug($request->name) . '.' . $extension;
-                $ruta = $tmp->storeAs(
-                    self::UPLOAD_PATH,
-                    $name
-                );
+                // $ruta = $tmp->storeAs(
+                //     self::UPLOAD_PATH,
+                //     $name
+                // );
+                $ruta = self::UPLOAD_PATH . '/' . $name;
+                Storage::disk('public')->put($ruta, File::get($tmp));
+                //dd($ruta);
                 $ruta = $this->separadorDirectorios($ruta);
                 return $ruta;
             }

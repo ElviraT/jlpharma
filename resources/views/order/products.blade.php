@@ -45,8 +45,8 @@
                                 @if (isset($pro->img))
                                     <div class="col-lg-3">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ str_replace('\\', '/', '../' . $pro->img) }}" alt="producto"
-                                                class="card-img-top mx-auto"
+                                            <img src="{{ str_replace('\\', '/', '../storage/' . $pro->img) }}"
+                                                alt="producto" class="card-img-top mx-auto"
                                                 style="height: 150px; width: 150px;display: block;"
                                                 alt="{{ $pro->img }}">
                                             <div class="card-body">
@@ -92,7 +92,7 @@
                                 @else
                                     <div class="col-lg-3">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ str_replace('\\', '/', '../' . $pro->product->img) }}"
+                                            <img src="{{ str_replace('\\', '/', '../storage/' . $pro->product->img) }}"
                                                 alt="producto" class="card-img-top mx-auto"
                                                 style="height: 150px; width: 150px;display: block;"
                                                 alt="{{ $pro->product->img }}">
