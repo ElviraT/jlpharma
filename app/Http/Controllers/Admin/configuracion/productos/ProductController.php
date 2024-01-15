@@ -56,13 +56,9 @@ class ProductController extends Controller
             if ($tmp->isValid()) {
                 $extension = $tmp->extension();
                 $name = Str::slug($request->name) . '.' . $extension;
-                // $ruta = $tmp->storeAs(
-                //     self::UPLOAD_PATH,
-                //     $name
-                // );
                 $ruta = self::UPLOAD_PATH . '/' . $name;
+                $this->_eliminarArchivo($name);
                 Storage::disk('public')->put($ruta, File::get($tmp));
-                //dd($ruta);
                 $ruta = $this->separadorDirectorios($ruta);
                 return $ruta;
             }
@@ -106,10 +102,7 @@ class ProductController extends Controller
         try {
             DB::beginTransaction();
             $ruta = $this->separadorDirectorios('../public/' . $product->img);
-            if (file_exists($ruta)) {
-                // dd($ruta);
-                unlink(storage_path($ruta));
-            }
+            $this->_eliminarArchivo($product->img);
             $product->delete();
 
             DB::commit();
@@ -118,5 +111,10 @@ class ProductController extends Controller
         }
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('product.index');
+    }
+    private function _eliminarArchivo($name)
+    {
+        $archivo = self::UPLOAD_PATH . '/' . $name;
+        Storage::disk('public')->delete([$archivo]);
     }
 }
