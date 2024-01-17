@@ -43,7 +43,7 @@
                         <div class="row">
                             @foreach ($products['products'] as $pro)
                                 @if (isset($pro->img))
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
                                             <img src="{{ str_replace('\\', '/', '../storage/' . $pro->img) }}"
                                                 alt="producto" class="card-img-top mx-auto"
@@ -59,10 +59,12 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="row">
-                                                        <div class="col-4">
-                                                            <p>${{ $pro->price_dg }}</p>
+                                                        <div class="col-6">
+                                                            <p><strong>{{ 'Precio:' }}</strong>
+                                                                ${{ number_format($pro->price_dg, 2) }}
+                                                            </p>
                                                         </div>
-                                                        <div class="col-8">
+                                                        <div class="col-6">
                                                             <div class="input-group">
                                                                 <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
                                                                     type="number" id="cant{{ $pro->id }}"
@@ -70,9 +72,15 @@
                                                                     onchange="add_cant({{ $pro->id }})">
                                                             </div>
                                                         </div>
+                                                        @if (Auth::user()->hasRole('Vendedor'))
+                                                            <div class="col-12">
+                                                                <p><strong>{{ 'Stock:' }}</strong>
+                                                                    {{ $pro->quantity }}{{ ' und.' }}</p>
+                                                            </div>
+                                                        @endif
                                                     </div>
                                                 </div>
-                                                <div class="card-footer">
+                                                <div class="card-footer" align="center">
                                                     @can('order.store')
                                                         <form action="{{ route('order.store') }}" method="post">
                                                             @csrf
@@ -90,7 +98,7 @@
                                         </div>
                                     </div>
                                 @else
-                                    <div class="col-lg-3">
+                                    <div class="col-lg-4">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
                                             <img src="{{ str_replace('\\', '/', '../storage/' . $pro->product->img) }}"
                                                 alt="producto" class="card-img-top mx-auto"
@@ -106,10 +114,11 @@
                                                 </div>
                                                 <div class="col-12">
                                                     <div class="row">
-                                                        <div class="col-4">
-                                                            <p>${{ $pro->price }}</p>
+                                                        <div class="col-6">
+                                                            <p><strong>{{ 'Precio:' }}</strong>${{ number_format($pro->price, 2) }}
+                                                            </p>
                                                         </div>
-                                                        <div class="col-8">
+                                                        <div class="col-6">
                                                             <div class="input-group">
                                                                 <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
                                                                     type="number" id="cant{{ $pro->product->id }}"
@@ -117,9 +126,16 @@
                                                                     onchange="add_cant({{ $pro->product->id }})">
                                                             </div>
                                                         </div>
+                                                        @if (Auth::user()->hasRole('Vendedor'))
+                                                            <div class="col-12">
+                                                                <p><strong>{{ 'Stock:' }}</strong>
+                                                                    {{ $pro->product->quantity }}{{ ' und.' }}</p>
+                                                            </div>
+                                                        @endif
+
                                                     </div>
                                                 </div>
-                                                <div class="card-footer">
+                                                <div class="card-footer" align="center">
                                                     @can('order.store')
                                                         <form action="{{ route('order.store') }}" method="post">
                                                             @csrf

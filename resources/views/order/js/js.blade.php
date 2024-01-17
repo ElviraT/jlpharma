@@ -19,21 +19,21 @@
 
     $(document).ready(function() {
         // ASIGNAR NUMERO DE PEDIDO
-        var codigo = 0;
-        var letras;
-        letras = $('#contador').val().slice(3);
-        var contador = parseInt(letras) + parseInt(1);
-        console.log(letras);
-        if (contador < 10) {
-            codigo = ('PE-000' + contador);
-        } else if (contador < 100) {
-            codigo = ('PE-00' + contador);
-        } else if (contador < 1000) {
-            codigo = ('PE-0' + contador);
-        } else if (contador < 10000) {
-            codigo = ('PE-' + contador);
-        }
-        $('#order').val(codigo);
+        var iduser = $('#envia').val();
+        $.ajax({
+            url: '../combo/' + iduser + '/user',
+            type: 'GET',
+
+            error: function(err) {
+                console.log(err);
+            },
+
+            success: function(options) {
+                $('#contador').val(options['name']);
+                $('#realizar_pedido').attr('disabled', false);
+            }
+
+        });
         // FIN
 
         var combo = $('#combo').val();

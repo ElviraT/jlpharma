@@ -149,18 +149,19 @@ class OrderController extends Controller
     }
     public function checkout()
     {
-        $pedido = Order::select('nOrder')->orderBy('id', 'desc')->first();
         $status = StatusPedido::all();
         $combo = Auth::user()->getRoleNames();
         $idReceives = Session::get('idPara');
         $idSend = Session::get('idDe');
-        return view('order.checkout', compact('pedido', 'combo', 'idReceives', 'idSend', 'status'));
+        return view('order.checkout', compact('combo', 'idReceives', 'idSend', 'status'));
     }
     public function send(Request $request)
     {
+        $nombre = $this->getIniciales($request['nOrder']);
+        $norden = strtoupper($nombre) . date('dmYHis');
         try {
             $item = [
-                'nOrder' => $request['nOrder'],
+                'nOrder' =>  $norden,
                 'idSend' => $request['idSend'],
                 'idReceives' => $request['idReceives'],
                 'idUser' => auth()->user()->id,
@@ -187,6 +188,15 @@ class OrderController extends Controller
             Toastr::error('Intente de nuevo', 'error');
         }
         return to_route('order.index');
+    }
+    private function getIniciales($nombre)
+    {
+        $name = '';
+        $explode = explode(' ', $nombre);
+        for ($x = 0; $x < 2; $x++) {
+            $name .= $explode[$x][0];
+        }
+        return $name;
     }
     public function remove(Request $request)
     {

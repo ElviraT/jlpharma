@@ -52,4 +52,9 @@ class ComboController extends Controller
         }
         return response()->json($result);
     }
+    public function user($iduser)
+    {
+        $user = User::select(['name'])->where('id', $iduser)->first();
+        return response()->json($user);
+    }
 }

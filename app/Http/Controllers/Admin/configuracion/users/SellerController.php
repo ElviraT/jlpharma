@@ -28,7 +28,11 @@ class SellerController extends Controller
 
     public function index(Request $request)
     {
-        $seller = Seller::orderBy('id', 'ASC')->get();
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $seller = Seller::orderBy('id', 'ASC')->get();
+        } else {
+            $seller = Seller::where('id', auth()->user()->seller->id)->orderBy('id', 'ASC')->get();
+        }
         return view('admin.configuracion.usuarios.sellers.index', compact('seller'));
     }
     public function create()

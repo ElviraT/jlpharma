@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Seller extends Model
 {
@@ -22,9 +23,9 @@ class Seller extends Model
     {
         return $this->belongsTo(Status::class, 'idstatus');
     }
-    public function user(): BelongsTo
+    public function user(): HasMany
     {
-        return $this->belongsTo(User::class, 'idUser');
+        return $this->hasMany(User::class, 'idUser');
     }
     public function zone(): BelongsTo
     {

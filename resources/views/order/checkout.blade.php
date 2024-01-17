@@ -17,67 +17,71 @@
                 <div class="card sombra p-2">
                     <div class="col-lg-12">
                         @if (Cart::count())
-                            <table id="AllDataTable" class="table table-striped table-bordered" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th width=15%>{{ 'IMAGEN' }}</th>
-                                        <th width=20%>{{ 'NOMBRE' }}</th>
-                                        <th width=20%>{{ 'CANTIDAD' }}</th>
-                                        <th width=20%>{{ 'PRECIO UNITARIO' }}</th>
-                                        <th width=15%>{{ 'IMPORTE' }}</th>
-                                        <th width=10%></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach (Cart::content() as $item)
+                            <div class="table-responsive">
+                                <table id="AllDataTable" class="table table-striped table-bordered" width="100%">
+                                    <thead>
                                         <tr>
-                                            <td>
-                                                <img src="{{ str_replace('\\', '/', '../storage/' . $item->options->image) }}"
-                                                    alt=""class="img-responsive" style="width: 50%;">
-                                            </td>
-                                            <td>
-                                                {{ $item->name }}
-                                            </td>
-                                            <td>
-                                                {{ $item->qty }}
-                                            </td>
-                                            <td>
-                                                {{ number_format($item->price, 2) }}
-                                            </td>
-                                            <td>
-                                                {{ number_format($item->qty * $item->price, 2) }}
-                                            </td>
-                                            <td>
-                                                <form action="{{ route('order.remove') }}" method="post">
-                                                    @csrf
-                                                    <input type="hidden" name="id" value="{{ $item->rowId }}">
-                                                    <input type="submit" name="add"
-                                                        class="btn btn-outline-danger btn-sm" value="X">
-                                                </form>
-                                            </td>
+                                            <th width=15%>{{ 'IMAGEN' }}</th>
+                                            <th width=20%>{{ 'NOMBRE' }}</th>
+                                            <th width=20%>{{ 'CANTIDAD' }}</th>
+                                            <th width=20%>{{ 'PRECIO UNITARIO' }}</th>
+                                            <th width=15%>{{ 'IMPORTE' }}</th>
+                                            <th width=10%></th>
                                         </tr>
-                                    @endforeach
-                                    <tr class="fw-bolder">
-                                        <td colspan="3"></td>
-                                        <td class="text-end">{{ 'Subtotal' }}</td>
-                                        <td class="text-end">{{ Cart::subtotal() }}</td>
-                                        <td></td>
-                                    </tr>
-                                    <tr class="fw-bolder">
-                                        <td colspan="3"></td>
-                                        <td class="text-end">{{ 'Total' }}</td>
-                                        <td class="text-end">
-                                            {{ Cart::total() }}
-                                        </td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                            <div class="col-12">
+                                    </thead>
+                                    <tbody>
+                                        @foreach (Cart::content() as $item)
+                                            <tr>
+                                                <td>
+                                                    <img src="{{ str_replace('\\', '/', '../storage/' . $item->options->image) }}"
+                                                        alt=""class="img-responsive" style="width: 55%;">
+                                                </td>
+                                                <td>
+                                                    {{ $item->name }}
+                                                </td>
+                                                <td>
+                                                    {{ $item->qty }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($item->price, 2) }}
+                                                </td>
+                                                <td>
+                                                    {{ number_format($item->qty * $item->price, 2) }}
+                                                </td>
+                                                <td>
+                                                    <form action="{{ route('order.remove') }}" method="post">
+                                                        @csrf
+                                                        <input type="hidden" name="id" value="{{ $item->rowId }}">
+                                                        <input type="submit" name="add"
+                                                            class="btn btn-outline-danger btn-sm" value="X">
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                    </tbody>
+                                    <tfoot>
+                                        <tr class="fw-bolder">
+                                            <td colspan="4" class="text-end">{{ 'Subtotal' }}</td>
+                                            <td class="text-end">{{ Cart::subtotal() }}</td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="fw-bolder">
+                                            <td colspan="4" class="text-end">{{ 'Total' }}</td>
+                                            <td class="text-end">
+                                                {{ Cart::total() }}
+                                            </td>
+                                            <td></td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
+                            <div class="col-12 mt-5">
                                 <div class="row">
-                                    <div class="col-6">
-                                        <a href="{{ route('order.clear') }}"
-                                            class="btn btn-outline-danger btn-sm text-center">{{ 'Vaciar Pedido' }}</a>
+                                    <div class="col-6 mt-5">
+                                        <div class="col-md-12 mt-5">
+                                            <a href="{{ route('order.clear') }}"
+                                                class="btn btn-outline-danger btn-sm text-center">{{ 'Vaciar Pedido' }}</a>
+                                        </div>
                                     </div>
                                     <div class="col-6">
                                         <form action="{{ route('order.send') }}" method="post">
@@ -110,10 +114,10 @@
                                                 required>
                                             <input type="hidden" name="idReceives" id="recibe"
                                                 value="{{ $idReceives }}" required>
-                                            <input type="hidden" name="nOrder" id="order" value="" required>
+                                            <input type="hidden" name="nOrder" id="contador" value="" required>
 
-                                            <button type="submit"
-                                                class="btn btn-outline-info btn-sm text-center">{{ 'Realizar Pedido' }}</button>
+                                            <button type="submit" class="btn btn-outline-info btn-sm text-center"
+                                                id="realizar_pedido" disabled>{{ 'Realizar Pedido' }}</button>
                                         </form>
                                     </div>
                                 </div>
@@ -127,8 +131,8 @@
             </div>
         </div>
     </div>
-    <input type="hidden" value="{{ isset($pedido->nOrder) ? $pedido->nOrder : 'PE-000' }}" id="contador">
-    <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo">
+    {{-- <input type="text" value="" id="contador" name="nOrder"> --}}
+    {{-- <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo"> --}}
 @endsection
 @section('js')
     @include('order.js.js')

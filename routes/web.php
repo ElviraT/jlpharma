@@ -96,6 +96,7 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
         Route::match(['get', 'post'], '/{state}/municipality', 'municipality')->name('combo_municipio');
         Route::match(['get', 'post'], '/{municipality}/parish', 'parish')->name('combo_parroquia');
         Route::match(['get', 'post'], '/{pedido}/combo_pedido', 'pedido');
+        Route::match(['get', 'post'], '/{idUser}/user', 'user');
     });
 });
 
