@@ -78,6 +78,7 @@ class SellerController extends Controller
 
     public function edit(Seller $seller)
     {
+        // dd($seller);
         $zones = DB::table('zones')
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
@@ -160,7 +161,6 @@ class SellerController extends Controller
             DB::commit();
             Toastr::success(__('Successfully updated registration'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
-            dd($e);
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }

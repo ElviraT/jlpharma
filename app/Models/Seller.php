@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Seller extends Model
 {
@@ -23,9 +24,9 @@ class Seller extends Model
     {
         return $this->belongsTo(Status::class, 'idstatus');
     }
-    public function user(): HasMany
+    public function user(): HasOne
     {
-        return $this->hasMany(User::class, 'idUser');
+        return $this->hasOne(User::class, 'id', 'idUser');
     }
     public function zone(): BelongsTo
     {

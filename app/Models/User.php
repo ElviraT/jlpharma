@@ -63,9 +63,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsTo(Drugstore::class, 'id', 'idUser');
     }
 
-    public function seller(): BelongsTo
+    public function seller(): HasOne
     {
-        return $this->belongsTo(Seller::class, 'id', 'idUser');
+        return $this->hasOne(Seller::class, 'idUser');
     }
 
     public function OrderSend(): HasMany
