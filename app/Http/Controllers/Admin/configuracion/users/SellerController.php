@@ -160,6 +160,7 @@ class SellerController extends Controller
             DB::commit();
             Toastr::success(__('Successfully updated registration'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
+            dd($e);
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }

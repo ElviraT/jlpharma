@@ -47,42 +47,37 @@
         <!-- -------------------------------------------------------------- -->
         <!-- Login box.scss -->
         <!-- -------------------------------------------------------------- -->
-        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center"
-            style="
-          background: url('{{ asset('img/login.jpg') }}') no-repeat center center;
-        ">
-            <div class="auth-box on-sidebar">
-                <div id="loginform">
-                    <div class="logo">
-                        <span class="db"><img src="{{ asset('img/Logo.png') }}" alt="loginpage" class="dark-logo"
-                                width="300" /></span>
-                        <h5 class="font-medium mb-3">Sign In to Admin</h5>
-                    </div>
-                    @yield('content')
+        <div class="auth-wrapper d-flex no-block justify-content-center align-items-center">
+            <div id="loginform">
+                <div class="logo" align="center">
+                    <span class="db"><img src="{{ asset('img/Logo.png') }}" alt="loginpage" class="dark-logo"
+                            width="200" /></span>
                 </div>
-                <!-- -------------------------------------------------------------- -->
-                <!-- Login box.scss -->
-                <!-- -------------------------------------------------------------- -->
+                @yield('content')
             </div>
             <!-- -------------------------------------------------------------- -->
-            <!-- All Required js -->
+            <!-- Login box.scss -->
             <!-- -------------------------------------------------------------- -->
-            <script src="{{ asset('js_new/jquery.min.js') }}"></script>
-            <script src="{{ asset('js_new/bootstrap.bundle.min.js') }}"></script>
-            <script src="{{ asset('js_new/feather.min.js') }}"></script>
-            <script src="{{ asset('js_new/custom.min.js') }}"></script>
-            <!-- -------------------------------------------------------------- -->
-            <!-- This page plugin js -->
-            <!-- -------------------------------------------------------------- -->
-            <script>
-                // ==============================================================
-                // Login and Recover Password
-                // ==============================================================
-                $('#to-recover').on('click', function() {
-                    $('#loginform').slideUp();
-                    $('#recoverform').fadeIn();
-                });
-            </script>
+        </div>
+        <!-- -------------------------------------------------------------- -->
+        <!-- All Required js -->
+        <!-- -------------------------------------------------------------- -->
+        <script src="{{ asset('js_new/jquery.min.js') }}"></script>
+        <script src="{{ asset('js_new/bootstrap.bundle.min.js') }}"></script>
+        <script src="{{ asset('js_new/feather.min.js') }}"></script>
+        <script src="{{ asset('js_new/custom.min.js') }}"></script>
+        <!-- -------------------------------------------------------------- -->
+        <!-- This page plugin js -->
+        <!-- -------------------------------------------------------------- -->
+        <script>
+            // ==============================================================
+            // Login and Recover Password
+            // ==============================================================
+            $('#to-recover').on('click', function() {
+                $('#loginform').slideUp();
+                $('#recoverform').fadeIn();
+            });
+        </script>
 </body>
 
 <!-- Mirrored from demos.wrappixel.com/premium-admin-templates/bootstrap/xtreme-bootstrap/package/html/ltr/authentication-login2.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 06 Sep 2023 22:55:11 GMT -->
