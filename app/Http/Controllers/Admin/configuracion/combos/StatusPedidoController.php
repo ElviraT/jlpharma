@@ -56,9 +56,9 @@ class StatusPedidoController extends Controller
         }
         return to_route('statusp.index');
     }
-    public function destroy(StatusPedido $status)
+    public function destroy(StatusPedido $statusp)
     {
-        $status->delete();
+        $statusp->delete();
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('statusp.index');
     }

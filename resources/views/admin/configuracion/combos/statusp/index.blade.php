@@ -59,7 +59,7 @@
                                                 @can('statusp.destroy')
                                                     <a href="#" type="button" data-toggle="modal"
                                                         data-target="#confirm-delete" data-record-id="{{ $resultado->id }}"
-                                                        data-record-title="{{ 'el status de pedido' }}{{ $resultado->name }}"
+                                                        data-record-title="{{ 'el status de pedido ' }}{{ $resultado->name }}"
                                                         data-action="{{ route('statusp.destroy', $resultado->id) }}"
                                                         title="{{ __('Delete Status') }}"
                                                         class="btn-transition btn btn-outline-danger">
