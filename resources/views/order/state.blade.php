@@ -1,5 +1,26 @@
 @extends('layouts_new.base')
+@section('css')
+    <style>
+        .espacio_modal {
+            letter-spacing: 1px;
+            line-height: 27px;
+        }
 
+        #detalle_info,
+        tr th td {
+            border: 2px solid #555;
+        }
+
+        #detalle_info thead {
+            background-color: rgb(80, 255, 182);
+            border-bottom: 1px solid #555;
+        }
+
+        #detalle_info tfoot {
+            border-top: 1px solid #555;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -16,13 +37,13 @@
                         <table id="AllDataTable" class="table table-bordered" width="100%">
                             <thead>
                                 <tr>
-                                    <th width="10%">{{ __('No. Orden') }}</th>
-                                    <th width="15%">{{ __('Realizado Por') }}</th>
-                                    <th width="20%">{{ __('Para') }}</th>
-                                    <th width="10%">{{ __('Total') }}</th>
-                                    <th width="10%">{{ __('Estado') }}</th>
-                                    <th width="25%">{{ __('Observación') }}</th>
-                                    <th width="10%">{{ __('Action') }}</th>
+                                    <th>{{ __('No. Orden') }}</th>
+                                    <th>{{ __('Realizado Por') }}</th>
+                                    <th>{{ __('Para') }}</th>
+                                    <th>{{ __('Total') }}</th>
+                                    <th>{{ __('Estado') }}</th>
+                                    <th>{{ __('Observación') }}</th>
+                                    <th>{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -41,7 +62,8 @@
                                         @endif
                                         <td>
                                             <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
-                                                data-target=".bd-example-modal-sm" data-record-id="{{ $resultado->id }}">
+                                                data-target=".bd-example-modal-sm" data-record-id="{{ $resultado->id }}"
+                                                data-record-status="{{ $resultado->status->name }}">
                                                 <i class="ri-eye-line"></i>
                                             </button> &nbsp;&nbsp;
                                         </td>
@@ -54,6 +76,9 @@
             </div>
         </div>
     </div>
+@endsection
+@section('modal')
+    @include('order.modal.info')
 @endsection
 @section('js')
     @include('order.js.js')

@@ -156,4 +156,87 @@
         $('.title', this).text(data.recordTitle);
         modal.removeClass('loading');
     });
+
+    // MODAL INFO
+    $('#modal_info').on('show.bs.modal', function(e) {
+        var modal = $(e.delegateTarget),
+            data = $(e.relatedTarget).data();
+        modal.addClass('loading');
+        if (data.recordId != undefined) {
+            modal.addClass('loading');
+            $('#estado', modal).text(data.recordStatus);
+            $('#id', modal).val(data.recordId);
+            $.getJSON('./' + data.recordId + '/info', function(data) {
+
+                var options = {
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit',
+                    hour: 'numeric',
+                    minute: 'numeric',
+                    hour12: true,
+                };
+                var fecha = new Date(data.pedido.created_at);
+                $('#idTitle').append(data.order.nOrder);
+                $('#rif').text(data.order.rif);
+                $('#rs').text(data.order.rs);
+                $('#contacto').text(data.order.c_nombre + ' ' + data.order.c_apellido);
+                $('#seg').text(data.order.segmento);
+                $('#sada').text(data.order.sada + '/' + data.order.sicm);
+                $('#tel').text(data.order.telefono);
+                $('#email').text(data.order.email);
+                $('#dir').text(data.order.direccion);
+                $('#pedido').text(data.pedido.nOrder);
+                $('#fecha').text(fecha.toLocaleDateString("es-ES", options));
+                if (data.vendedor) {
+                    $('#cedula').text(data.vendedor.dni);
+                    $('#nombre').text(data.vendedor.name);
+                    $('#telefono').text(data.vendedor.telefono);
+                }
+                // DETALLE DE PEDIDO
+                $("#cuerpo").html("");
+                $("#footer").html("");
+                for (var i = 0; i < data.detalle.length; i++) {
+                    var tr = `<tr>
+                    <td>` + ([i] + 1) + `</td>
+                    <td>` + data.detalle[i].name + `</td>
+                    <td>` + data.detalle[i].cant + `</td>
+                    <td>` + data.detalle[i].price + `</td>
+                    <td>` + data.detalle[i].importe + `</td>
+                    </tr>`;
+                    $("#cuerpo").append(tr)
+                }
+                var trF = `<tr>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th>Total</th>
+                    <th>` + data.pedido.total + `</th>
+                    </tr>`;
+                $("#footer").append(trF)
+                // FIN DETALLE
+                modal.removeClass('loading');
+            });
+        }
+    });
+    $('#modal_info').on('hidden.bs.modal', function() {
+        $('#estado').text('');
+        $('#idTitle').text('Pedido ');
+        $('#rif').text('');
+        $('#rs').text('');
+        $('#contacto').text('');
+        $('#seg').text('');
+        $('#sada').text('');
+        $('#tel').text('');
+        $('#email').text('');
+        $('#dir').text('');
+        $('#pedido').text('');
+        $('#fecha').text('');
+        $('#cedula').text('');
+        $('#nombre').text('');
+        $('#telefono').text('');
+        $("#cuerpo").html('');
+        $("#footer").html('');
+    });
+    // FIN MODAL INFO
 </script>

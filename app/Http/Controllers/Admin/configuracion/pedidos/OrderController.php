@@ -13,6 +13,7 @@ use App\Models\Pharmacy;
 use App\Models\Product;
 use App\Models\StatusPedido;
 use App\Models\User;
+use Barryvdh\DomPDF\Facade as PDF;
 use Brian2694\Toastr\Facades\Toastr;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Http\Request;
@@ -232,5 +233,39 @@ class OrderController extends Controller
             $order = Order::where('idSend', Auth::user()->id)->get();
         }
         return view('order.state', compact('order'));
+    }
+
+    public function info($id)
+    {
+        $data['pedido'] = Order::find($id);
+        $data['detalle'] = $data['pedido']->detalle;
+
+        if (isset($data['pedido']->userSend->drugstore)) {
+            $data['order'] = DB::table('users')
+                ->join('orders', 'users.id', '=', 'orders.idSend')
+                ->join('drugstores', 'orders.idSend', '=', 'drugstores.idUser')
+                ->join('contacts', 'drugstores.id', '=', 'contacts.iddrugstore')
+                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'drugstores.name AS rs', 'drugstores.telefono', 'drugstores.rif', 'drugstores.sada', 'drugstores.sicm', 'drugstores.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
+                ->where('orders.id', $id)
+                ->first();
+        } else {
+            $data['order'] = DB::table('users')
+                ->join('orders', 'users.id', '=', 'orders.idSend')
+                ->join('pharmacies', 'orders.idSend', '=', 'pharmacies.idUser')
+                ->join('contacts', 'pharmacies.id', '=', 'contacts.iddrugstore')
+                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'pharmacies.name AS rs', 'pharmacies.telefono', 'pharmacies.rif', 'pharmacies.sada', 'pharmacies.sicm', 'pharmacies.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
+                ->where('orders.id', $id)
+                ->first();
+        }
+        $data['vendedor'] = $data['pedido']->user->seller;
+        return $data;
+    }
+
+    public function pdf(Request $request)
+    {
+        $order = $this->info($request->id);
+        $pdf = app('dompdf.wrapper');
+        $pdf->loadView('order.pedido_pdf', ['order' => $order]);
+        return $pdf->download('pedido-' . $order['pedido']->nOrder . '.pdf');
     }
 }

@@ -86,6 +86,8 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::post('/order/send', [OrderController::class, 'send'])->name('order.send');
     Route::get('/order/{order}/detail', [OrderController::class, 'detalle'])->name('order.detalle');
     Route::get('/order/state', [OrderController::class, 'state'])->name('order.state');
+    Route::get('/order/{id}/info', [OrderController::class, 'info'])->name('order.info');
+    Route::post('/order/pdf', [OrderController::class, 'pdf'])->name('order.pdf');
 
     Route::get('/request/permission', [DrugstorexPharmacyController::class, 'index'])->name('request.index');
     Route::post('/request/permission/add', [DrugstorexPharmacyController::class, 'store'])->name('request.store');
