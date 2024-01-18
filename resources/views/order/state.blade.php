@@ -16,17 +16,20 @@
                         <table id="AllDataTable" class="table table-bordered" width="100%">
                             <thead>
                                 <tr>
-                                    <th width="15%">{{ __('No. Orden') }}</th>
+                                    <th width="10%">{{ __('No. Orden') }}</th>
+                                    <th width="15%">{{ __('Realizado Por') }}</th>
                                     <th width="20%">{{ __('Para') }}</th>
-                                    <th width="15%">{{ __('Total') }}</th>
+                                    <th width="10%">{{ __('Total') }}</th>
                                     <th width="10%">{{ __('Estado') }}</th>
-                                    <th width="40%">{{ __('Observación') }}</th>
+                                    <th width="25%">{{ __('Observación') }}</th>
+                                    <th width="10%">{{ __('Action') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 @foreach ($order as $resultado)
                                     <tr>
                                         <td>{{ $resultado->nOrder }}</td>
+                                        <td>{{ $resultado->user->name }}</td>
                                         <td>{{ $resultado->userReceives->name }}</td>
                                         <td>{{ number_format($resultado->total, 2) }}</td>
                                         <td style="background-color: {{ $resultado->status->color }}; color: #fff">
@@ -36,6 +39,12 @@
                                         @else
                                             <td>{{ 'NINGUNA' }}</td>
                                         @endif
+                                        <td>
+                                            <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
+                                                data-target=".bd-example-modal-sm" data-record-id="{{ $resultado->id }}">
+                                                <i class="ri-eye-line"></i>
+                                            </button> &nbsp;&nbsp;
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>

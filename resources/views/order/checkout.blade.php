@@ -76,16 +76,20 @@
                                 </table>
                             </div>
                             <div class="col-12 mt-5">
-                                <div class="row">
-                                    <div class="col-6 mt-5">
-                                        <div class="col-md-12 mt-5">
-                                            <a href="{{ route('order.clear') }}"
-                                                class="btn btn-outline-danger btn-sm text-center">{{ 'Vaciar Pedido' }}</a>
+                                <form action="{{ route('order.send') }}" method="post">
+                                    @csrf
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <div class="col-md-12 mb-3">
+                                                <label>{{ 'Observación:' }}</label>
+                                                <textarea name="observation" id="observation" rows="2" class="form-control" required></textarea>
+                                            </div>
+                                            <div class="col-md-12">
+                                                <a href="{{ route('order.clear') }}"
+                                                    class="btn btn-outline-danger btn-sm text-center">{{ 'Vaciar Pedido' }}</a>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-6">
-                                        <form action="{{ route('order.send') }}" method="post">
-                                            @csrf
+                                        <div class="col-6">
                                             <div class="col-md-12 mb-3">
                                                 <label>{{ 'Status' }}</label>
                                                 <select name="idStatus" id="idStatus" class="form-control status"
@@ -118,9 +122,9 @@
 
                                             <button type="submit" class="btn btn-outline-info btn-sm text-center"
                                                 id="realizar_pedido" disabled>{{ 'Realizar Pedido' }}</button>
-                                        </form>
+                                        </div>
                                     </div>
-                                </div>
+                                </form>
                             </div>
                         @else
                             <a href="{{ route('order.products') }}"
@@ -131,8 +135,6 @@
             </div>
         </div>
     </div>
-    {{-- <input type="text" value="" id="contador" name="nOrder"> --}}
-    {{-- <input type="hidden" value="{{ isset($combo) ? $combo : '' }}" id="combo"> --}}
 @endsection
 @section('js')
     @include('order.js.js')

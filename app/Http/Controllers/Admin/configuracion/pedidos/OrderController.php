@@ -166,7 +166,8 @@ class OrderController extends Controller
                 'idReceives' => $request['idReceives'],
                 'idUser' => auth()->user()->id,
                 'total' => $request['total'],
-                'idStatus' => $request['idStatus']
+                'idStatus' => $request['idStatus'],
+                'observation' => $request['observation']
             ];
             $order = Order::create($item);
             for ($i = 0; $i < count($request['name']); $i++) {
