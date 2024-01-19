@@ -257,6 +257,7 @@ class OrderController extends Controller
                 ->where('orders.id', $id)
                 ->first();
         }
+        // dd($data['pedido']->userSend->drugstore);
         $data['vendedor'] = $data['pedido']->user->seller;
         return $data;
     }

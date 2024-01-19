@@ -58,9 +58,9 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasMany(Pharmacy::class, 'id');
     }
 
-    public function drugstore(): BelongsTo
+    public function drugstore(): HasMany
     {
-        return $this->belongsTo(Drugstore::class, 'id');
+        return $this->hasMany(Drugstore::class, 'id');
     }
 
     public function seller(): HasOne

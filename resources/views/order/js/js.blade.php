@@ -178,8 +178,9 @@
                     minute: 'numeric',
                     hour12: true,
                 };
+                console.log(data);
                 var fecha = new Date(data.pedido.created_at);
-                $('#idTitle').append(data.order.nOrder);
+                $('#idTitle').append(data.pedido.nOrder);
                 $('#rif').text(data.order.rif);
                 $('#rs').text(data.order.rs);
                 $('#contacto').text(data.order.c_nombre + ' ' + data.order.c_apellido);

@@ -22,7 +22,7 @@ class Order extends Model
 
     public function userSend(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'idSend', 'id');
+        return $this->belongsTo(User::class, 'idSend');
     }
     public function userReceives(): BelongsTo
     {
