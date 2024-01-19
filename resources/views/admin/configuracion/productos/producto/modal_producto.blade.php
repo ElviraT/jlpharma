@@ -45,12 +45,12 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>{{ 'Centro de salud' }}</label>
-                            <input type="number" name="price_cs" class="form-control" id="price_cs" step="0.1"
+                            <input type="number" name="price_cs" class="form-control" id="price_cs" step="0.01"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>{{ 'Drogueria' }}</label>
-                            <input type="number" name="price_dg" class="form-control" id="price_dg" step="0.1"
+                            <input type="number" name="price_dg" class="form-control" id="price_dg" step="0.01"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">
@@ -65,7 +65,7 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <label>{{ 'Transferencia' }}</label>
-                            <input type="number" name="price_tf" class="form-control" id="price_tf" step="0.1"
+                            <input type="number" name="price_tf" class="form-control" id="price_tf" step="0.01"
                                 required>
                         </div>
                         <div class="col-md-6 mb-3">

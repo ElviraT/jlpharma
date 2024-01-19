@@ -27,9 +27,9 @@ class Drugstore extends Model
     {
         return $this->belongsTo(Status::class, 'idstatus');
     }
-    public function user(): HasMany
+    public function user(): BelongsTo
     {
-        return $this->hasMany(User::class, 'idUser');
+        return $this->belongsTo(User::class, 'idUser');
     }
     public function contact(): HasOne
     {

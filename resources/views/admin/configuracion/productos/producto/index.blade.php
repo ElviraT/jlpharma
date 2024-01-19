@@ -50,7 +50,7 @@
                                             </td>
                                             <td>{{ $resultado->codigo }}</td>
                                             <td>{{ $resultado->name }}</td>
-                                            <td>{{ $resultado->price_dg . ', ' . $resultado->price_tf . ', ' . $resultado->price_cs }}
+                                            <td>{{ number_format($resultado->price_dg, 2) . ', ' . number_format($resultado->price_tf, 2) . ', ' . number_format($resultado->price_cs, 2) }}
                                             </td>
                                             <td>{{ $resultado->category->name }}</td>
 
