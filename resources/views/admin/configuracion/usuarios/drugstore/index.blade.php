@@ -29,11 +29,11 @@
                             <table id="AllDataTable" class="table table-bordered" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="30%">{{ __('Name') }}</th>
+                                        <th style="word-break: break-all;">{{ __('Name') }}</th>
                                         <th>{{ 'RIF' }}</th>
                                         <th>{{ 'Teléfono' }}</th>
-                                        <th width="10%">{{ 'Status' }}</th>
-                                        <th width="20%">{{ __('Action') }}</th>
+                                        <th>{{ 'Status' }}</th>
+                                        <th>{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>

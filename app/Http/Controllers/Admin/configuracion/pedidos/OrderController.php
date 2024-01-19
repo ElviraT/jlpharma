@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
+use Laravolt\Avatar\Avatar;
 
 class OrderController extends Controller
 {
@@ -193,12 +194,22 @@ class OrderController extends Controller
     }
     private function getIniciales($nombre)
     {
-        $name = '';
-        $explode = explode(' ', $nombre);
-        for ($x = 0; $x < 2; $x++) {
-            $name .= $explode[$x][0];
+        // Obtener iniciales del primer nombre
+        $iniciales = '';
+        $cont = 0;
+        $palabras = explode(' ', $nombre);
+        foreach ($palabras as $palabra) {
+            if (count($palabras) === 1) {
+                $iniciales .= strtoupper($palabra[0]) . strtoupper($palabra[1]);
+            } else {
+                if ($cont <= 1) {
+                    $iniciales .= strtoupper($palabra[0]);
+                }
+                $cont++;
+            }
         }
-        return $name;
+
+        return $iniciales;
     }
     public function remove(Request $request)
     {
