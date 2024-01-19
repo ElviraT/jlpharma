@@ -10,6 +10,13 @@
         });
     });
     $(function() {
+        $('.select').selectize({
+            preload: true,
+            loadingClass: 'loading',
+            closeAfterSelect: true
+        });
+    });
+    $(function() {
         $('.status').selectize({
             preload: true,
             loadingClass: 'loading',

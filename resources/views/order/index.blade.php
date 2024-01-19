@@ -60,7 +60,7 @@
                                                 <h4>PARA:</h4>
                                                 {!! Form::select('idPara', $combo, null, [
                                                     'placeholder' => 'Seleccione',
-                                                    'class' => 'otro',
+                                                    'class' => 'select form-control',
                                                     'id' => 'idPara',
                                                 ]) !!}
                                             </div>
