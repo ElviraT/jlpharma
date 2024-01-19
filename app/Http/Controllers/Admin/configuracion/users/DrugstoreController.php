@@ -27,7 +27,7 @@ class DrugstoreController extends Controller
         if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Vendedor')) {
             $drugstore = Drugstore::orderBy('id', 'ASC')->get();
         } else {
-            $drugstore = Drugstore::where('id', auth()->user()->drugstore->id)->orderBy('id', 'ASC')->get();
+            $drugstore = Drugstore::where('idUser', auth()->user()->id)->orderBy('id', 'ASC')->get();
         }
         return view('admin.configuracion.usuarios.drugstore.index', compact('drugstore'));
     }

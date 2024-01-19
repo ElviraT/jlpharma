@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use App\Models\Pharmacy;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 
@@ -23,7 +24,12 @@ class PharmacyController extends Controller
 
     public function index(Request $request)
     {
-        $pharmacy = Pharmacy::orderBy('id', 'ASC')->get();
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Vendedor')) {
+            $pharmacy = Pharmacy::orderBy('id', 'ASC')->get();
+        } else {
+            $pharmacy = Pharmacy::where('idUser', auth()->user()->id)->orderBy('id', 'ASC')->get();
+        }
+
         return view('admin.configuracion.usuarios.pharmacy.index', compact('pharmacy'));
     }
     public function create()
