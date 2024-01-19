@@ -1,6 +1,26 @@
 @extends('layouts_new.base')
 @section('css')
     <link href="{{ asset('css/selectize.min.css') }}" rel="stylesheet" type="text/css" />
+    <style>
+        .espacio_modal {
+            letter-spacing: 1px;
+            line-height: 27px;
+        }
+
+        #detalle_info,
+        tr th td {
+            border: 2px solid #555;
+        }
+
+        #detalle_info thead {
+            background-color: rgb(80, 255, 182);
+            border-bottom: 1px solid #555;
+        }
+
+        #detalle_info tfoot {
+            border-top: 1px solid #555;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -25,6 +45,10 @@
                             data-target=".bd-example-rechazo-sm" data-record-id="{{ $order->id }}"
                             data-record-title="{{ 'Rechazar el pedido de ' }}{{ $order->userSend->name }}">
                             {{ 'Rechazar Pedido' }}
+                        </button> &nbsp;&nbsp;
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modal_info"
+                            data-record-id="{{ $order->id }}" data-record-status="{{ $order->status->name }}">
+                            {{ 'Ver Pedido' }}
                         </button> &nbsp;&nbsp;
                         <a href="{{ route('dashboard') }}" class="btn btn-info">{{ 'Volver' }}</a>
                     </div>
@@ -65,6 +89,7 @@
 @section('modal')
     @include('order.aceptar_modal')
     @include('order.rechazar_modal')
+    @include('order.modal.info')
 @endsection
 @section('js')
     @include('order.js.js')

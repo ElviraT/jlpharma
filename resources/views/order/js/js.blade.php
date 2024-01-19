@@ -166,7 +166,9 @@
             modal.addClass('loading');
             $('#estado', modal).text(data.recordStatus);
             $('#id', modal).val(data.recordId);
-            $.getJSON('./' + data.recordId + '/info', function(data) {
+            var url = "{{ route('order.info', 'id') }}";
+            url = url.replace('id', data.recordId);
+            $.getJSON(url, function(data) {
 
                 var options = {
                     year: 'numeric',
