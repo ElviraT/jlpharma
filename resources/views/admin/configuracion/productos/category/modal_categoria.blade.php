@@ -23,7 +23,7 @@
                         <label>{{ __('Color') }}</label>
                         <input id="color" type="color" class="form-control" name="color" maxlength="20">
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-12" hidden>
                         <label for="speciality">{{ 'Especialidad' }}</label>
                         <select id="speciality" name="idSpeciality" class="otro form-control" style="width: 100%">
                             <option></option>

@@ -35,7 +35,7 @@
                                     <tr>
                                         <th width="40%">{{ __('Name') }}</th>
                                         <th width="20%">{{ __('Color') }}</th>
-                                        <th width="20%">{{ __('Speciality') }}</th>
+                                        {{-- <th width="20%">{{ __('Speciality') }}</th> --}}
                                         <th width="20%">{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
@@ -49,7 +49,7 @@
                                                     <p class="mt-2">{{ $resultado->color }}</p>
                                                 </div>
                                             </td>
-                                            <td>{{ $resultado->Speciality->name }}</td>
+                                            {{-- <td>{{ $resultado->Speciality->name }}</td> --}}
                                             <td>
                                                 @can('category.edit')
                                                     <a href="#" type="button" data-toggle="modal"

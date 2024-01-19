@@ -35,6 +35,7 @@ class CategoryController extends Controller
 
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
+            dd($e);
             Toastr::error(__('An error occurred please try again'), 'error');
         }
         return to_route('category.index');
