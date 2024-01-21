@@ -17,9 +17,9 @@ return new class extends Migration
             $table->longText('description');
             $table->string('codigo');
             $table->string('img')->nullable();
-            $table->double('price_cs');
-            $table->double('price_dg');
-            $table->double('price_tf');
+            $table->float('price_cs', 10, 2);
+            $table->float('price_dg', 10, 2);
+            $table->float('price_tf', 10, 2);
             $table->integer('quantity');
             $table->integer('quantity_min');
             $table->integer('quantity_tf');

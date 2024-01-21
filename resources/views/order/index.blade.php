@@ -17,7 +17,7 @@
                     <div class="col-12 mb-3">
                         <div class="row">
                             @role(['SuperAdmin', 'Vendedor'])
-                                <form action="{{ route('order.products') }}" method="POST">
+                                <form action="{{ route('order.filtro') }}" method="POST">
                                     @csrf
                                     <div class="row">
                                         <div class="col-4">
@@ -52,7 +52,7 @@
                                 </form>
                             @endrole
                             @role(['Drogueria', 'Farmacia'])
-                                <form action="{{ route('order.products') }}" method="POST">
+                                <form action="{{ route('order.filtro') }}" method="POST">
                                     @csrf
                                     <div class="col-6">
                                         <div class="row">

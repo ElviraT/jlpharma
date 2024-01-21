@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\configuracion\users;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NuevoUsuarioMail;
 use App\Models\Inventary;
 use App\Models\Order;
 use App\Models\Product;
@@ -13,6 +14,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class SellerController extends Controller
 {
@@ -66,7 +68,7 @@ class SellerController extends Controller
                 "idZone" => $request['idZone'],
             ];
             Seller::create($data_seller);
-
+            Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {

@@ -47,6 +47,8 @@ class UsersSeeder extends Seeder
             'email' => 'desarrollo@test.com',
             'email_verified_at' => Carbon::now(),
             'password' => Hash::make('Admin'),
+            'status' => 1,
+            'first_time' => 1,
         ]);
 
         $role = Role::find(1); // Obtén el rol SuperAdmin por su ID

@@ -77,7 +77,8 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     Route::get('/order', [OrderController::class, 'index'])->name('order.index');
-    Route::match(['get', 'post'], '/order/products', [OrderController::class, 'products'])->name('order.products');
+    Route::match(['get', 'post'], '/order/filtro', [OrderController::class, 'filtro'])->name('order.filtro');
+    Route::match(['get', 'post'], '/order/products/{id}', [OrderController::class, 'products'])->name('order.products');
     Route::post('/order/store', [OrderController::class, 'store'])->name('order.store');
     Route::get('/order/checkout', [OrderController::class, 'checkout'])->name('order.checkout');
     Route::get('/order/clear', [OrderController::class, 'clear'])->name('order.clear');
@@ -87,6 +88,7 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::get('/order/{order}/detail', [OrderController::class, 'detalle'])->name('order.detalle');
     Route::get('/order/state', [OrderController::class, 'state'])->name('order.state');
     Route::get('/order/{id}/info', [OrderController::class, 'info'])->name('order.info');
+    Route::get('/update/{id}/{cant}/order', [OrderController::class, 'update']);
     Route::post('/order/pdf', [OrderController::class, 'pdf'])->name('order.pdf');
 
     Route::get('/request/permission', [DrugstorexPharmacyController::class, 'index'])->name('request.index');

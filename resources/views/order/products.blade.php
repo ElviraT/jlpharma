@@ -45,7 +45,7 @@
                                 @if (isset($pro->img))
                                     <div class="col-lg-4">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ str_replace('\\', '/', '../storage/' . $pro->img) }}"
+                                            <img src="{{ str_replace('\\', '/', '../../storage/' . $pro->img) }}"
                                                 alt="producto" class="card-img-top mx-auto"
                                                 style="height: 150px; width: 150px;display: block;"
                                                 alt="{{ $pro->img }}">
@@ -87,6 +87,8 @@
                                                             <input type="hidden" name="product"
                                                                 value="{{ $products['para'] }}">
                                                             <input type="hidden" name="id" value="{{ $pro->id }}">
+                                                            <input type="hidden" name="idCategoria"
+                                                                value="{{ $products['categoria'] }}">
                                                             <input type="hidden" name="cant"
                                                                 id="cantidad{{ $pro->id }}" value="1">
                                                             <input type="submit" name="add" class="btn btn-outline-success"
@@ -100,7 +102,7 @@
                                 @else
                                     <div class="col-lg-4">
                                         <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ str_replace('\\', '/', '../storage/' . $pro->product->img) }}"
+                                            <img src="{{ str_replace('\\', '/', '../../storage/' . $pro->product->img) }}"
                                                 alt="producto" class="card-img-top mx-auto"
                                                 style="height: 150px; width: 150px;display: block;"
                                                 alt="{{ $pro->product->img }}">
@@ -156,6 +158,10 @@
                                 @endif
                             @endforeach
                         </div>
+                    </div>
+                    <div class="col-12" style="display: flex;justify-content: flex-end;">
+                        <a href="javascript:history.back()" class="btn btn-light btn-lg active"><i
+                                class="ri-arrow-left-s-line"></i></a>
                     </div>
                 </div>
             </div>

@@ -47,6 +47,34 @@
                         aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
                             class="hide-menu">{{ __('Dashboard') }}</span></a>
                 </li>
+                @canany(['order.index', 'order.state', 'request.index'])
+                    <li class="nav-small-cap">
+                        <i data-feather="more-horizontal" class="feather-icon"></i>
+                        <span class="hide-menu">{{ __('menu.Order') }}</span>
+                    </li>
+                    @can('request.index')
+                        <li class="sidebar-item {{ @request()->routeIs('request.index') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('request.index') }}"
+                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Solicitar Permiso' }}</span></a>
+                        </li>
+                    @endcan
+                    @can('order.index')
+                        <li class="sidebar-item {{ @request()->routeIs('order') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
+                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Realizar Pedido' }}</span></a>
+                        </li>
+                    @endcan
+                    @can('order.state')
+                        <li class="sidebar-item {{ @request()->routeIs('order.state') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.state') }}"
+                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Estado de Pedido' }}</span></a>
+                        </li>
+                    @endcan
+
+                @endcanany
                 <li class="nav-small-cap">
                     <i data-feather="more-horizontal" class="feather-icon"></i>
                     <span class="hide-menu">{{ __('menu.Configuration') }}</span>
@@ -164,14 +192,14 @@
                                             {{ __('menu.Municipality') }} </span></a>
                                 </li>
                             @endcan
-                            @can('parishes.index')
+                            {{-- @can('parishes.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('parishes.index') }}"
                                         class="sidebar-link {{ @request()->routeIs('parishes*') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Parish') }} </span></a>
                                 </li>
-                            @endcan
+                            @endcan --}}
                             @can('zones.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('zones.index') }}"
@@ -266,34 +294,6 @@
                             @endcan
                         </ul>
                     </li>
-                @endcanany
-                @canany(['order.index', 'order.state', 'request.index'])
-                    <li class="nav-small-cap">
-                        <i data-feather="more-horizontal" class="feather-icon"></i>
-                        <span class="hide-menu">{{ __('menu.Order') }}</span>
-                    </li>
-                    @can('request.index')
-                        <li class="sidebar-item {{ @request()->routeIs('request.index') ? 'active' : ' ' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('request.index') }}"
-                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">{{ 'Solicitar Permiso' }}</span></a>
-                        </li>
-                    @endcan
-                    @can('order.index')
-                        <li class="sidebar-item {{ @request()->routeIs('order') ? 'active' : ' ' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
-                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">{{ 'Realizar Pedido' }}</span></a>
-                        </li>
-                    @endcan
-                    @can('order.state')
-                        <li class="sidebar-item {{ @request()->routeIs('order.state') ? 'active' : ' ' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.state') }}"
-                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">{{ 'Estado de Pedido' }}</span></a>
-                        </li>
-                    @endcan
-
                 @endcanany
                 <li class="sidebar-item">
                     <a class="dropdown-item"

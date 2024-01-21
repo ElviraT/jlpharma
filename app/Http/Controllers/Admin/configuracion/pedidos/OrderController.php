@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\configuracion\pedidos;
 
 use App\Http\Controllers\Controller;
 use App\Mail\OrderMail;
+use App\Models\Category;
 use App\Models\Drugstore;
 use App\Models\Inventary;
 use App\Models\Jluser;
@@ -21,7 +22,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Session;
-use Laravolt\Avatar\Avatar;
 
 class OrderController extends Controller
 {
@@ -58,60 +58,89 @@ class OrderController extends Controller
         return view('order.index', compact('combo'));
     }
 
-    public function products(Request $request)
+    public function filtro(Request $request)
+    {
+        // dd($request);
+        session(['idPara' => $request->idPara]);
+        session(['idDe' => $request->idDe]);
+        session(['De' => $request->de]);
+        $categorias = Category::paginate(10);
+
+        return view('order.filtro_producto', compact('categorias'));
+    }
+    public function products($id)
     {
         if (Auth::user()->hasAnyRole('Farmacia', 'Drogueria')) {
-            $products = $this->products1($request);
+            $products = $this->products1($id);
         } else {
-            $products = $this->products2($request);
+            $products = $this->products2($id);
         }
 
         return view('order.products', compact('products'));
     }
 
-    private function products1($request)
+    private function products1($id)
     {
-        if (isset($request->idPara)) {
-            session(['idPara' => $request->idPara]);
-            session(['idDe' => Auth::user()->id]);
-            $id = Session::get('idPara');
-        } else {
-            $id = Session::get('idPara');
-        }
+        $idPara = Session::get('idPara');
+        $idDe = Session::get('idDe');
+        $De = Session::get('De');
+        // if (isset($request->idPara)) {
+        //     session(['idPara' => $request->idPara]);
+        //     session(['idDe' => Auth::user()->id]);
+        //     $id = Session::get('idPara');
+        // } else {
+        //     $id = Session::get('idPara');
+        // }
         if (Auth::user()->hasRole('Farmacia')) {
-            $data['products'] = Inventary::where('idUser', $id)->get();
-            $data['para'] = $id;
+            $data['products'] =  DB::table('inventaries')
+                ->join('products', 'inventaries.idProduct', 'products.id')
+                ->select('*')
+                ->where('inventaries.idUser', $idPara)
+                ->where('products.idCategory', $id)
+                ->paginate(10);
+            $data['para'] = $idPara;
             $data['de'] = Auth::user()->id;
-        } elseif (Auth::user()->hasRole('Drogueria')) {
-            $data['products'] = Product::all();
-            $data['para'] = $id;
+        } elseif (Auth::user()->hasRole('Droguería')) {
+            $data['products'] = Product::where('idCategory', $id)->paginate(10);
+            $data['para'] = $idPara;
             $data['de'] = Auth::user()->id;
         }
+        $data['categoria'] = $id;
         return $data;
     }
-    private function products2($request)
+    private function products2($id)
     {
-        if (isset($request->idPara)) {
-            session(['idPara' => $request->idPara]);
-            session(['idDe' => $request->idDe]);
-            session(['De' => $request->de]);
-            $idPara = Session::get('idPara');
-            $idDe = Session::get('idDe');
-            $De = Session::get('De');
-        } else {
-            $idPara = Session::get('idPara');
-            $idDe = Session::get('idDe');
-            $De = Session::get('De');
-        }
+        // if (isset($request->idPara)) {
+        //     session(['idPara' => $request->idPara]);
+        //     session(['idDe' => $request->idDe]);
+        //     session(['De' => $request->de]);
+        //     $idPara = Session::get('idPara');
+        //     $idDe = Session::get('idDe');
+        //     $De = Session::get('De');
+        // } else {
+        //     $idPara = Session::get('idPara');
+        //     $idDe = Session::get('idDe');
+        //     $De = Session::get('De');
+        // }
+        $idPara = Session::get('idPara');
+        $idDe = Session::get('idDe');
+        $De = Session::get('De');
         if ($De == 'Farmacia') {
-            $data['products'] = Inventary::where('idUser', $idPara)->get();
+            $data['products'] = DB::table('inventaries')
+                ->join('products', 'inventaries.idProduct', 'products.id')
+                ->select('*')
+                ->where('inventaries.idUser', $idPara)
+                ->where('products.idCategory', $id)
+                ->paginate(10);
+
             $data['para'] = $idPara;
             $data['de'] = $idDe;
         } else {
-            $data['products'] = Product::all();
+            $data['products'] = Product::where('idCategory', $id)->paginate(10);
             $data['para'] = $idPara;
             $data['de'] = $idDe;
         }
+        $data['categoria'] = $id;
         return $data;
     }
 
@@ -147,7 +176,12 @@ class OrderController extends Controller
             }
         }
         Toastr::success('Producto agregado: ' . $products->name, 'Success');
-        return to_route('order.products');
+        return to_route('order.products', $request->idCategoria);
+    }
+    public function update($id, $cant)
+    {
+        $ok = Cart::update($id, $cant);
+        return $ok;
     }
     public function checkout()
     {
@@ -256,19 +290,18 @@ class OrderController extends Controller
                 ->join('orders', 'users.id', '=', 'orders.idSend')
                 ->join('drugstores', 'orders.idSend', '=', 'drugstores.idUser')
                 ->join('contacts', 'drugstores.id', '=', 'contacts.iddrugstore')
-                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'drugstores.name AS rs', 'drugstores.telefono', 'drugstores.rif', 'drugstores.sada', 'drugstores.sicm', 'drugstores.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
+                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'orders.observation', 'drugstores.name AS rs', 'drugstores.telefono', 'drugstores.rif', 'drugstores.sada', 'drugstores.sicm', 'drugstores.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
                 ->where('orders.id', $id)
                 ->first();
         } else {
             $data['order'] = DB::table('users')
                 ->join('orders', 'users.id', '=', 'orders.idSend')
                 ->join('pharmacies', 'orders.idSend', '=', 'pharmacies.idUser')
-                ->join('contacts', 'pharmacies.id', '=', 'contacts.iddrugstore')
-                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'pharmacies.name AS rs', 'pharmacies.telefono', 'pharmacies.rif', 'pharmacies.sada', 'pharmacies.sicm', 'pharmacies.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
+                ->join('contacts', 'pharmacies.id', '=', 'contacts.idPharmacy')
+                ->select('users.last_name AS segmento', 'users.email', 'orders.nOrder', 'orders.observation', 'pharmacies.name AS rs', 'pharmacies.telefono', 'pharmacies.rif', 'pharmacies.sada', 'pharmacies.sicm', 'pharmacies.direccion', 'contacts.name AS c_nombre', 'contacts.last_name AS c_apellido')
                 ->where('orders.id', $id)
                 ->first();
         }
-        // dd($data['pedido']->userSend->drugstore);
         $data['vendedor'] = $data['pedido']->user->seller;
         return $data;
     }

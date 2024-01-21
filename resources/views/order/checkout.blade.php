@@ -40,7 +40,9 @@
                                                     {{ $item->name }}
                                                 </td>
                                                 <td>
-                                                    {{ $item->qty }}
+                                                    <input type="text" name="cantidad" id="cantidad{{ $item->rowId }}"
+                                                        class="form-control" value="{{ $item->qty }}"
+                                                        onchange="return update('{{ $item->rowId }}')">
                                                 </td>
                                                 <td>
                                                     {{ number_format($item->price, 2) }}
@@ -138,4 +140,23 @@
 @endsection
 @section('js')
     @include('order.js.js')
+    <script>
+        function update(id) {
+            var cant = $('#cantidad' + id).val();
+            $.ajax({
+                url: '../update/' + id + '/' + cant + '/order',
+                type: 'GET',
+
+                error: function(err) {
+                    console.log(err);
+                },
+
+                success: function(options) {
+                    window.location.reload();
+                    console.log('OK');
+                }
+
+            });
+        }
+    </script>
 @endsection

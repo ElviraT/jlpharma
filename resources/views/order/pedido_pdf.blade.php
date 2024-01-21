@@ -28,50 +28,42 @@
     </style>
 
 <body>
-    <img src="{{ asset('img/favicon.png') }}" alt="" width="10%">
-    <h1>{{ 'Gestion de ventas JL' }}</h1>
+    <table>
+        <tr>
+            <td><img src="{{ asset('img/favicon.png') }}" alt="" width="27%"></td>
+            <td>
+                <h1>{{ 'Gestion de ventas JL' }}</h1>
+            </td>
+        </tr>
+    </table>
     <hr>
     <table>
         <tr>
             <td width="60%">
                 <h3>{{ 'Datos del Cliente' }}</h3>
-                <label class="control-label">{{ 'RIF:  ' }}</label><span>{{ $order['order']->rif }}</span><br>
-                <label class="control-label">{{ 'Razón Social:  ' }}</label><span>{{ $order['order']->rs }}</span><br>
-                <label
-                    class="control-label">{{ 'Contacto:  ' }}</label><span>{{ $order['order']->c_nombre . ' ' . $order['order']->c_apellido }}</span><br>
-                <label
-                    class="control-label">{{ 'Segmento:  ' }}</label><span>{{ $order['order']->segmento }}</span><br>
-                <label
-                    class="control-label">{{ 'SICM/SADA:  ' }}</label><span>{{ $order['order']->sada . '/' . $order['order']->sicm }}</span><br>
-                <label
-                    class="control-label">{{ 'Teléfono:  ' }}</label><span>{{ $order['order']->telefono }}</span><br>
-                <label class="control-label">{{ 'Email:  ' }}</label><span>{{ $order['order']->email }}</span><br>
-                <label class="control-label">{{ 'Dirección:  ' }}</label><span>{{ $order['order']->direccion }}</span>
+                <label>{{ 'RIF:  ' }}</label><span>{{ $order['order']->rif }}</span><br>
+                <label>{{ 'Razón Social:  ' }}</label><span>{{ $order['order']->rs }}</span><br>
+                <label>{{ 'Contacto:  ' }}</label><span>{{ $order['order']->c_nombre . ' ' . $order['order']->c_apellido }}</span><br>
+                <label>{{ 'Segmento:  ' }}</label><span>{{ $order['order']->segmento }}</span><br>
+                <label>{{ 'SICM/SADA:  ' }}</label><span>{{ $order['order']->sada . '/' . $order['order']->sicm }}</span><br>
+                <label>{{ 'Teléfono:  ' }}</label><span>{{ $order['order']->telefono }}</span><br>
+                <label>{{ 'Email:  ' }}</label><span>{{ $order['order']->email }}</span><br>
+                <label>{{ 'Dirección:  ' }}</label><span>{{ $order['order']->direccion }}</span>
             </td>
             <td width="40%">
                 <h3>{{ 'Datos de la orden' }}</h3>
-                <label
-                    class="control-label">{{ 'Pedido:  ' }}</label><span>{{ $order['pedido']->nOrder }}</span><br>
-                <label
-                    class="control-label">{{ 'Fecha:  ' }}</label><span>{{ date_format($order['pedido']->created_at, 'Y/m/d h:i') }}</span><br>
-                <label
-                    class="control-label">{{ 'Estado:  ' }}</label><span>{{ $order['pedido']->status->name }}</span>
+                <label>{{ 'Pedido:  ' }}</label><span>{{ $order['pedido']->nOrder }}</span><br>
+                <label>{{ 'Fecha:  ' }}</label><span>{{ date_format($order['pedido']->created_at, 'Y/m/d h:i') }}</span><br>
+                <label>{{ 'Estado:  ' }}</label><span>{{ $order['pedido']->status->name }}</span>
                 @if (isset($order['vendedor']))
                     <h3>{{ 'Datos del vendedor' }}</h3>
-
-                    <label
-                        class="control-label">{{ 'Cedula:  ' }}</label><span>{{ $order['vendedor']->dni }}</span><br>
-                    <label
-                        class="control-label">{{ 'Nombre:  ' }}</label><span>{{ $order['vendedor']->name }}</span><br>
-                    <label
-                        class="control-label">{{ 'Teléfono:  ' }}</label><span>{{ $order['vendedor']->telefono }}</span>
+                    <label>{{ 'Cedula:  ' }}</label><span>{{ $order['vendedor']->dni }}</span><br>
+                    <label>{{ 'Nombre:  ' }}</label><span>{{ $order['vendedor']->name }}</span><br>
+                    <label>{{ 'Teléfono:  ' }}</label><span>{{ $order['vendedor']->telefono }}</span>
                 @endif
             </td>
         </tr>
     </table>
-
-
-
 
     <h3>{{ 'Detalle del pedido' }}</h3>
     <table id="detalle_info" width="100%">
@@ -102,6 +94,10 @@
             </tr>
         </tfoot>
     </table>
+    <hr>
+    <div>
+        <strong> {{ $order['order']->observation }} </strong>
+    </div>
 </body>
 
 </html>

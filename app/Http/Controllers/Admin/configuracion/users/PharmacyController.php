@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\configuracion\users;
 
 use App\Http\Controllers\Controller;
+use App\Mail\NuevoUsuarioMail;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Models\Pharmacy;
@@ -11,6 +12,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class PharmacyController extends Controller
 {
@@ -76,7 +78,7 @@ class PharmacyController extends Controller
                 "telephone2" => $request['telephone2'],
             ];
             Contact::create($data_contacto);
-
+            Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {

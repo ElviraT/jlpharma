@@ -4,12 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <!-- Tell the browser to be responsive to screen width -->
-    {{-- <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="keywords"
-        content="wrappixel, admin dashboard, html css dashboard, web dashboard, bootstrap 5 admin, bootstrap 5, css3 dashboard, bootstrap 5 dashboard, xtreme admin bootstrap 5 dashboard, frontend, responsive bootstrap 5 admin template, material design, material dashboard bootstrap 5 dashboard template" />
-    <meta name="description"
-        content="Xtreme is powerful and clean admin dashboard template, inpired from Google's Material Design" /> --}}
+    <meta name="csrf-token" content="{ { csrf_token() }}">
     <meta name="robots" content="noindex,nofollow" />
     <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Favicon icon -->
@@ -48,7 +43,7 @@
         <!-- Login box.scss -->
         <!-- -------------------------------------------------------------- -->
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center">
-            <div id="loginform">
+            <div class="p-3" id="loginform" style="border: 1px solid #049383;">
                 <div class="logo" align="center">
                     <span class="db"><img src="{{ asset('img/Logo.png') }}" alt="loginpage" class="dark-logo"
                             width="200" /></span>
