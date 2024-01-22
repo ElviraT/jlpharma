@@ -32,7 +32,7 @@ class SellerController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $seller = Seller::where('idstatus',1)->orderBy('id', 'ASC')->paginate(10);
+            $seller = Seller::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
         } else {
             $seller = Seller::where('id', auth()->user()->seller->id)->where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
         }
@@ -44,7 +44,8 @@ class SellerController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.sellers.create', compact('zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.sellers.create', compact('zones', 'status'));
     }
 
     public function store(Request $request)

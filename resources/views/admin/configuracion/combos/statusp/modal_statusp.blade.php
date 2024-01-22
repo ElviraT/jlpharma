@@ -20,6 +20,11 @@
                             placeholder="{{ __('Name') }}" required onkeypress='return soloLetras(event)'
                             maxlength="128">
                     </div>
+                    <div class="col-12 mb-3">
+                        <label>{{ 'Orden' }}</label>
+                        <input type="number" name="orden" id="orden" class="form-control" step="1"
+                            min="1" required>
+                    </div>
                     <div class="col-md-12 mb-3">
                         <label>{{ __('Color') }}</label>
                         <input id="color" type="color" class="form-control" name="color" maxlength="20">

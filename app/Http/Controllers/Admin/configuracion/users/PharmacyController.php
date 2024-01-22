@@ -44,7 +44,8 @@ class PharmacyController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.pharmacy.create', compact('zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.pharmacy.create', compact('zones', 'status'));
     }
 
     public function store(Request $request)

@@ -19,7 +19,7 @@ class StatusPedidoController extends Controller
 
     public function index(Request $request)
     {
-        $status = StatusPedido::orderBy('id', 'ASC')->get();
+        $status = StatusPedido::orderBy('orden', 'ASC')->get();
         return view('admin.configuracion.combos.statusp.index', compact('status'));
     }
 
@@ -48,6 +48,7 @@ class StatusPedidoController extends Controller
             $status = StatusPedido::find($id);
             $status->name = $request->name;
             $status->color = $request->color;
+            $status->orden = $request->orden;
             $status->save();
 
             Toastr::success(__('Successfully updated registration'), 'Success');

@@ -42,7 +42,8 @@ class DrugstoreController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.drugstore.create', compact('zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.drugstore.create', compact('zones', 'status'));
     }
 
     public function store(Request $request)
@@ -58,6 +59,8 @@ class DrugstoreController extends Controller
             ];
             $user = User::create($data_user);
             $user->assignRole([4]);
+
+            User::where('name', 'LIKE', '%Latinfarma%')->update(['last_name' => 'Latinfarma']);
 
             $data_drogueria = [
                 "name" => $request['name'],

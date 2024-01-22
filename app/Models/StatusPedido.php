@@ -10,7 +10,7 @@ class StatusPedido extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name', 'color'
+        'name', 'color', 'orden'
     ];
     public function order(): HasMany
     {

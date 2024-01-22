@@ -168,7 +168,7 @@ class OrderController extends Controller
     }
     public function checkout()
     {
-        $status = StatusPedido::all();
+        $status = StatusPedido::orderBy('orden', 'ASC')->get();
         $combo = Auth::user()->getRoleNames();
         $idReceives = Session::get('idPara');
         $idSend = Session::get('idDe');
@@ -250,7 +250,7 @@ class OrderController extends Controller
 
     public function detalle(Order $order)
     {
-        $status = StatusPedido::all();
+        $status = StatusPedido::orderBy('orden', 'ASC')->get();
         return view('order.detalle', compact('order', 'status'));
     }
     public function state()

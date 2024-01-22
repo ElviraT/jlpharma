@@ -15,6 +15,7 @@
                 $("#method").val('put');
                 $('#name', modal).val(obj.name);
                 $('#color', modal).val(obj.color);
+                $('#orden', modal).val(obj.orden);
                 modal.removeClass('loading');
             });
         }
@@ -22,5 +23,6 @@
     $('#modal_statusp').on('hidden.bs.modal', function(e) {
         $('#name').val('');
         $('#color').val('');
+        $('#orden').val('');
     });
 </script>

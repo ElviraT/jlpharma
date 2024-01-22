@@ -250,6 +250,14 @@
                                             {{ __('menu.Seller') }} </span></a>
                                 </li>
                             @endcan
+                            @can('other.index')
+                                <li class="sidebar-item">
+                                    <a href="{{ route('other.index') }}"
+                                        class="sidebar-link {{ @request()->routeIs('other') || @request()->routeIs('other.create') ? 'active' : ' ' }}"><i
+                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
+                                            {{ 'Otros Usuarios' }} </span></a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcanany

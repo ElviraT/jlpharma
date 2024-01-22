@@ -34,6 +34,8 @@ class DashboardController extends Controller
                 ->where('permission', 0)
                 ->where('observation', null)
                 ->paginate(8);
+        } else {
+            $solicitud = [];
         }
         $user = User::select('id')->where('last_name', '<>', 'web')->get();
         return view('dashboard', compact('pedidos', 'user', 'solicitud'));

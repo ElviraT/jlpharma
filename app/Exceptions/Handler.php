@@ -4,12 +4,14 @@ namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Illuminate\Auth\AuthenticationException;
+use Illuminate\Support\Facades\Artisan;
 use Throwable;
 
 class Handler extends ExceptionHandler
 {
     protected function unauthenticated($request, AuthenticationException $exception)
     {
+        Artisan::call("cache:clear");
         return $request->expectsJson()
             ? response()->json(['message' => $exception->getMessage()], 401)
             : redirect()->guest(route('login'));

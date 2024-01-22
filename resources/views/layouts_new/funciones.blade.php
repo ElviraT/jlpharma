@@ -108,6 +108,7 @@
         var table_roles = $('#AllDataTable').DataTable({
             lengthChange: false,
             responsive: true,
+            "order": [],
             language: {
                 url: "{{ asset('js/Spanish.json') }}",
             },
