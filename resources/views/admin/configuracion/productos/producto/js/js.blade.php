@@ -38,6 +38,8 @@
                 $("#method").val('put');
                 var $category = $('#category').selectize();
                 $category[0].selectize.setValue(obj.idCategory);
+                var $mark = $('#idMark').selectize();
+                $mark[0].selectize.setValue(obj.idMark);
                 $('#codigo', modal).attr('readonly', false);
                 $('#codigo', modal).val(obj.codigo);
                 $('#codigo', modal).attr('readonly', true);

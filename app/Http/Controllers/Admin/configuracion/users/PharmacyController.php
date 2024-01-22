@@ -7,6 +7,7 @@ use App\Mail\NuevoUsuarioMail;
 use App\Models\Contact;
 use Illuminate\Http\Request;
 use App\Models\Pharmacy;
+use App\Models\Status;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
@@ -26,10 +27,12 @@ class PharmacyController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Vendedor')) {
-            $pharmacy = Pharmacy::orderBy('id', 'ASC')->get();
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $pharmacy = Pharmacy::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
+        } else if (Auth::user()->hasAnyRole('Vendedor')) {
+            $pharmacy = Pharmacy::where('idstatus', 1)->where('idZone', Auth::user()->seller->idZone)->orderBy('id', 'ASC')->paginate(10);
         } else {
-            $pharmacy = Pharmacy::where('idUser', auth()->user()->id)->orderBy('id', 'ASC')->get();
+            $pharmacy = Pharmacy::where('idUser', auth()->user()->id)->where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
         }
 
         return view('admin.configuracion.usuarios.pharmacy.index', compact('pharmacy'));
@@ -95,7 +98,8 @@ class PharmacyController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.pharmacy.edit', compact('pharmacy', 'zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.pharmacy.edit', compact('pharmacy', 'zones', 'status'));
     }
     public function update(Request $request)
     {
@@ -105,8 +109,8 @@ class PharmacyController extends Controller
                 "name" => $request['name'],
                 "last_name" => 'Farmacia',
                 "dni" => $request['rif'],
+                "status" => $request['idStatus'],
                 "email" => $request['email'],
-                "password" => Hash::make('12345'),
             ];
             $user = User::find($request['idUser']);
             $user->update($data_user);
@@ -120,6 +124,7 @@ class PharmacyController extends Controller
                 "direccion" => $request['direccion'],
                 "idUser" => $user->id,
                 "idZone" => $request['idZone'],
+                "idstatus" => $request['idStatus'],
             ];
             $pharmacy = Pharmacy::find($request['id']);
             $pharmacy->update($data_farmacia);

@@ -15,6 +15,16 @@
                         <form action="{{ route('request.store') }}" method="post">
                             @csrf
                             <div class="row">
+                                @role(['Vendedor', 'SuperAdmin'])
+                                    <div class="col-md-6 mb-3">
+                                        <label for="zona">{{ __('menu.Pharmacy') }}</label>
+                                        {!! Form::select('idPharmacy', $pharmacies, Auth::user()->id, [
+                                            'placeholder' => 'Seleccione',
+                                            'class' => 'otro',
+                                            'id' => 'idPharmacy',
+                                        ]) !!}
+                                    </div>
+                                @endrole
                                 <div class="col-md-6 mb-3">
                                     <label for="zona">{{ 'Droguerías' }}</label>
                                     {!! Form::select('idDrugstore', $drugstore, null, [

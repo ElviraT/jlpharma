@@ -9,4 +9,10 @@
             closeAfterSelect: true
         });
     });
+    $('#mySelect').on('change', function() {
+        var value = $(this).val();
+        $("#telefono").val(value);
+        $("#telefono").focus();
+
+    });
 </script>

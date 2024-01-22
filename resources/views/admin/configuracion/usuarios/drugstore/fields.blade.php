@@ -37,9 +37,25 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label>{{ 'Teléfono' }}</label>
-                        <input type="text" name="telefono" class="form-control" id="telefono"
-                            placeholder="Ingrese el Teléfono" required
-                            value="{{ @$drugstore ? $drugstore->telefono : null }}">
+                        <div class="input-group">
+                            <select id="mySelect" class="form-control otro">
+                                <option value="">Seleccione</option>
+                                <option value="+54">Argentina +54</option>
+                                <option value="+591">Bolivia +591</option>
+                                <option value="+55">Brasil +55</option>
+                                <option value="+56">Chile +56</option>
+                                <option value="+593">Ecuador +593</option>
+                                <option value="+502">Guatemala +502</option>
+                                <option value="+52">México +52</option>
+                                <option value="+507">Panamá +507</option>
+                                <option value="+51">Perú +51</option>
+                                <option value="+598">Uruguay +598</option>
+                                <option value="+58">Venezuela +58</option>
+                            </select>
+                            <input type="text" name="telefono" class="form-control" id="telefono"
+                                placeholder="Ingrese el Teléfono" required
+                                value="{{ @$drugstore ? $drugstore->telefono : null }}">
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="zona">{{ 'Zona' }}</label>
@@ -69,28 +85,62 @@
                                 </div>
                                 <div class="col-md-6 mt-2 mb-3">
                                     <label>{{ 'Teléfono 1' }}</label>
-                                    <input type="text" name="telephone" class="form-control" id="telephone"
-                                        placeholder="Ingrese el Teléfono 1" required
-                                        value="{{ @$drugstore ? $drugstore->contact->telephone : null }}">
+                                    <div class="input-group">
+                                        <select id="mySelect1" class="form-control otro">
+                                            <option value="">Seleccione</option>
+                                            <option value="+54">Argentina +54</option>
+                                            <option value="+591">Bolivia +591</option>
+                                            <option value="+55">Brasil +55</option>
+                                            <option value="+56">Chile +56</option>
+                                            <option value="+593">Ecuador +593</option>
+                                            <option value="+502">Guatemala +502</option>
+                                            <option value="+52">México +52</option>
+                                            <option value="+507">Panamá +507</option>
+                                            <option value="+51">Perú +51</option>
+                                            <option value="+598">Uruguay +598</option>
+                                            <option value="+58">Venezuela +58</option>
+                                        </select>
+                                        <input type="text" name="telephone" class="form-control" id="telephone"
+                                            placeholder="Ingrese el Teléfono 1" required
+                                            value="{{ @$drugstore ? $drugstore->contact->telephone : null }}">
+                                    </div>
                                 </div>
                                 <div class="col-md-6 mt-2 mb-3">
                                     <label>{{ 'Teléfono 2' }}</label>
-                                    <input type="text" name="telephone2" class="form-control" id="telephone2"
-                                        placeholder="Ingrese el Teléfono 2"
-                                        value="{{ @$drugstore ? $drugstore->contact->telephone2 : null }}">
+                                    <div class="input-group">
+                                        <select id="mySelect2" class="form-control otro">
+                                            <option value="">Seleccione</option>
+                                            <option value="+54">Argentina +54</option>
+                                            <option value="+591">Bolivia +591</option>
+                                            <option value="+55">Brasil +55</option>
+                                            <option value="+56">Chile +56</option>
+                                            <option value="+593">Ecuador +593</option>
+                                            <option value="+502">Guatemala +502</option>
+                                            <option value="+52">México +52</option>
+                                            <option value="+507">Panamá +507</option>
+                                            <option value="+51">Perú +51</option>
+                                            <option value="+598">Uruguay +598</option>
+                                            <option value="+58">Venezuela +58</option>
+                                        </select>
+                                        <input type="text" name="telephone2" class="form-control" id="telephone2"
+                                            placeholder="Ingrese el Teléfono 2"
+                                            value="{{ @$drugstore ? $drugstore->contact->telephone2 : null }}">
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-12">
+                    <div class="col-6">
                         <label>Dirección</label>
                         <textarea name="direccion" id="direccion" rows="3" class="form-control">{{ @$drugstore ? $drugstore->direccion : null }}</textarea>
                     </div>
-                    <div class="col-md-12" id="check" hidden>
+                    <div class="col-md-6" id="check" hidden>
                         <label>{{ 'Estatus' }}</label><br>
-                        <input type="checkbox" name="status" id="status_check" data-toggle="toggle" data-style="ios"
-                            data-on="Activo" data-off="Inactivo" data-onstyle="success" data-offstyle="danger"
-                            data-width="90" data-height="30">
+                        {!! Form::select('idStatus', $status, isset($drugstore) ? $drugstore->idstatus : null, [
+                            'placeholder' => 'Seleccione',
+                            'class' => 'otro',
+                            'id' => 'idStatus',
+                        ]) !!}
                     </div>
                 </div>
             </div>

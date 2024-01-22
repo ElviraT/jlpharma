@@ -15,7 +15,7 @@ return [
     'Status' => 'Status',
     'Marital Status' => 'Estado Civil',
     'Limit' => 'Límite de Registros',
-    'Pharmacy' => 'Farmacia',
+    'Pharmacy' => 'Centro de Salud',
     'Zone' => 'Zona',
     'Drugstore' => 'Droguería',
     'Jluser' => 'Usuarios JL',
@@ -23,4 +23,6 @@ return [
     'Speciality' => 'Especialidades',
     'Product' => 'Productos',
     'Seller' => 'Vendedores',
+    'Mark' => 'Marcas
+    ',
 ];

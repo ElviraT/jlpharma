@@ -29,7 +29,7 @@
                             <table id="AllDataTable" class="table table-bordered" width="100%">
                                 <thead>
                                     <tr>
-                                        <th style="word-break: break-all;">{{ __('Name') }}</th>
+                                        <th>{{ __('Name') }}</th>
                                         <th>{{ 'RIF' }}</th>
                                         <th>{{ 'Teléfono' }}</th>
                                         <th>{{ 'Status' }}</th>
@@ -71,6 +71,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $drugstore->links('vendor.pagination.bootstrap-5') }}
                         </div>
                     @endif
                 </div>

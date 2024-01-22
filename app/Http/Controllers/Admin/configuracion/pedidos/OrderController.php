@@ -84,24 +84,18 @@ class OrderController extends Controller
         $idPara = Session::get('idPara');
         $idDe = Session::get('idDe');
         $De = Session::get('De');
-        // if (isset($request->idPara)) {
-        //     session(['idPara' => $request->idPara]);
-        //     session(['idDe' => Auth::user()->id]);
-        //     $id = Session::get('idPara');
-        // } else {
-        //     $id = Session::get('idPara');
-        // }
         if (Auth::user()->hasRole('Farmacia')) {
             $data['products'] =  DB::table('inventaries')
                 ->join('products', 'inventaries.idProduct', 'products.id')
                 ->select('*')
                 ->where('inventaries.idUser', $idPara)
                 ->where('products.idCategory', $id)
+                ->orderBy('products.name', 'ASC')
                 ->paginate(10);
             $data['para'] = $idPara;
             $data['de'] = Auth::user()->id;
         } elseif (Auth::user()->hasRole('Droguería')) {
-            $data['products'] = Product::where('idCategory', $id)->paginate(10);
+            $data['products'] = Product::where('idCategory', $id)->orderBy('name', 'ASC')->paginate(10);
             $data['para'] = $idPara;
             $data['de'] = Auth::user()->id;
         }
@@ -110,18 +104,6 @@ class OrderController extends Controller
     }
     private function products2($id)
     {
-        // if (isset($request->idPara)) {
-        //     session(['idPara' => $request->idPara]);
-        //     session(['idDe' => $request->idDe]);
-        //     session(['De' => $request->de]);
-        //     $idPara = Session::get('idPara');
-        //     $idDe = Session::get('idDe');
-        //     $De = Session::get('De');
-        // } else {
-        //     $idPara = Session::get('idPara');
-        //     $idDe = Session::get('idDe');
-        //     $De = Session::get('De');
-        // }
         $idPara = Session::get('idPara');
         $idDe = Session::get('idDe');
         $De = Session::get('De');
@@ -131,12 +113,13 @@ class OrderController extends Controller
                 ->select('*')
                 ->where('inventaries.idUser', $idPara)
                 ->where('products.idCategory', $id)
+                ->orderBy('products.name', 'ASC')
                 ->paginate(10);
 
             $data['para'] = $idPara;
             $data['de'] = $idDe;
         } else {
-            $data['products'] = Product::where('idCategory', $id)->paginate(10);
+            $data['products'] = Product::where('idCategory', $id)->orderBy('name', 'ASC')->paginate(10);
             $data['para'] = $idPara;
             $data['de'] = $idDe;
         }
@@ -312,5 +295,42 @@ class OrderController extends Controller
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('order.pedido_pdf', ['order' => $order]);
         return $pdf->download('pedido-' . $order['pedido']->nOrder . '.pdf');
+    }
+    public function edit(Order $order)
+    {
+        return view('order.edit', compact('order'));
+    }
+    public function update_pedido($id, $cant)
+    {
+        $detalle = OrderDetail::where('id', $id)->first();
+
+        $total = 0;
+
+
+        $importe = ($cant * $detalle->price);
+        $data1 = [
+            'cant' => $cant,
+            'importe' => $importe,
+        ];
+
+        try {
+            DB::beginTransaction();
+            $detalle->update($data1);
+            $detalle2 = OrderDetail::where('idOrder', $detalle->idOrder)->get();
+            foreach ($detalle2 as $value) {
+                $total = $total + $value->importe;
+            }
+            $data = [
+                'total' => $total
+            ];
+            $order = Order::find($detalle->idOrder);
+            $order->update($data);
+            DB::commit();
+            $ok = 'ACTUALIZADO';
+        } catch (\Throwable $th) {
+            DB::rollBack();
+            $ok = 'ERROR';
+        }
+        return $ok;
     }
 }

@@ -8,6 +8,7 @@ use App\Models\Inventary;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Seller;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -31,9 +32,9 @@ class SellerController extends Controller
     public function index(Request $request)
     {
         if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $seller = Seller::orderBy('id', 'ASC')->get();
+            $seller = Seller::where('idstatus',1)->orderBy('id', 'ASC')->paginate(10);
         } else {
-            $seller = Seller::where('id', auth()->user()->seller->id)->orderBy('id', 'ASC')->get();
+            $seller = Seller::where('id', auth()->user()->seller->id)->where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
         }
         return view('admin.configuracion.usuarios.sellers.index', compact('seller'));
     }
@@ -85,7 +86,8 @@ class SellerController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.sellers.edit', compact('seller', 'zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.sellers.edit', compact('seller', 'zones', 'status'));
     }
     public function update(Request $request)
     {
@@ -94,6 +96,7 @@ class SellerController extends Controller
             $data_user = [
                 "name" => $request['name'],
                 "dni" => $request['dni'],
+                "status" => $request['idStatus'],
                 "email" => $request['email']
             ];
             $user = User::find($request['idUser']);
@@ -105,6 +108,7 @@ class SellerController extends Controller
                 "telefono" => $request['telefono'],
                 "idUser" => $user->id,
                 "idZone" => $request['idZone'],
+                "idstatus" => $request['idStatus'],
             ];
             $seller = Seller::find($request['id']);
             $seller->update($data_seller);

@@ -33,6 +33,15 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
+                            <label for="zona">{{ 'Marcas' }}</label>
+                            <select id="idMark" name="idMark" class="otro" style="width: 100%">
+                                <option></option>
+                                @foreach ($marks as $mark)
+                                    <option value="{{ $mark->id }}">{{ $mark->name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
                             <label for="img">Imagen</label>
                             <input type="file" class="form-control-file form-control" id="img" name="img">
                         </div>
@@ -75,9 +84,9 @@
                         </div>
                         <div class="col-md-12" id="check" hidden>
                             <label>{{ 'Disponible' }}</label><br>
-                            <input type="checkbox" name="available" id="available" data-toggle="toggle" data-style="ios"
-                                data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger"
-                                data-width="30" data-height="20">
+                            <input type="checkbox" name="available" id="available" data-toggle="toggle"
+                                data-style="ios" data-on="Si" data-off="No" data-onstyle="success"
+                                data-offstyle="danger" data-width="30" data-height="20">
                         </div>
                     </div>
                 </div>

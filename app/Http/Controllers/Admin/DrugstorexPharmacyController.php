@@ -23,14 +23,16 @@ class DrugstorexPharmacyController extends Controller
     public function index()
     {
         $drugstore = User::where('last_name', 'Droguería')->where('status', 1)->pluck('name', 'id');
-        return view('request.index', compact('drugstore'));
+        $pharmacies = User::where('last_name', 'Farmacia')->where('status', 1)->pluck('name', 'id');
+        return view('request.index', compact('drugstore', 'pharmacies'));
     }
 
     public function store(Request $request)
     {
         $data = [
             'idDrugstore' => $request->idDrugstore,
-            'idPharmacy' => Auth::user()->id,
+            'idPharmacy' => $request->idPharmacy,
+            'idUser' => Auth::user()->id,
         ];
         try {
             DrugstorexPharmacy::create($data);

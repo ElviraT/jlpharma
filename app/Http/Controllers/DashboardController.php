@@ -24,11 +24,17 @@ class DashboardController extends Controller
         } else {
             $pedidos = Order::where('idReceives', Auth::user()->id)->where('idStatus', 1)->paginate(8);
         }
-        $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)
-            ->where('permission', 0)
-            ->where('observation', null)
-            ->paginate(8);
-
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'Vendedor')) {
+            $solicitud = DrugstorexPharmacy::where('permission', 0)
+                ->where('idUser', Auth::user()->id)
+                ->where('observation', null)
+                ->paginate(8);
+        } else if (Auth::user()->hasAnyRole('Doregueria')) {
+            $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)
+                ->where('permission', 0)
+                ->where('observation', null)
+                ->paginate(8);
+        }
         $user = User::select('id')->where('last_name', '<>', 'web')->get();
         return view('dashboard', compact('pedidos', 'user', 'solicitud'));
     }

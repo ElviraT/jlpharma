@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\configuracion\users;
 use App\Http\Controllers\Controller;
 use App\Mail\NuevoUsuarioMail;
 use App\Models\Jluser;
+use App\Models\Status;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Brian2694\Toastr\Facades\Toastr;
@@ -24,7 +25,7 @@ class JluserController extends Controller
 
     public function index(Request $request)
     {
-        $jluser = Jluser::orderBy('id', 'ASC')->get();
+        $jluser = Jluser::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
         return view('admin.configuracion.usuarios.jlusers.index', compact('jluser'));
     }
     public function create()
@@ -74,7 +75,8 @@ class JluserController extends Controller
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
             ->pluck('name', 'id');
-        return view('admin.configuracion.usuarios.jlusers.edit', compact('jluser', 'zones'));
+        $status = Status::pluck('name', 'id');
+        return view('admin.configuracion.usuarios.jlusers.edit', compact('jluser', 'zones', 'status'));
     }
     public function update(Request $request)
     {
@@ -83,6 +85,7 @@ class JluserController extends Controller
             $data_user = [
                 "name" => $request['name'],
                 "dni" => $request['dni'],
+                "status" => $request['idStatus'],
                 "email" => $request['email']
             ];
             $user = User::find($request['idUser']);
@@ -94,6 +97,7 @@ class JluserController extends Controller
                 "telefono" => $request['telefono'],
                 "idUser" => $user->id,
                 "idZone" => $request['idZone'],
+                "idstatus" => $request['idStatus'],
             ];
             $jluser = Jluser::find($request['id']);
             $jluser->update($data_jl);

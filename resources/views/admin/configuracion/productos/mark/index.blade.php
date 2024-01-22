@@ -1,4 +1,7 @@
 @extends('layouts_new.base')
+@section('css')
+    @include('admin.configuracion.productos.mark.css.css')
+@endsection
 
 @section('content')
     <div class="container">
@@ -7,21 +10,22 @@
                 <div class="card sombra p-2">
                     <div class="row">
                         <div class="col-md-11">
-                            <h3>{{ __('List Pharmacy') }}</h3>
+                            <h3>{{ 'Marcas' }}</h3>
                         </div>
                         <div class="col-md-1">
-                            @can('pharmacy.create')
-                                <a class="btn-transition btn btn-outline-primary" href="{{ route('pharmacy.create') }}">
+                            @can('mark.create')
+                                <button type="button" class="btn-transition btn btn-outline-primary" data-toggle="modal"
+                                    data-action="{{ route('mark.store') }}" data-target=".bd-example-modal-sm">
                                     <span class="btn-icon-wrapper pr-2 opacity-7">
                                         <i data-feather="plus-circle" class="feather-icon"></i>
                                     </span>
-                                </a>
+                                </button>
                             @endcan
                         </div>
                     </div>
                 </div>
                 <div class="card sombra p-2">
-                    @if (count($pharmacy) == 0)
+                    @if (count($mark) == 0)
                         <br>
                         <p class="text-center">{{ __('No matching records found') }}</p>
                     @else
@@ -29,38 +33,32 @@
                             <table id="AllDataTable" class="table table-bordered" width="100%">
                                 <thead>
                                     <tr>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ 'RIF' }}</th>
-                                        <th>{{ 'Teléfono' }}</th>
-                                        <th>{{ 'Status' }}</th>
-                                        <th>{{ __('Action') }}</th>
+                                        <th width="60%">{{ __('Name') }}</th>
+                                        <th width="20%">{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach ($pharmacy as $resultado)
+                                    @foreach ($mark as $resultado)
                                         <tr>
                                             <td>{{ $resultado->name }}</td>
-                                            <td>{{ $resultado->rif }}</td>
-                                            <td>{{ $resultado->telefono }}</td>
-                                            <td style="background-color: {{ $resultado->status->color }}; color: #fff">
-                                                {{ $resultado->status->name }}</td>
-                                            <td width="30">
-                                                @can('pharmacy.edit')
-                                                    <a href="{{ route('pharmacy.edit', $resultado) }}" type="button"
-                                                        class="btn-transition btn btn-outline-success btn-sm"
-                                                        title="{{ __('Edit Pharmacy') }}">
+                                            <td>
+                                                @can('mark.edit')
+                                                    <a href="#" type="button" data-toggle="modal"
+                                                        data-target="#modal_mark" class="btn-transition btn btn-outline-success"
+                                                        data-record-id="{{ $resultado['id'] }}" title="{{ __('Edit Mark') }}"
+                                                        data-action="{{ route('mark.update', $resultado) }}">
                                                         <span class="btn-icon-wrapper pr-2 opacity-7">
                                                             <i data-feather="edit-3" class="feather-icon"></i>
                                                         </span>
                                                     </a>
                                                 @endcan
-                                                @can('pharmacy.destroy')
+                                                @can('mark.destroy')
                                                     <a href="#" type="button" data-toggle="modal"
                                                         data-target="#confirm-delete" data-record-id="{{ $resultado->id }}"
-                                                        data-record-title="{{ 'la farmacia ' }}{{ $resultado->name }}"
-                                                        data-action="{{ route('pharmacy.destroy', $resultado->id) }}"
-                                                        title="{{ __('Delete Pharmacy') }}"
-                                                        class="btn-transition btn btn-outline-danger btn-sm">
+                                                        data-record-title="{{ 'la marca ' }}{{ $resultado->name }}"
+                                                        data-action="{{ route('mark.destroy', $resultado->id) }}"
+                                                        title="{{ __('Delete Mark') }}"
+                                                        class="btn-transition btn btn-outline-danger">
                                                         <span class="btn-icon-wrapper pr-2 opacity-7">
                                                             <i data-feather="trash-2" class="feather-icon"></i>
                                                         </span>
@@ -71,7 +69,6 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                            {{ $pharmacy->links('vendor.pagination.bootstrap-5') }}
                         </div>
                     @endif
                 </div>
@@ -80,8 +77,10 @@
     </div>
 @endsection
 @section('modal')
+    @include('admin.configuracion.productos.mark.modal_mark')
     @include('admin.modales.eliminar')
 @endsection
+
 @section('js')
-    @include('admin.configuracion.usuarios.pharmacy.js.js')
+    @include('admin.configuracion.productos.mark.js.js')
 @endsection

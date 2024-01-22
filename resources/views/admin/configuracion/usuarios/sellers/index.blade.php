@@ -29,10 +29,10 @@
                             <table id="AllDataTable" class="table table-bordered" width="100%">
                                 <thead>
                                     <tr>
-                                        <th width="30%">{{ __('Name') }}</th>
+                                        <th>{{ __('Name') }}</th>
                                         <th>{{ 'Teléfono' }}</th>
-                                        <th width="10%">{{ 'Status' }}</th>
-                                        <th width="20%">{{ __('Action') }}</th>
+                                        <th>{{ 'Status' }}</th>
+                                        <th>{{ __('Action') }}</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,6 +69,7 @@
                                     @endforeach
                                 </tbody>
                             </table>
+                            {{ $seller->links('vendor.pagination.bootstrap-5') }}
                         </div>
                     @endif
                 </div>

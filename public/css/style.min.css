@@ -51100,3 +51100,24 @@ a.paginate_button.current{
     white-space: nowrap; 
     max-width: 100%;
   }
+  #menu{
+    overflow-y: auto !important;
+  }
+  #menu::-webkit-scrollbar {
+    width: 5px;
+    /* width of the entire scrollbar */
+}
+
+#menu::-webkit-scrollbar-track {
+    background: #f4ec65;
+    /* color of the tracking area */
+}
+
+#menu::-webkit-scrollbar-thumb {
+    background-color: #04c38c;
+    /* color of the scroll thumb */
+    border-radius: 20px;
+    /* roundness of the scroll thumb */
+    border: 0.5px solid #f4ec65;
+    /* creates padding around scroll thumb */
+}

@@ -17,6 +17,7 @@ use App\Http\Controllers\Admin\configuracion\direccion\ParishController;
 use App\Http\Controllers\Admin\configuracion\direccion\ZoneController;
 use App\Http\Controllers\Admin\configuracion\pedidos\OrderController;
 use App\Http\Controllers\Admin\configuracion\productos\CategoryController;
+use App\Http\Controllers\Admin\configuracion\productos\MarkController;
 use App\Http\Controllers\Admin\configuracion\productos\MisProductosController;
 use App\Http\Controllers\Admin\configuracion\productos\ProductController;
 use App\Http\Controllers\Admin\configuracion\productos\SpecialityController;
@@ -58,6 +59,7 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::resource('maritalStatus', MaritalStatusController::class)->except(['show'])->names('maritalStatus');
     Route::resource('category', CategoryController::class)->except(['show'])->names('category');
     Route::resource('speciality', SpecialityController::class)->except(['show'])->names('speciality');
+    Route::resource('mark', MarkController::class)->except(['show'])->names('mark');
 
     // Route::resource('users', UserController::class)->names('users');
     Route::resource('pharmacy', PharmacyController::class)->except(['show'])->names('pharmacy');
@@ -89,7 +91,9 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::get('/order/state', [OrderController::class, 'state'])->name('order.state');
     Route::get('/order/{id}/info', [OrderController::class, 'info'])->name('order.info');
     Route::get('/update/{id}/{cant}/order', [OrderController::class, 'update']);
+    Route::get('/update_pedido/{id}/{cant}/order', [OrderController::class, 'update_pedido']);
     Route::post('/order/pdf', [OrderController::class, 'pdf'])->name('order.pdf');
+    Route::get('/order/{order}/edit', [OrderController::class, 'edit'])->name('order.edit');
 
     Route::get('/request/permission', [DrugstorexPharmacyController::class, 'index'])->name('request.index');
     Route::post('/request/permission/add', [DrugstorexPharmacyController::class, 'store'])->name('request.store');

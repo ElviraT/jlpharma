@@ -1,6 +1,6 @@
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
-    <div class="scroll-sidebar">
+    <div class="scroll-sidebar" style="overflow-y:auto !important;" id="menu">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
@@ -253,7 +253,7 @@
                         </ul>
                     </li>
                 @endcanany
-                @canany(['category.index', 'speciality.index', 'product.index', 'mis_productos.index'])
+                @canany(['category.index', 'speciality.index', 'product.index', 'mis_productos.index', 'mark.index'])
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('category') || @request()->routeIs('speciality') ? 'active' : ' ' }}"
                             href="#" aria-expanded="false"><i data-feather="box" class="feather-icon"></i><span
@@ -274,6 +274,14 @@
                                         class="sidebar-link {{ @request()->routeIs('category') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Category') }} </span></a>
+                                </li>
+                            @endcan
+                            @can('mark.index')
+                                <li class="sidebar-item">
+                                    <a href="{{ route('mark.index') }}"
+                                        class="sidebar-link {{ @request()->routeIs('mark') ? 'active' : ' ' }}"><i
+                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
+                                            {{ __('menu.Mark') }} </span></a>
                                 </li>
                             @endcan
                             @can('product.index')

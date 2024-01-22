@@ -211,8 +211,8 @@
                     <td>` + ([i] + 1) + `</td>
                     <td>` + data.detalle[i].name + `</td>
                     <td>` + data.detalle[i].cant + `</td>
-                    <td>` + data.detalle[i].price + `</td>
-                    <td>` + data.detalle[i].importe + `</td>
+                    <td>$` + data.detalle[i].price.toFixed(2) + `</td>
+                    <td>$` + data.detalle[i].importe.toFixed(2) + `</td>
                     </tr>`;
                     $("#cuerpo").append(tr)
                 }
@@ -221,7 +221,7 @@
                     <th></th>
                     <th></th>
                     <th>Total</th>
-                    <th>` + data.pedido.total + `</th>
+                    <th>$` + data.pedido.total.toFixed(2) + `</th>
                     </tr>`;
                 $("#footer").append(trF)
                 // FIN DETALLE

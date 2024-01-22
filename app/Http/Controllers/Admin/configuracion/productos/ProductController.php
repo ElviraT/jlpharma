@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\configuracion\productos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
+use App\Models\Mark;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
@@ -24,11 +25,12 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $product = Product::orderBy('id', 'ASC')->get();
+        $product = Product::orderBy('name', 'ASC')->get();
         $codigo = Product::select('codigo')->orderBy('id', 'desc')->first();
         $categories = Category::all();
+        $marks = Mark::all();
 
-        return view('admin.configuracion.productos.producto.index', compact('product', 'categories', 'codigo'));
+        return view('admin.configuracion.productos.producto.index', compact('product', 'categories', 'codigo', 'marks'));
     }
 
     public function store(Request $request)

@@ -160,9 +160,9 @@
         setTimeout(cargarReloj, 30000);
 
     }
-
     // Ejecutamos la función 'CargarReloj' 
     cargarReloj();
+
     // $(document).on('ajaxStart', function() {
     //     loading_show();
     // })

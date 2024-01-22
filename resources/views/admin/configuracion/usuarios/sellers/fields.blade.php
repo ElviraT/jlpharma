@@ -25,9 +25,25 @@
                     </div>
                     <div class="col-md-4 mb-3">
                         <label>{{ 'Teléfono' }}</label>
-                        <input type="text" name="telefono" class="form-control" id="telefono"
-                            placeholder="Ingrese el Teléfono" required
-                            value="{{ @$seller ? $seller->telefono : null }}">
+                        <div class="input-group">
+                            <select id="mySelect" class="form-control otro">
+                                <option value="">Seleccione</option>
+                                <option value="+54">Argentina +54</option>
+                                <option value="+591">Bolivia +591</option>
+                                <option value="+55">Brasil +55</option>
+                                <option value="+56">Chile +56</option>
+                                <option value="+593">Ecuador +593</option>
+                                <option value="+502">Guatemala +502</option>
+                                <option value="+52">México +52</option>
+                                <option value="+507">Panamá +507</option>
+                                <option value="+51">Perú +51</option>
+                                <option value="+598">Uruguay +598</option>
+                                <option value="+58">Venezuela +58</option>
+                            </select>
+                            <input type="text" name="telefono" class="form-control" id="telefono"
+                                placeholder="Ingrese el Teléfono" required
+                                value="{{ @$seller ? $seller->telefono : null }}">
+                        </div>
                     </div>
                     <div class="col-md-4 mb-3">
                         <label for="zona">{{ 'Zona' }}</label>
@@ -36,6 +52,14 @@
                             'class' => 'otro',
                             'id' => 'idZone',
                             'required' => 'required',
+                        ]) !!}
+                    </div>
+                    <div class="col-md-4" id="check" hidden>
+                        <label>{{ 'Estatus' }}</label><br>
+                        {!! Form::select('idStatus', $status, isset($seller) ? $seller->idstatus : null, [
+                            'placeholder' => 'Seleccione',
+                            'class' => 'otro',
+                            'id' => 'idStatus',
                         ]) !!}
                     </div>
                 </div>

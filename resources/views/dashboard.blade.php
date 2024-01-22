@@ -96,7 +96,7 @@
                 </div>
             </div>
         </div>
-        @role(['Drogueria', 'SueperAdmin'])
+        @role(['Drogueria', 'Vendedor', 'SuperAdmin'])
             <div class="col-lg-12 margin-tb">
                 <div class="card sombra p-3">
                     <h3>{{ 'Solicitud de Permisos' }}</h3>
@@ -108,7 +108,8 @@
                                     <div class="card warning sombra">
                                         <div class="card-body" align="center">
                                             <br>
-                                            <h4>{{ $result->userPharmacy->name }}</h4>
+                                            <h4>{{ 'De: ' . $result->userPharmacy->name }}</h4>
+                                            <h4>{{ 'Para: ' . $result->userDrugstore->name }}</h4>
                                         </div>
                                         <div class="card-footer" align="center">
                                             <button type="button" class="btn btn-warning" data-toggle="modal"

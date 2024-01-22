@@ -12,11 +12,16 @@ class DrugstorexPharmacy extends Model
     protected $fillable = [
         'idDrugstore',
         'idPharmacy',
+        'idUser',
         'permission'
     ];
 
     public function userPharmacy(): BelongsTo
     {
         return $this->belongsTo(User::class, 'idPharmacy', 'id');
+    }
+    public function userDrugstore(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'idDrugstore', 'id');
     }
 }

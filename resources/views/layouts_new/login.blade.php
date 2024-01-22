@@ -43,7 +43,7 @@
         <!-- Login box.scss -->
         <!-- -------------------------------------------------------------- -->
         <div class="auth-wrapper d-flex no-block justify-content-center align-items-center">
-            <div class="p-3" id="loginform" style="border: 1px solid #049383;">
+            <div class="col-4 p-3" id="loginform" style="border: 1px solid #049383;">
                 <div class="logo" align="center">
                     <span class="db"><img src="{{ asset('img/Logo.png') }}" alt="loginpage" class="dark-logo"
                             width="200" /></span>

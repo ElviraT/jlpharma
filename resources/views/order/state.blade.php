@@ -52,7 +52,7 @@
                                         <td>{{ $resultado->nOrder }}</td>
                                         <td>{{ $resultado->user->name }}</td>
                                         <td>{{ $resultado->userReceives->name }}</td>
-                                        <td>{{ number_format($resultado->total, 2) }}</td>
+                                        <td>{{ '$' . number_format($resultado->total, 2) }}</td>
                                         <td style="background-color: {{ $resultado->status->color }}; color: #fff">
                                             {{ $resultado->status->name }}</td>
                                         @if (@isset($resultado->observation))
@@ -66,6 +66,10 @@
                                                 data-record-status="{{ $resultado->status->name }}">
                                                 <i class="ri-eye-line"></i>
                                             </button> &nbsp;&nbsp;
+                                            <a href="{{ route('order.edit', $resultado->id) }}"
+                                                class="btn btn-secondary btn-sm">
+                                                <i class="ri-edit-line"></i>
+                                            </a> &nbsp;&nbsp;
                                         </td>
                                     </tr>
                                 @endforeach

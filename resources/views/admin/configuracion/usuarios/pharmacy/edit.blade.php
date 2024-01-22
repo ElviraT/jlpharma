@@ -25,4 +25,7 @@
 @endsection
 @section('js')
     @include('admin.configuracion.usuarios.pharmacy.js.js')
+    <script>
+        $('#check').attr('hidden', false);
+    </script>
 @endsection
