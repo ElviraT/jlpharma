@@ -22,7 +22,7 @@ class DrugstorexPharmacyController extends Controller
     }
     public function index()
     {
-        $drugstore = User::where('last_name', 'Droguería')->whereOr('last_name', 'Latinfarma')->where('status', 1)->pluck('name', 'id');
+        $drugstore = User::where('last_name', 'Droguería')->where('status', 1)->pluck('name', 'id');
         $pharmacies = User::where('last_name', 'Farmacia')->where('status', 1)->pluck('name', 'id');
         return view('request.index', compact('drugstore', 'pharmacies'));
     }

@@ -20,7 +20,7 @@
                                 <form action="{{ route('order.filtro') }}" method="POST">
                                     @csrf
                                     <div class="row">
-                                        <div class="col-4">
+                                        <div class="col-lg-4 col-sm-12">
                                             <legend>DE:</legend>
                                             <fieldset>
                                                 <label>
@@ -32,7 +32,7 @@
                                             </fieldset>
                                             <select id="idDe" name="idDe" class="form-control" required></select>
                                         </div>
-                                        <div class="col-4">
+                                        <div class="col-lg-4 col-sm-12">
                                             <fieldset>
                                                 <legend>PARA:</legend>
                                                 <label>

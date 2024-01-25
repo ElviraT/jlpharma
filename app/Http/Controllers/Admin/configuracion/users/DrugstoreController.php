@@ -60,8 +60,6 @@ class DrugstoreController extends Controller
             $user = User::create($data_user);
             $user->assignRole([4]);
 
-            User::where('name', 'LIKE', '%Latinfarma%')->update(['last_name' => 'Latinfarma']);
-
             $data_drogueria = [
                 "name" => $request['name'],
                 "rif" => $request['rif'],

@@ -268,7 +268,7 @@ class OrderController extends Controller
         $data['pedido'] = Order::find($id);
         $data['detalle'] = $data['pedido']->detalle;
 
-        if (isset($data['pedido']->userSend->drugstore)) {
+        if ($data['pedido']->userSend->last_name == 'Droguería') {
             $data['order'] = DB::table('users')
                 ->join('orders', 'users.id', '=', 'orders.idSend')
                 ->join('drugstores', 'orders.idSend', '=', 'drugstores.idUser')

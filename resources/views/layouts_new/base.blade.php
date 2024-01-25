@@ -6,11 +6,7 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    @if (Auth::user()->last_name == 'Latinfarma')
-        <title>{{ 'Latinfarma Droguería' }}</title>
-    @else
-        <title>{{ config('app.name', 'Laravel') }}</title>
-    @endif
+    <title>{{ config('app.name', 'Laravel') }}</title>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="keywords"
@@ -20,11 +16,7 @@
     <meta name="robots" content="noindex,nofollow" />
     <link rel="stylesheet" href="{{ asset('css/flag-icons.min.css') }}" />
     <!-- Favicon icon -->
-    @if (Auth::user()->last_name == 'Latinfarma')
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img_latinfarma/logo1.png') }}" />
-    @else
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon.png') }}" />
-    @endif
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon.png') }}" />
     <!-- Custom CSS -->
     <link href="{{ asset('css/remixicon.css') }}" rel="stylesheet">
     <!--Datatable-->
@@ -36,120 +28,6 @@
     <link rel="stylesheet" href="{{ asset('css/toastr.min.css') }}" />
     <!-- Custom CSS -->
     <link href="{{ asset('css/style.min.css') }}" rel="stylesheet" />
-    @if (Auth::user()->last_name == 'Latinfarma')
-        <style>
-            .modal-header-success {
-                background-color: #043484;
-                color: white;
-            }
-
-            body::-webkit-scrollbar {
-                width: 15px;
-                /* width of the entire scrollbar */
-            }
-
-            body::-webkit-scrollbar-track {
-                background: #0cd4d4;
-                /* color of the tracking area */
-            }
-
-            body::-webkit-scrollbar-thumb {
-                background-color: #043484;
-                /* color of the scroll thumb */
-                border-radius: 20px;
-                /* roundness of the scroll thumb */
-                border: 1px solid #0cd4d4;
-                /* creates padding around scroll thumb */
-            }
-
-            .paging_simple_numbers {
-                /* display: inline-block; */
-                float: right;
-            }
-
-            .paging_simple_numbers a {
-                color: black;
-                float: left !important;
-                padding: 8px 16px;
-                text-decoration: none;
-                transition: background-color .3s;
-                border: 1px solid #ddd;
-            }
-
-            a.paginate_button.current {
-                background-color: #043484 !important;
-                color: white !important;
-                border: 1px solid #043484 !important;
-            }
-
-            .paging_simple_numbers a:hover:not(.active) {
-                background-color: #0cd4d4;
-            }
-
-            .table tr {
-                width: 10px !important;
-            }
-
-            .primary {
-                background-color: #043484;
-                color: white;
-            }
-
-            .pedido {
-                border: 1px solid #043484 !important;
-            }
-
-            .warning {
-                border: 1px solid #0cd4d4 !important;
-            }
-
-            .text-pedido {
-                color: #043484;
-                font-size: 35px;
-            }
-
-            .text-solicitud {
-                color: #0cd4d4;
-                font-size: 35px;
-            }
-
-            .btn-warning {
-                background-color: #0cd4d4;
-                border: 1px solid #0cd4d4 !important;
-            }
-
-            table,
-            thead,
-            th {
-                box-sizing: border-box;
-                white-space: nowrap;
-                max-width: 100%;
-            }
-
-            #menu {
-                overflow-y: auto !important;
-            }
-
-            #menu::-webkit-scrollbar {
-                width: 5px;
-                /* width of the entire scrollbar */
-            }
-
-            #menu::-webkit-scrollbar-track {
-                background: #0cd4d4;
-                /* color of the tracking area */
-            }
-
-            #menu::-webkit-scrollbar-thumb {
-                background-color: #043484;
-                /* color of the scroll thumb */
-                border-radius: 20px;
-                /* roundness of the scroll thumb */
-                border: 0.5px solid #0cd4d4;
-                /* creates padding around scroll thumb */
-            }
-        </style>
-    @endif
     @yield('css')
 </head>
 

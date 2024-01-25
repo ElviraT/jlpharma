@@ -250,18 +250,10 @@
                                             {{ __('menu.Seller') }} </span></a>
                                 </li>
                             @endcan
-                            @can('other.index')
-                                <li class="sidebar-item">
-                                    <a href="{{ route('other.index') }}"
-                                        class="sidebar-link {{ @request()->routeIs('other') || @request()->routeIs('other.create') ? 'active' : ' ' }}"><i
-                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
-                                            {{ 'Otros Usuarios' }} </span></a>
-                                </li>
-                            @endcan
                         </ul>
                     </li>
                 @endcanany
-                @canany(['category.index', 'speciality.index', 'product.index', 'mis_productos.index', 'mark.index'])
+                @canany(['category.index', 'speciality.index', 'product.index', 'mis_productos.index'])
                     <li class="sidebar-item">
                         <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('category') || @request()->routeIs('speciality') ? 'active' : ' ' }}"
                             href="#" aria-expanded="false"><i data-feather="box" class="feather-icon"></i><span
@@ -282,14 +274,6 @@
                                         class="sidebar-link {{ @request()->routeIs('category') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Category') }} </span></a>
-                                </li>
-                            @endcan
-                            @can('mark.index')
-                                <li class="sidebar-item">
-                                    <a href="{{ route('mark.index') }}"
-                                        class="sidebar-link {{ @request()->routeIs('mark') ? 'active' : ' ' }}"><i
-                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
-                                            {{ __('menu.Mark') }} </span></a>
                                 </li>
                             @endcan
                             @can('product.index')

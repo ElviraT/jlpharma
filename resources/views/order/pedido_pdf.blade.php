@@ -3,74 +3,40 @@
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    @if (Auth::user()->last_name == 'Latinfarma')
-        <title>{{ 'Latinfarma Droguería' }}</title>
-        <style>
-            body {
-                font-family: sans-serif;
-                font-size: 12px;
-                letter-spacing: 1px;
-                line-height: 27px;
-            }
+    <title>{{ config('app.name', 'Laravel') }}</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            font-size: 12px;
+            letter-spacing: 1px;
+            line-height: 27px;
+        }
 
-            #detalle_info,
-            tr th td {
-                border: 2px solid #555;
-            }
+        #detalle_info,
+        tr th td {
+            border: 2px solid #555;
+        }
 
-            #detalle_info thead {
-                background-color: #043484;
-                border-bottom: 1px solid #555;
-            }
+        #detalle_info thead {
+            background-color: rgb(80, 255, 182);
+            border-bottom: 1px solid #555;
+        }
 
-            #detalle_info tfoot {
-                border-top: 1px solid #555;
-            }
-        </style>
-    @else
-        <title>{{ config('app.name', 'Laravel') }}</title>
-        <style>
-            body {
-                font-family: sans-serif;
-                font-size: 12px;
-                letter-spacing: 1px;
-                line-height: 27px;
-            }
-
-            #detalle_info,
-            tr th td {
-                border: 2px solid #555;
-            }
-
-            #detalle_info thead {
-                background-color: rgb(80, 255, 182);
-                border-bottom: 1px solid #555;
-            }
-
-            #detalle_info tfoot {
-                border-top: 1px solid #555;
-            }
-        </style>
-    @endif
-
+        #detalle_info tfoot {
+            border-top: 1px solid #555;
+        }
+    </style>
 
 <body>
     <table>
         <tr>
             <td>
-                @if (Auth::user()->last_name == 'Latinfarma')
-                    <img src="{{ asset('img_latinfarma/logo1.png') }}" alt="" width="27%">
+                <img src="{{ asset('img/favicon.png') }}" alt="" width="27%">
             </td>
-        @else
-            <img src="{{ asset('img/favicon.png') }}" alt="" width="27%"></td>
-            @endif
+
             <td>
                 <h1>
-                    @if (Auth::user()->last_name == 'Latinfarma')
-                        {{ 'Gestion de ventas Latinfarma' }}
-                    @else
-                        {{ 'Gestion de ventas JL' }}
-                    @endif
+                    {{ 'Gestion de ventas JL' }}
                 </h1>
             </td>
         </tr>

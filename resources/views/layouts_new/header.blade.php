@@ -8,49 +8,24 @@
             <!-- -------------------------------------------------------------- -->
             <!-- Logo -->
             <!-- -------------------------------------------------------------- -->
-            @if (Auth::user()->last_name == 'Latinfarma')
-                <a class="navbar-brand" href="#">
-                    <!-- Logo icon -->
-                    <b class="logo-icon">
-                        <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                        <!-- Dark Logo icon -->
-                        <img src="{{ asset('img_latinfarma/logo1.png') }}" alt="homepage" class="dark-logo"
-                            width="50" />
-                        <!-- Light Logo icon -->
-                        <img src="{{ asset('img_latinfarma/logo1.png') }}" alt="homepage" class="light-logo"
-                            width="50" />
-                    </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text -->
-                    <span class="logo-text">
-                        <!-- dark Logo text -->
-                        <img src="{{ asset('img_latinfarma/Latinfarma_rif.png') }}" alt="homepage" class="dark-logo"
-                            width="150" />
-                        <!-- Light Logo text -->
-                        <img src="{{ asset('img_latinfarma/Latinfarma_rif.png') }}" alt="homepage" class="light-logo"
-                            width="50" />
-                    </span>
-                </a>
-            @else
-                <a class="navbar-brand" href="#">
-                    <!-- Logo icon -->
-                    <b class="logo-icon">
-                        <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
-                        <!-- Dark Logo icon -->
-                        <img src="{{ asset('img/favicon.png') }}" alt="homepage" class="dark-logo" width="50" />
-                        <!-- Light Logo icon -->
-                        <img src="{{ asset('img/favicon.png') }}" alt="homepage" class="light-logo" width="50" />
-                    </b>
-                    <!--End Logo icon -->
-                    <!-- Logo text -->
-                    <span class="logo-text">
-                        <!-- dark Logo text -->
-                        <img src="{{ asset('img/icon-logo.png') }}" alt="homepage" class="dark-logo" width="150" />
-                        <!-- Light Logo text -->
-                        <img src="{{ asset('img/icon-logo.png') }}" alt="homepage" class="light-logo" width="50" />
-                    </span>
-                </a>
-            @endif
+            <a class="navbar-brand" href="#">
+                <!-- Logo icon -->
+                <b class="logo-icon">
+                    <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                    <!-- Dark Logo icon -->
+                    <img src="{{ asset('img/favicon.png') }}" alt="homepage" class="dark-logo" width="50" />
+                    <!-- Light Logo icon -->
+                    <img src="{{ asset('img/favicon.png') }}" alt="homepage" class="light-logo" width="50" />
+                </b>
+                <!--End Logo icon -->
+                <!-- Logo text -->
+                <span class="logo-text">
+                    <!-- dark Logo text -->
+                    <img src="{{ asset('img/icon-logo.png') }}" alt="homepage" class="dark-logo" width="150" />
+                    <!-- Light Logo text -->
+                    <img src="{{ asset('img/icon-logo.png') }}" alt="homepage" class="light-logo" width="50" />
+                </span>
+            </a>
             <!-- -------------------------------------------------------------- -->
             <!-- End Logo -->
             <!-- -------------------------------------------------------------- -->

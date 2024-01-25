@@ -60,13 +60,11 @@ Route::middleware(['auth', 'translate', 'verified'])->group(function () {
     Route::resource('maritalStatus', MaritalStatusController::class)->except(['show'])->names('maritalStatus');
     Route::resource('category', CategoryController::class)->except(['show'])->names('category');
     Route::resource('speciality', SpecialityController::class)->except(['show'])->names('speciality');
-    Route::resource('mark', MarkController::class)->except(['show'])->names('mark');
 
     // Route::resource('users', UserController::class)->names('users');
     Route::resource('pharmacy', PharmacyController::class)->except(['show'])->names('pharmacy');
     Route::resource('drugstore', DrugstoreController::class)->except(['show'])->names('drugstore');
     Route::resource('jluser', JluserController::class)->except(['show'])->names('jluser');
-    Route::resource('other', OtherController::class)->except(['show'])->names('other');
     Route::resource('product', ProductController::class)->except(['show'])->names('product');
     Route::resource('mis-productos', MisProductosController::class)->except(['show', 'update', 'create', 'destroy'])->names('mis_productos');
 

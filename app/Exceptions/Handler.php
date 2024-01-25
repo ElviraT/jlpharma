@@ -11,7 +11,10 @@ class Handler extends ExceptionHandler
 {
     protected function unauthenticated($request, AuthenticationException $exception)
     {
-        Artisan::call("cache:clear");
+        if (response()->json(['message' => $exception->getMessage()], 419)) {
+            Artisan::call("cache:clear");
+            return to_route('login');
+        }
         return $request->expectsJson()
             ? response()->json(['message' => $exception->getMessage()], 401)
             : redirect()->guest(route('login'));
