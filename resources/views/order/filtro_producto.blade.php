@@ -14,7 +14,8 @@
                     <div class="col-md-12 mt-3">
                         <div class="row">
                             @foreach ($categorias as $item)
-                                <a href="{{ route('order.products', $item->id) }}" class="btn">
+                                <a href="{{ url('./order/products/' . $item->id . '/null') }}" class="btn"
+                                    onclick="loading_show()">
                                     <div class="col-12 mb-3" style="border: 2px solid {{ $item->color }}; padding: 25px;"
                                         align="left">
                                         <div class="row">

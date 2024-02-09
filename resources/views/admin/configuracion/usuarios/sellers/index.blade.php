@@ -40,9 +40,12 @@
                                         <tr>
                                             <td>{{ $resultado->name }}</td>
                                             <td>{{ $resultado->telefono }}</td>
-                                            <td style="background-color: {{ $resultado->status->color }}; color: #fff">
-                                                {{ $resultado->status->name }}</td>
-                                            <td width="30">
+                                            <td>
+                                                <div style="background-color:{{ $resultado->status->color }} !important; color:#FFF; padding: 10px;"
+                                                    align="center">
+                                                    {{ $resultado->status->name }}</div>
+                                            </td>
+                                            <td>
                                                 @can('seller.edit')
                                                     <a href="{{ route('seller.edit', $resultado) }}" type="button"
                                                         class="btn-transition btn btn-outline-success btn-sm"

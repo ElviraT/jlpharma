@@ -23,6 +23,7 @@ class Product extends Model
         'quantity_tf',
         'idCategory',
         'available',
+        'rotacion',
         'idMark',
     ];
 
@@ -39,5 +40,9 @@ class Product extends Model
     public function inventary(): HasMany
     {
         return $this->hasMany(Inventary::class, 'idProduct');
+    }
+    public function detalle(): HasMany
+    {
+        return $this->hasMany(OrderDetail::class, 'idProduct');
     }
 }

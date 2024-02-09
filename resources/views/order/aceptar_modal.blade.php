@@ -6,7 +6,7 @@
                 <h4 class="modal-title" id="myModalLabel">Confirmación de Pedido</h4>
                 <button type="button" class="btn btn-ligth close" data-dismiss="modal" aria-hidden="true">×</button>
             </div>
-            <form action="{{ route('seller.aceptar') }}" id="form-aceptar" method="post">
+            <form action="{{ route('order.aceptar') }}" id="form-aceptar" method="post">
 
                 <div class="modal-body">
                     @csrf
@@ -18,7 +18,7 @@
                             <label>{{ 'Status' }}</label>
                             <select name="idStatus" id="idStatus" class="form-control status">
                                 @foreach ($status as $item)
-                                    @if ($item->name == 'Despachado')
+                                    @if ($item->orden == 3)
                                         <option value="{{ $item->id }}" selected>
                                             {{ $item->name }}</option>
                                     @endif

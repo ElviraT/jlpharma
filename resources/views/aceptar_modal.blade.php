@@ -22,7 +22,7 @@
                             <i class="ri-arrow-go-back-line" aria-hidden="true"></i>
                         </span>{{ __('Back') }}
                     </button>
-                    <button type="submit" class="mt-1 btn-transition btn btn-outline-primary">
+                    <button type="submit" class="mt-1 btn-transition btn btn-outline-primary" onclick="loading_show()">
                         <span class="btn-icon-wrapper pr-2 opacity-7">
                             <i class="ri-save-3-line"></i>
                         </span>{{ __('Save') }}

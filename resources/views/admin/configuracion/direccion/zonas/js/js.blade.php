@@ -34,7 +34,6 @@
         valueField: 'id',
         searchField: ['name'],
         loadingClass: 'loading',
-        preload: true,
         onChange: function(value) {
             if (!value.length) return;
             /*listar ciudades*/
@@ -82,12 +81,15 @@
                 $("#form-enviar").attr('action', data.action);
                 $("#method").val('put');
                 var $country = $('#country').selectize();
-                $country[0].selectize.setValue(obj.idCountry);
-                var $state = $('#state').selectize();
-                $state[0].selectize.setValue(obj.idState);
+                $country[0].selectize.setValue(obj.idCountry, true);
+
                 var $city = $('#city').selectize();
                 $city[0].selectize.setValue(obj.idCity);
+
                 $('#name', modal).val(obj.name);
+                var $state = $('#state').selectize();
+                $state[0].selectize.setValue(obj.idState, true);
+
                 modal.removeClass('loading');
             });
         }

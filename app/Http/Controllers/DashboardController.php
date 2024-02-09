@@ -6,7 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Models\Drugstore;
 use App\Models\DrugstorexPharmacy;
 use App\Models\Order;
+use App\Models\Rate;
 use App\Models\User;
+use Illuminate\Contracts\Session\Session;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -19,25 +21,43 @@ class DashboardController extends Controller
     }
     public function index()
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $pedidos = Order::where('idStatus', 1)->paginate(8);
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Analista')) {
+            $pedidos = DB::table('orders')
+                ->join('status_pedidos', 'orders.idStatus', '=', 'status_pedidos.id')
+                ->select('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color', DB::raw("COUNT(orders.nOrder) AS count"))
+                ->groupBy('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color')
+                ->orderBy('orden', 'ASC')
+                ->get();
         } else {
-            $pedidos = Order::where('idReceives', Auth::user()->id)->where('idStatus', 1)->paginate(8);
+            $pedidos = DB::table('orders')
+                ->join('status_pedidos', 'orders.idStatus', '=', 'status_pedidos.id')
+                ->select('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color', DB::raw("COUNT(orders.nOrder) AS count"))
+                ->where('orders.idUser', auth()->user()->id)
+                ->groupBy('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color')
+                ->orderBy('orden', 'ASC')
+                ->get();
         }
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL', 'Analista')) {
+            $user = DB::table('users')
+                ->where('users.last_name', '<>', 'web')
+                ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))
+                ->groupBy('users.last_name')
+                ->get();
+        } else {
+            $user = DB::table('pharmacies')
+                ->join('users', 'pharmacies.idUser', '=', 'users.id')
+                ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))
+                ->where('pharmacies.idZone', auth()->user()->seller->idZone)
+                ->groupBy('users.last_name')
+                ->get();
+        }
+        $rate = Rate::select('monto')->orderBy('id', 'DESC')->first();
+        session(['rate' => $rate->monto]);
         if (Auth::user()->hasAnyRole('SuperAdmin', 'Vendedor')) {
-            $solicitud = DrugstorexPharmacy::where('permission', 0)
-                ->where('idUser', Auth::user()->id)
-                ->where('observation', null)
-                ->paginate(8);
-        } else if (Auth::user()->hasAnyRole('Doregueria')) {
-            $solicitud = DrugstorexPharmacy::where('idDrugstore', Auth::user()->id)
-                ->where('permission', 0)
-                ->where('observation', null)
-                ->paginate(8);
+            $solicitudes = DrugstorexPharmacy::where('permission', 0)->take(4)->get();
         } else {
-            $solicitud = [];
+            $solicitudes = DrugstorexPharmacy::where('permission', 0)->where('idDrugstore', auth()->user()->id)->take(4)->get();
         }
-        $user = User::select('id')->where('last_name', '<>', 'web')->get();
-        return view('dashboard', compact('pedidos', 'user', 'solicitud'));
+        return view('dashboard', compact('pedidos', 'user', 'solicitudes'));
     }
 }

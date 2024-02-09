@@ -6,7 +6,7 @@
 
     <form method="POST" action="{{ route('login') }}" class="form-horizontal mt-3">
 
-        @csrf
+        {{ csrf_field() }}
         <!-- Email Address -->
         <div>
             <x-input-label for="email" :value="__('Email')" />

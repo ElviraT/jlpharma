@@ -2,7 +2,7 @@
     input[type="color"] {
         -webkit-appearance: none;
         border: solid 1px #c9c3c3 !important;
-        width: 55px;
+        width: 100%;
         height: 50px;
     }
 

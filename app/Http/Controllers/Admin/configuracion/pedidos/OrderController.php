@@ -5,12 +5,9 @@ namespace App\Http\Controllers\Admin\configuracion\pedidos;
 use App\Http\Controllers\Controller;
 use App\Mail\OrderMail;
 use App\Models\Category;
-use App\Models\Drugstore;
 use App\Models\Inventary;
-use App\Models\Jluser;
 use App\Models\Order;
 use App\Models\OrderDetail;
-use App\Models\Pharmacy;
 use App\Models\Product;
 use App\Models\StatusPedido;
 use App\Models\User;
@@ -37,7 +34,6 @@ class OrderController extends Controller
 
     public function index(Request $request)
     {
-        // $products = Product::all();
         Session::put('idPara', '');
         Session::put('idDe', '');
         Session::put('De', '');
@@ -54,13 +50,11 @@ class OrderController extends Controller
         } else {
             $combo = [];
         }
-        // dd($combo);
         return view('order.index', compact('combo'));
     }
 
     public function filtro(Request $request)
     {
-        // dd($request);
         session(['idPara' => $request->idPara]);
         session(['idDe' => $request->idDe]);
         session(['De' => $request->de]);
@@ -68,62 +62,89 @@ class OrderController extends Controller
 
         return view('order.filtro_producto', compact('categorias'));
     }
-    public function products($id)
+    public function products($id, $idProduct)
     {
-        if (Auth::user()->hasAnyRole('Farmacia', 'Drogueria')) {
-            $products = $this->products1($id);
+        if (Auth::user()->hasAnyRole('Farmacia')) {
+            $products = $this->products1($id, $idProduct);
         } else {
-            $products = $this->products2($id);
+            $products = $this->products2($id, $idProduct);
         }
-
-        return view('order.products', compact('products'));
+        $combo = Product::where('idCategory', $id)->where('available', 1)->pluck('name', 'id');
+        session(['idCategory' => $id]);
+        $categoria = Session::get('idCategory');
+        return view('order.products', compact('products', 'combo', 'categoria'));
     }
 
-    private function products1($id)
+    private function products1($id, $idProduct)
     {
         $idPara = Session::get('idPara');
         $idDe = Session::get('idDe');
         $De = Session::get('De');
-        if (Auth::user()->hasRole('Farmacia')) {
-            $data['products'] =  DB::table('inventaries')
-                ->join('products', 'inventaries.idProduct', 'products.id')
-                ->select('*')
-                ->where('inventaries.idUser', $idPara)
-                ->where('products.idCategory', $id)
-                ->orderBy('products.name', 'ASC')
-                ->paginate(10);
-            $data['para'] = $idPara;
-            $data['de'] = Auth::user()->id;
-        } elseif (Auth::user()->hasRole('Droguería')) {
-            $data['products'] = Product::where('idCategory', $id)->orderBy('name', 'ASC')->paginate(10);
-            $data['para'] = $idPara;
-            $data['de'] = Auth::user()->id;
-        }
-        $data['categoria'] = $id;
-        return $data;
-    }
-    private function products2($id)
-    {
-        $idPara = Session::get('idPara');
-        $idDe = Session::get('idDe');
-        $De = Session::get('De');
-        if ($De == 'Farmacia') {
+        if ($idProduct  == 'null') {
             $data['products'] = DB::table('inventaries')
                 ->join('products', 'inventaries.idProduct', 'products.id')
                 ->select('*')
                 ->where('inventaries.idUser', $idPara)
                 ->where('products.idCategory', $id)
-                ->orderBy('products.name', 'ASC')
+                ->where('available', 1)
+                ->orderBy('name', 'ASC')
                 ->paginate(10);
-
-            $data['para'] = $idPara;
-            $data['de'] = $idDe;
         } else {
-            $data['products'] = Product::where('idCategory', $id)->orderBy('name', 'ASC')->paginate(10);
-            $data['para'] = $idPara;
-            $data['de'] = $idDe;
+            $data['products'] = DB::table('inventaries')
+                ->join('products', 'inventaries.idProduct', 'products.id')
+                ->select('*')
+                ->where('inventaries.idUser', $idPara)
+                ->where('products.idCategory', $id)
+                ->where('products.id', $idProduct)
+                ->where('available', 1)
+                ->orderBy('name', 'ASC')
+                ->paginate(10);
         }
+
+        $data['idde'] = $idDe;
+        $data['de'] = $De;
         $data['categoria'] = $id;
+        $data['para'] = $idPara;
+        return $data;
+    }
+    private function products2($id, $idProduct)
+    {
+        $idPara = Session::get('idPara');
+        $idDe = Session::get('idDe');
+        $De = Session::get('De');
+        if ($idProduct  == 'null') {
+
+            if ($De == 'Farmacia') {
+                $data['products'] = DB::table('inventaries')
+                    ->join('products', 'inventaries.idProduct', 'products.id')
+                    ->select('*')
+                    ->where('inventaries.idUser', $idPara)
+                    ->where('products.idCategory', $id)
+                    ->where('available', 1)
+                    ->orderBy('name', 'ASC')
+                    ->paginate(10);
+            } else {
+                $data['products'] = Product::where('idCategory', $id)
+                    ->where('available', 1)
+                    ->orderBy('name', 'ASC')
+                    ->paginate(10);
+            }
+        } else {
+            $data['products'] = DB::table('inventaries')
+                ->join('products', 'inventaries.idProduct', 'products.id')
+                ->select('*')
+                ->where('inventaries.idUser', $idPara)
+                ->where('products.idCategory', $id)
+                ->where('products.id', $idProduct)
+                ->where('available', 1)
+                ->orderBy('name', 'ASC')
+                ->paginate(10);
+        }
+
+        $data['para'] = $idPara;
+        $data['categoria'] = $id;
+        $data['idde'] = $idDe;
+        $data['de'] = $De;
         return $data;
     }
 
@@ -253,14 +274,15 @@ class OrderController extends Controller
         $status = StatusPedido::orderBy('orden', 'ASC')->get();
         return view('order.detalle', compact('order', 'status'));
     }
-    public function state()
+    public function state($id)
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $order = Order::all();
+        $status = StatusPedido::orderBy('orden', 'ASC')->get();
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+            $order = Order::where('idStatus', $id)->paginate(10);
         } else {
-            $order = Order::where('idSend', Auth::user()->id)->get();
+            $order = Order::where('idUser', Auth::user()->id)->where('idStatus', $id)->paginate(10);
         }
-        return view('order.state', compact('order'));
+        return view('order.state', compact('order', 'status'));
     }
 
     public function info($id)
@@ -289,12 +311,13 @@ class OrderController extends Controller
         return $data;
     }
 
-    public function pdf(Request $request)
+    public function pdf($id)
     {
-        $order = $this->info($request->id);
+        $order = $this->info($id);
         $pdf = app('dompdf.wrapper');
         $pdf->loadView('order.pedido_pdf', ['order' => $order]);
-        return $pdf->download('pedido-' . $order['pedido']->nOrder . '.pdf');
+        return $pdf->stream('pedido-' . $order['pedido']->nOrder . '.pdf');
+        // return $pdf->download('pedido-' . $order['pedido']->nOrder . '.pdf');
     }
     public function edit(Order $order)
     {

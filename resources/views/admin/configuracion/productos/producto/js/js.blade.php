@@ -1,7 +1,77 @@
 <!-- Select2 -->
 <script src="{{ asset('js/selectize.js') }}" type="text/javascript"></script>
-
+{{-- <script src="{{ asset('js/bootstrap4-toggle.min.js') }}"></script> --}}
 <script type="text/javascript">
+    $(document).ready(function() {
+        var table = $('#AllDataTable_prod').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('product.get-product-data') }}",
+            columns: [{
+                    data: 'image',
+                    name: 'img',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'codigo',
+                    name: 'codigo'
+                },
+                {
+                    data: 'name',
+                    name: 'name',
+                    render: function(data, type, row) {
+                        return '<span class="dos_lineas">' + data + '</span>';
+                    }
+                },
+                {
+                    data: 'prices',
+                    name: 'prices',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'category.name',
+                    name: 'category.name'
+                },
+                {
+                    data: 'available',
+                    name: 'available',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'rotacion',
+                    name: 'rotacion',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'action',
+                    name: 'action',
+                    orderable: false,
+                    searchable: false
+                },
+            ],
+            language: {
+                url: "{{ asset('js/Spanish.json') }}",
+            },
+            initComplete: function(settings, json) {
+                // Inicializa Bootstrap Toggle
+                initializeBootstrapToggle();
+            }
+        });
+
+        function initializeBootstrapToggle() {
+            $('input[name="available"], input[name="rotacion"]').bootstrapToggle();
+        }
+
+        // Vuelve a inicializar Bootstrap Toggle después de que la tabla se vuelva a renderizar (por ejemplo, después de una búsqueda)
+        $('#AllDataTable_prod').on('draw.dt', function() {
+            initializeBootstrapToggle();
+        });
+    });
+
     $(function() {
         $('.otro').selectize({
             preload: true,
@@ -55,7 +125,7 @@
                 $('#quantity_tf').val(obj.quantity_tf);
                 $('#check').attr('hidden', false);
                 if (obj.available == 1) {
-                    $('#available').prop("checked", true);
+                    $('#available').prop('checked', true).change();
                 }
                 modal.removeClass('loading');
             });
@@ -77,4 +147,46 @@
         $('#quantity_min').val('');
         $('#quantity_tf').val('');
     });
+    $(function() {
+        $('[data-toggle="popover"]').popover({
+            container: 'body',
+            trigger: 'focus'
+        })
+    })
+
+    function activar(idP, idDis) {
+        var id = idDis;
+        var idPro = idP;
+        $.ajax({
+            url: './activar/' + id + '/' + idPro + '/product',
+            type: 'GET',
+
+            error: function(err) {
+                console.log(err);
+            },
+
+            success: function(options) {
+                console.log('OK');
+                window.location.reload();
+            }
+        });
+    }
+
+    function rotacion(idP, idRot) {
+        var id = idRot;
+        var idPro = idP;
+        $.ajax({
+            url: './rotacion/' + id + '/' + idPro + '/product',
+            type: 'GET',
+
+            error: function(err) {
+                console.log(err);
+            },
+
+            success: function(options) {
+                console.log('OK');
+                window.location.reload();
+            }
+        });
+    }
 </script>

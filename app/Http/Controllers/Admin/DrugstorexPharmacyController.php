@@ -27,6 +27,16 @@ class DrugstorexPharmacyController extends Controller
         return view('request.index', compact('drugstore', 'pharmacies'));
     }
 
+    public function all()
+    {
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'Vendedor')) {
+            $solicitudes = DrugstorexPharmacy::where('permission', 0)->paginate(10);
+        } else {
+            $solicitudes = DrugstorexPharmacy::where('permission', 0)->where('idDrugstore', auth()->user()->id)->paginate(10);
+        }
+        return view('request.all', compact('solicitudes'));
+    }
+
     public function store(Request $request)
     {
         $data = [

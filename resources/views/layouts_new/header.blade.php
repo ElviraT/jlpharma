@@ -54,7 +54,7 @@
                     <div class="col-4">
                         <ul class="navbar-nav">
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ route('order.checkout') }}">{{ __('menu.Order') }} <span
+                                <a class="nav-link" href="{{ route('order.checkout') }}">{{ 'Carrito' }}&nbsp; <span
                                         class="badge bg-danger">{{ \Cart::count() }}</span></a>
                             </li>
                             <li class="nav-item dropdown">
@@ -64,10 +64,10 @@
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right dropdown-menu-animate-up"
                                     aria-labelledby="navbarDropdown2">
-                                    <a class="dropdown-item" href="{{ route('language', 'es') }}">
+                                    <a class="dropdown-item" href="{{ url('/lang/es') }}">
                                         <span class="fi fi-es"></span>
                                         {{ __('es.Spanish') }}</a>
-                                    <a class="dropdown-item" href="{{ route('language', 'en') }}">
+                                    <a class="dropdown-item" href="{{ url('/lang/en') }}">
                                         <span class="fi fi-us"></span>
                                         {{ __('es.English') }}</a>
                                     <a class="dropdown-item" href="#">
@@ -98,9 +98,6 @@
                                     </div>
                                     <a class="dropdown-item" href="#"><i data-feather="user"
                                             class="feather-sm text-info me-1 ms-1"></i> {{ __('es.My_Profile') }}</a>
-                                    {{-- <a class="dropdown-item" href="#"><i data-feather="credit-card"
-                                            class="feather-sm text-primary me-1 ms-1"></i> My
-                                        Balance</a> --}}
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item"
                                         href="{{ route('logout') }}"onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i

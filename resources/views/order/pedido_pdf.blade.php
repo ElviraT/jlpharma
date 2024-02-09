@@ -4,12 +4,14 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <title>{{ config('app.name', 'Laravel') }}</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{{ asset('img/favicon.png') }}" />
     <style>
         body {
             font-family: sans-serif;
-            font-size: 12px;
+            font-size: 10px;
             letter-spacing: 1px;
-            line-height: 27px;
+            line-height: 18px;
         }
 
         #detalle_info,
@@ -18,8 +20,9 @@
         }
 
         #detalle_info thead {
-            background-color: rgb(80, 255, 182);
+            background-color: #049383;
             border-bottom: 1px solid #555;
+            color: white;
         }
 
         #detalle_info tfoot {
@@ -27,22 +30,25 @@
         }
     </style>
 
+
+
 <body>
     <table>
         <tr>
             <td>
-                <img src="{{ asset('img/favicon.png') }}" alt="" width="27%">
+                <img src="{{ asset('img/favicon.png') }}" alt="" width="30%">
             </td>
 
             <td>
                 <h1>
-                    {{ 'Gestion de ventas JL' }}
+                    {{ 'Gestion de ventas JL Pharma Medicamentos' }}
+
                 </h1>
             </td>
         </tr>
     </table>
     <hr>
-    <table>
+    <table width='100%'>
         <tr>
             <td width="60%">
                 <h3>{{ 'Datos del Cliente' }}</h3>
@@ -59,7 +65,6 @@
                 <h3>{{ 'Datos de la orden' }}</h3>
                 <label>{{ 'Pedido:  ' }}</label><span>{{ $order['pedido']->nOrder }}</span><br>
                 <label>{{ 'Fecha:  ' }}</label><span>{{ date_format($order['pedido']->created_at, 'Y/m/d h:i') }}</span><br>
-                <label>{{ 'Estado:  ' }}</label><span>{{ $order['pedido']->status->name }}</span>
                 @if (isset($order['vendedor']))
                     <h3>{{ 'Datos del vendedor' }}</h3>
                     <label>{{ 'Cedula:  ' }}</label><span>{{ $order['vendedor']->dni }}</span><br>
@@ -74,34 +79,38 @@
     <table id="detalle_info" width="100%">
         <thead>
             <tr>
-                <th>Nro.</th>
+                <th width='2%'>Nro.</th>
                 <th>Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Total</th>
+                <th width='10%'>Cantidad</th>
+                <th width='15%'>Precio Unitario</th>
+                <th width='15%'>Total $</th>
             </tr>
         </thead>
         <tbody>
+            @php($cant = 0)
             @foreach ($order['detalle'] as $key => $item)
+                @php($cant = $cant + $item->cant)
                 <tr>
-                    <td>{{ $key + 1 }}</td>
+                    <td align="center">{{ $key + 1 }}</td>
                     <td>{{ $item->name }}</td>
-                    <td>{{ $item->cant }}</td>
-                    <td>{{ $item->price }}</td>
-                    <td>{{ $item->importe }}</td>
+                    <td align="center">{{ $item->cant }}</td>
+                    <td align="center">{{ number_format($item->price, 2) . '$' }}</td>
+                    <td align="center">{{ number_format($item->importe, 2) . '$' }}</td>
                 </tr>
             @endforeach
         </tbody>
         <tfoot>
             <tr>
-                <th colspan="4">{{ 'Total' }}</th>
-                <th>{{ $order['pedido']->total }}</th>
+                <th colspan="2">{{ 'Total' }}</th>
+                <th>{{ $cant }}</th>
+                <th colspan="2" align="right">{{ number_format($order['pedido']->total, 2) . '$' }}<br>
+                    {{ number_format($order['pedido']->total_bs, 2) . 'Bs' }}</th>
             </tr>
         </tfoot>
     </table>
     <hr>
     <div>
-        <strong> {{ $order['order']->observation }} </strong>
+        <strong>{{ 'Observación: ' }}</strong> {{ $order['order']->observation }}
     </div>
 </body>
 

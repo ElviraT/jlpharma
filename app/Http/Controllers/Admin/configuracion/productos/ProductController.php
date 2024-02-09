@@ -4,14 +4,15 @@ namespace App\Http\Controllers\Admin\configuracion\productos;
 
 use App\Http\Controllers\Controller;
 use App\Models\Category;
-use App\Models\Mark;
 use App\Models\Product;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Yajra\DataTables\DataTables;
 
 class ProductController extends Controller
 {
@@ -25,12 +26,47 @@ class ProductController extends Controller
     }
     public function index()
     {
-        $product = Product::orderBy('name', 'ASC')->get();
-        $codigo = Product::select('codigo')->orderBy('id', 'desc')->first();
-        $categories = Category::all();
-        $marks = Mark::all();
 
-        return view('admin.configuracion.productos.producto.index', compact('product', 'categories', 'codigo', 'marks'));
+        $last_code = Product::select('codigo')->orderBy('id', 'desc')->first();
+        $categories = Category::all();
+        return view('admin.configuracion.productos.producto.index', compact('categories', 'last_code'));
+    }
+
+    public function getProductData()
+    {
+        return DataTables::of(Product::with('category')->orderBy('name', 'asc'))
+            ->addColumn('action', function ($product) {
+                return view('partials.products.actions', compact('product'));
+            })
+            ->addColumn('prices', function ($product) {
+                return view('partials.products.prices', compact('product'));
+            })
+            ->addColumn('category_name', function ($product) {
+                return $product->category->name;
+            })
+            ->addColumn('image', function ($product) {
+                if (asset('storage/' . $product->img) != '') {
+                    return '<img src="' . asset('storage/' . $product->img) . '" alt="imagen" class="rounded-circle shadow-4-strong img" style="width:70px; height:70px;">';
+                } else {
+                    return '<img src="' . asset('img/no-image.jpg') . '" alt="imagen" class="rounded-circle shadow-4-strong img" style="width:70px; height:70px;">';
+                }
+            })
+            ->addColumn('available', function ($product) {
+                if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+                    return '<input type="checkbox" name="available" id="idDis' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->available == 1 ? 'checked' : '') . ' onchange="activar(' . $product->id . ',' . $product->available . ')">';
+                } else {
+                    return '<input type="checkbox" name="available" id="idDis' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->available == 1 ? 'checked' : '') . ' onchange="activar(' . $product->id . ',' . $product->available . ')" disabled>';
+                }
+            })
+            ->addColumn('rotacion', function ($product) {
+                if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+                    return '<input type="checkbox" name="rotacion" id="idRot' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->rotacion == 1 ? 'checked' : '') . ' onchange="rotacion(' . $product->id . ',' . $product->rotacion . ')">';
+                } else {
+                    return '<input type="checkbox" name="rotacion" id="idRot' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->rotacion == 1 ? 'checked' : '') . ' onchange="rotacion(' . $product->id . ',' . $product->rotacion . ')" disabled>';
+                }
+            })
+            ->rawColumns(['action', 'prices', 'image', 'available', 'rotacion'])
+            ->make(true);
     }
 
     public function store(Request $request)
@@ -71,7 +107,6 @@ class ProductController extends Controller
         $product = Product::find($id);
         return response()->json([$product]);
     }
-
     public function update(Request $request, $id)
     {
         if ($request->available == 'on') {
@@ -114,9 +149,37 @@ class ProductController extends Controller
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('product.index');
     }
+    public function aceptar($id, $idPro)
+    {
+        if ($id == 1) {
+            $estado = 0;
+        } else {
+            $estado = 1;
+        }
+        $producto = Product::where('id', $idPro)->first();
+        $producto->available = $estado;
+        $producto->save();
+        return response()->json(['mensaje' => "Listo"]);
+    }
+
+    public function rotacion($id, $idPro)
+    {
+        if ($id == 1) {
+            $estado = 0;
+        } else {
+            $estado = 1;
+        }
+        $producto = Product::where('id', $idPro)->first();
+        $producto->rotacion = $estado;
+        $producto->save();
+        return response()->json(['mensaje' => "Listo"]);
+    }
+
     private function _eliminarArchivo($name)
     {
         $archivo = self::UPLOAD_PATH . '/' . $name;
+        // dd($archivo);
         Storage::disk('public')->delete([$archivo]);
+        // return true;
     }
 }

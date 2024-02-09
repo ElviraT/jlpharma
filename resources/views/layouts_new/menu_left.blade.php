@@ -1,6 +1,6 @@
 <aside class="left-sidebar">
     <!-- Sidebar scroll-->
-    <div class="scroll-sidebar" style="overflow-y:auto !important;" id="menu">
+    <div class="scroll-sidebar" style="overflow-y:auto !important; overflow-x: hidden !important;" id="menu">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav">
@@ -47,7 +47,7 @@
                         aria-expanded="false"><i data-feather="home" class="feather-icon"></i><span
                             class="hide-menu">{{ __('Dashboard') }}</span></a>
                 </li>
-                @canany(['order.index', 'order.state', 'request.index'])
+                @canany(['order.index', 'request.index', 'cambio.index'])
                     <li class="nav-small-cap">
                         <i data-feather="more-horizontal" class="feather-icon"></i>
                         <span class="hide-menu">{{ __('menu.Order') }}</span>
@@ -60,20 +60,30 @@
                         </li>
                     @endcan
                     @can('order.index')
-                        <li class="sidebar-item {{ @request()->routeIs('order') ? 'active' : ' ' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
-                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">{{ 'Realizar Pedido' }}</span></a>
+                        @if (Session::get('orden') != '')
+                            <li class="sidebar-item {{ @request()->routeIs('order.index') ? 'active' : ' ' }}">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="#"
+                                    aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                        class="hide-menu" onclick="verificar();">{{ 'Realizar Pedido' }}</span></a>
+                            </li>
+                        @else
+                            <li class="sidebar-item {{ @request()->routeIs('order.index') ? 'active' : ' ' }}">
+                                <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.index') }}"
+                                    aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
+                                        class="hide-menu">{{ 'Realizar Pedido' }}</span></a>
+                            </li>
+                        @endif
+                    @endcan
+                    @can('cambio.index')
+                        <li class="sidebar-item {{ @request()->routeIs('cambio.index') ? 'active' : ' ' }}">
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('cambio.index') }}"
+                                aria-expanded="false">
+                                <i data-feather="bell" class="feather-icon"></i><span
+                                    class="hide-menu">{{ 'Cambio de estatus' }}&nbsp;
+                                </span><span class="badge bg-danger"
+                                    id="notificacion">{{ count(auth()->user()->unreadNotifications) }}</span></a>
                         </li>
                     @endcan
-                    @can('order.state')
-                        <li class="sidebar-item {{ @request()->routeIs('order.state') ? 'active' : ' ' }}">
-                            <a class="sidebar-link waves-effect waves-dark sidebar-link" href="{{ route('order.state') }}"
-                                aria-expanded="false"><i data-feather="file-text" class="feather-icon"></i><span
-                                    class="hide-menu">{{ 'Estado de Pedido' }}</span></a>
-                        </li>
-                    @endcan
-
                 @endcanany
                 <li class="nav-small-cap">
                     <i data-feather="more-horizontal" class="feather-icon"></i>
@@ -102,9 +112,9 @@
                         </ul>
                     </li>
                 @endcanany
-                @canany(['prefixes.index', 'sexes.index', 'maritalStatus.index', 'status.index', 'statusp.index'])
+                @canany(['status.index', 'statusp.index'])
                     <li class="sidebar-item">
-                        <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('prefix*') || @request()->routeIs('sexes*') || @request()->routeIs('status*') || @request()->routeIs('maritalStatus*') ? 'active' : ' ' }}"
+                        <a class="sidebar-link has-arrow waves-effect waves-dark @request()->routeIs('status.index') || @request()->routeIs('statusp.index') ? 'active' : ' ' }}"
                             href="#" aria-expanded="false"><i data-feather="arrow-down-circle"
                                 class="feather-icon"></i><span class="hide-menu">{{ __('Combos') }}
                             </span></a>
@@ -112,7 +122,7 @@
                             @can('status.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('status.index') }}"
-                                        class="sidebar-link {{ @request()->routeIs('status*') ? 'active' : ' ' }}"><i
+                                        class="sidebar-link {{ @request()->routeIs('status.index') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Status') }} </span></a>
                                 </li>
@@ -120,12 +130,12 @@
                             @can('statusp.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('statusp.index') }}"
-                                        class="sidebar-link {{ @request()->routeIs('statusp*') ? 'active' : ' ' }}"><i
+                                        class="sidebar-link {{ @request()->routeIs('statusp.index') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ 'Status de Pedidos' }} </span></a>
                                 </li>
                             @endcan
-                            @can('prefixes.index')
+                            {{-- @can('prefixes.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('prefixes.index') }}"
                                         class="sidebar-link {{ @request()->routeIs('prefixes*') ? 'active' : ' ' }}"><i
@@ -148,14 +158,13 @@
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Marital Status') }} </span></a>
                                 </li>
-                            @endcan
+                            @endcan --}}
                         </ul>
                     </li>
                 @endcanany
-                @canany(['countries.index', 'states.index', 'cities.index', 'municipality.index', 'parishes.index',
-                    'zones.index'])
+                @canany(['countries.index', 'states.index', 'cities.index', 'municipality.index', 'zones.index'])
                     <li class="sidebar-item">
-                        <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('countries*') || @request()->routeIs('states*') || @request()->routeIs('cities*') || @request()->routeIs('municipality*') || @request()->routeIs('parishes*') || @request()->routeIs('zones*') ? 'active' : ' ' }}"
+                        <a class="sidebar-link has-arrow waves-effect waves-dark {{ @request()->routeIs('countries.index') || @request()->routeIs('states.index') || @request()->routeIs('cities.index') || @request()->routeIs('municipality.index') || @request()->routeIs('zones.index') ? 'active' : ' ' }}"
                             href="#" aria-expanded="false"><i data-feather="map-pin"
                                 class="feather-icon"></i><span class="hide-menu">{{ __('menu.Direction') }}
                             </span></a>
@@ -250,6 +259,14 @@
                                             {{ __('menu.Seller') }} </span></a>
                                 </li>
                             @endcan
+                            @can('other.index')
+                                <li class="sidebar-item">
+                                    <a href="{{ route('other.index') }}"
+                                        class="sidebar-link {{ @request()->routeIs('other') || @request()->routeIs('other.create') ? 'active' : ' ' }}"><i
+                                            class="ri-arrow-right-s-line"></i><span class="hide-menu">
+                                            {{ 'Otros Usuarios' }} </span></a>
+                                </li>
+                            @endcan
                         </ul>
                     </li>
                 @endcanany
@@ -279,7 +296,7 @@
                             @can('product.index')
                                 <li class="sidebar-item">
                                     <a href="{{ route('product.index') }}"
-                                        class="sidebar-link {{ @request()->routeIs('product') ? 'active' : ' ' }}"><i
+                                        class="sidebar-link {{ @request()->routeIs('product.index') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
                                             {{ __('menu.Product') }} </span></a>
                                 </li>
@@ -295,7 +312,7 @@
                         </ul>
                     </li>
                 @endcanany
-                <li class="sidebar-item">
+                <li class="sidebar-item  mt-2 mb-4">
                     <a class="dropdown-item"
                         href="{{ route('logout') }}"onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i
                             data-feather="log-out" class="feather-sm text-danger me-1 ms-1"></i>

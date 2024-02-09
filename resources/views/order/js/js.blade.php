@@ -2,6 +2,16 @@
 <script src="{{ asset('js/selectize.js') }}" type="text/javascript"></script>
 
 <script type="text/javascript">
+    $(document).ready(function() {
+        var table_roles = $('#AllDataTable_checkout').DataTable({
+            lengthChange: false,
+            "order": [],
+            language: {
+                url: "{{ asset('js/Spanish.json') }}",
+            },
+        });
+    });
+
     $(function() {
         $('.otro').selectize({
             preload: true,
@@ -45,7 +55,7 @@
 
         var combo = $('#combo').val();
         if (combo == '["Drogueria"]') {
-            url = 'JL';
+            url = 'Latinfarma';
             $('.otro').attr('required', true);
         } else if (combo == '["Farmacia"]') {
             url = 'Droguería';
@@ -163,6 +173,25 @@
         $('.title', this).text(data.recordTitle);
         modal.removeClass('loading');
     });
+    $('#cambiar_status').on('show.bs.modal', function(e) {
+        var modal = $(e.delegateTarget),
+            data = $(e.relatedTarget).data();
+        modal.addClass('loading');
+        $('#id', modal).val(data.recordId);
+        $('#leer', modal).val(data.recordLeer);
+        // $('.title', this).text(data.recordTitle);
+        modal.removeClass('loading');
+    });
+    $('#permiso_modal').on('show.bs.modal', function(e) {
+        var modal = $(e.delegateTarget),
+            data = $(e.relatedTarget).data();
+        modal.addClass('loading');
+        $('#no_pedido', modal).text(data.recordNpedido);
+        $('#pedido', modal).val(data.recordNpedido);
+        $('#cliente', modal).val(data.recordCliente);
+        $('#id_pedido', modal).val(data.recordId);
+        modal.removeClass('loading');
+    });
 
     // MODAL INFO
     $('#modal_info').on('show.bs.modal', function(e) {
@@ -172,7 +201,7 @@
         if (data.recordId != undefined) {
             modal.addClass('loading');
             $('#estado', modal).text(data.recordStatus);
-            $('#id', modal).val(data.recordId);
+            $('#id_pdf', modal).val(data.recordId);
             var url = "{{ route('order.info', 'id') }}";
             url = url.replace('id', data.recordId);
             $.getJSON(url, function(data) {
@@ -206,22 +235,27 @@
                 // DETALLE DE PEDIDO
                 $("#cuerpo").html("");
                 $("#footer").html("");
+                var total_cant = 0;
+                var totalbs = 0;
                 for (var i = 0; i < data.detalle.length; i++) {
+                    total_cant += parseInt(data.detalle[i].cant, 10);
                     var tr = `<tr>
-                    <td>` + ([i] + 1) + `</td>
-                    <td>` + data.detalle[i].name + `</td>
+                    <td>` + ([parseInt(i) + parseInt(1)]) + `</td>
+                    <td><span class="dos_lineas">` + data.detalle[i].name + `</span></td>
                     <td>` + data.detalle[i].cant + `</td>
                     <td>$` + data.detalle[i].price.toFixed(2) + `</td>
                     <td>$` + data.detalle[i].importe.toFixed(2) + `</td>
                     </tr>`;
                     $("#cuerpo").append(tr)
+
                 }
                 var trF = `<tr>
                     <th></th>
                     <th></th>
-                    <th></th>
+                    <th>` + total_cant + `</th>
                     <th>Total</th>
-                    <th>$` + data.pedido.total.toFixed(2) + `</th>
+                    <th>$ ` + data.pedido.total.toFixed(2) + '<br>' +
+                    `Bs ` + data.pedido.total_bs.toFixed(2) + `</th> 
                     </tr>`;
                 $("#footer").append(trF)
                 // FIN DETALLE

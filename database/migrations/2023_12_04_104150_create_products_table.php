@@ -19,10 +19,10 @@ return new class extends Migration
             $table->string('img')->nullable();
             $table->float('price_cs', 10, 2);
             $table->float('price_dg', 10, 2);
-            $table->float('price_tf', 10, 2);
+            $table->float('price_tf', 10, 2)->nullable();
             $table->integer('quantity');
             $table->integer('quantity_min');
-            $table->integer('quantity_tf');
+            $table->integer('quantity_tf')->nullable();
             $table->unsignedBigInteger('idCategory');
             $table->boolean('available')->default(1);
             $table->timestamps();

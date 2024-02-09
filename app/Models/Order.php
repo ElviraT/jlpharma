@@ -16,6 +16,7 @@ class Order extends Model
         'idReceives',
         'idUser',
         'total',
+        'total_bs',
         'idStatus',
         'observation'
     ];

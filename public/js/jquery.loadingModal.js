@@ -5,7 +5,7 @@
         defaults = {
             position: 'auto',
             text: '',
-            color: '#fff',
+            color: '#f4ec65',
             opacity: '0.7',
             backgroundColor: 'rgb(0,0,0)',
             animation: 'doubleBounce'

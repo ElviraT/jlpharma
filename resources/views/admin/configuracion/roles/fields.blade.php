@@ -9,14 +9,14 @@
                 <h5>{{ 'Listado de Permisos' }}</h5>
                 <div class="row mt-2">
                     @foreach ($permission as $permiso)
-                        <div class="single-item col-md-3 mt-2">
+                        <div class="single-item col-md-4 mt-2">
                             <label>
                                 {!! form::checkbox('permissions[]', $permiso->id, null, [
                                     'class' => 'form-control checkbox',
                                     'data-toggle' => 'toggle',
                                     'data-on' => 'Si',
                                     'data-off' => 'No',
-                                    'data-size' => 'xs',
+                                    'data-size' => 'sm',
                                     'id' => 'check',
                                 ]) !!}
                                 {{ $permiso->name }}

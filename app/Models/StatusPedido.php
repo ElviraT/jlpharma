@@ -14,6 +14,6 @@ class StatusPedido extends Model
     ];
     public function order(): HasMany
     {
-        return $this->hasMany(Order::class, 'idStatus');
+        return $this->hasMany(Order::class, 'id');
     }
 }

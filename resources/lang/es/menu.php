@@ -18,7 +18,7 @@ return [
     'Pharmacy' => 'Centro de Salud',
     'Zone' => 'Zona',
     'Drugstore' => 'Droguería',
-    'Jluser' => 'Usuarios JL',
+    'Jluser' => 'Admin JL',
     'Category' => 'Categorias',
     'Speciality' => 'Especialidades',
     'Product' => 'Productos',

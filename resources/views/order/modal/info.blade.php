@@ -3,18 +3,20 @@
         <div class="modal-content">
             <div class="modal-header modal-header-success">
                 <h4 class="modal-title" id="idTitle">{{ 'Pedido ' }}</h4>
-                <form action="{{ route('order.pdf') }}" method="post">
-                    @csrf
-                    <input type="hidden" name="id" id="id">
-                    <button type="submit" class="btn btn-ligth"><i class="ri-download-cloud-line"></i></button>
-                </form>
+                {{-- <form action="{{ route('order.pdf') }}" method="post">
+                    @csrf --}}
+                <input type="hidden" name="id" id="id_pdf">
+                <a href="#" class="btn btn-ligth mb-2" onclick="generar_pdf()"><i class="ri-download-cloud-line"
+                        style="font-size:20px; color: #fff"></i></a>
+                {{-- </form> --}}
 
-                <button type="button" class="btn btn-ligth close" data-dismiss="modal" aria-hidden="true">×</button>
+                <button type="button" class="btn btn-ligth close" data-dismiss="modal" aria-hidden="true"
+                    style="color: #fff">×</button>
             </div>
             <div class="modal-body p-3">
                 <div class="espacio_modal col-12">
                     <div class="row">
-                        <div class="col-6">
+                        <div class="col-lg-6 col-sm-12">
                             <h3>{{ 'Datos del Cliente' }}</h3>
                             <div class="col-12">
                                 <div class="row">
@@ -41,7 +43,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-6">
+                        <div class="col-lg-6 col-sm-12">
                             <h3>{{ 'Datos de la orden' }}</h3>
                             <div class="col-12">
                                 <div class="row">
@@ -75,21 +77,23 @@
                         </div>
                         <div class="col-12 mt-3">
                             <h3>{{ 'Detalle del pedido' }}</h3>
-                            <table id="detalle_info" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>Nro.</th>
-                                        <th>Producto</th>
-                                        <th>Cantidad</th>
-                                        <th>Precio Unitario</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="cuerpo">
-                                </tbody>
-                                <tfoot id="footer">
-                                </tfoot>
-                            </table>
+                            <div style="overflow-x: auto">
+                                <table id="detalle_info" class="table-responsive" width="100%" cellpadding="7">
+                                    <thead>
+                                        <tr>
+                                            <th>Nro.</th>
+                                            <th>Producto</th>
+                                            <th>Cantidad</th>
+                                            <th class="dos_lineas">Precio Unitario</th>
+                                            <th>Total $</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="cuerpo">
+                                    </tbody>
+                                    <tfoot id="footer">
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

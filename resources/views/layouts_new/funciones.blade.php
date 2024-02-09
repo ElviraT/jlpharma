@@ -115,6 +115,19 @@
         });
     });
 
+    $(document).ready(function() {
+        var table = $('#DashboardTable').DataTable({
+            lengthChange: false,
+            info: false,
+            responsive: false,
+            paging: false,
+            "order": [],
+            language: {
+                url: "{{ asset('js/Spanish.json') }}",
+            },
+        });
+    });
+
     function cargarReloj() {
 
         // Haciendo uso del objeto Date() obtenemos la hora, minuto y segundo 
@@ -164,23 +177,74 @@
     // Ejecutamos la función 'CargarReloj' 
     cargarReloj();
 
-    // $(document).on('ajaxStart', function() {
-    //     loading_show();
-    // })
+    $(document).on('ajaxStart', function() {
+        loading_show();
+    })
 
-    // $(document).on('ajaxStop', function(start) {
-    //     loading_hide();
-    // });
+    $(document).on('ajaxStop', function(start) {
+        loading_hide();
+    });
 
-    // function loading_show() {
-    //     $('body').loadingModal({
-    //         text: 'Por favor espere...',
-    //         animation: 'circle',
-    //     });
-    //     $('body').loadingModal('show');
-    // }
+    function loading_show() {
+        $('body').loadingModal({
+            text: 'Por favor espere...',
+            animation: 'wave',
+        });
+        $('body').loadingModal('show');
+    }
 
-    // function loading_hide() {
-    //     $('body').loadingModal('hide');
-    // }
+    function loading_hide() {
+        $('body').loadingModal('hide');
+    }
+
+    function verificar() {
+        Swal.fire({
+            title: '¿Quieres Continuar?',
+            text: "Se perdera la edición del pedido actual",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#043484',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                location.href = "{{ route('order.index') }}";
+                Swal.fire(
+                    'Confirmado!',
+                    'La actualización se cancelara.',
+                    'success'
+                )
+            } else {
+                console.log('clicked cancel');
+            }
+        })
+    }
+
+    function verificar_edit(id) {
+        Swal.fire({
+            title: '¿Quieres Continuar?',
+            text: "Se perdera la edición del pedido actual",
+            icon: 'success',
+            showCancelButton: true,
+            confirmButtonColor: '#043484',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                var url = "{{ route('order.destroyCart', 'id') }}";
+                url = url.replace("id", id);
+                location.href = url;
+                Swal.fire(
+                    'Confirmado!',
+                    'La actualización se cancelara.',
+                    'success'
+                )
+            } else {
+                console.log('clicked cancel');
+            }
+        })
+    }
+    loading_hide();
 </script>
