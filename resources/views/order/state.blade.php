@@ -137,7 +137,7 @@
                                             &nbsp;
                                             @can('order.rechazar')
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
-                                                    title="{{ __('Eliminar pedido') }}" data-target=".bd-example-rechazo-sm"
+                                                    title="{{ __('Eliminar pedido') }}" data-target="#confirm-rechazar"
                                                     data-record-id="{{ $resultado->id }}"
                                                     data-record-title="{{ 'Rechazar el pedido de ' }}{{ $resultado->userSend->name }}">
                                                     <i class="ri-close-line"></i>

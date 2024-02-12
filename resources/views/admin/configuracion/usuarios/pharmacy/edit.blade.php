@@ -7,7 +7,7 @@
 @section('content')
     <div class="col-md-12">
         <div class="page-header-title">
-            <h5 class="m-b-10">{{ 'Editar Farmacia: ' }}{{ $pharmacy->name }}</h5>
+            <h5 class="m-b-10">{{ 'Editar Centro de Salud: ' }}{{ $pharmacy->name }}</h5>
         </div>
     </div>
     <div class="container">

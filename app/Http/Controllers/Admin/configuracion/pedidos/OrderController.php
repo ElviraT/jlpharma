@@ -39,7 +39,18 @@ class OrderController extends Controller
             Cart::destroy();
             Session::forget('orden');
         }
-        return view('order.index');
+        // Cart::destroy();
+        if (Auth::user()->hasRole('Farmacia')) {
+            $combo = DB::table('users')
+                ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
+                ->select('users.id AS id', 'users.name AS name')
+                ->where('drugstorex_pharmacies.idPharmacy', auth()->user()->id)
+                ->where('drugstorex_pharmacies.permission', 1)
+                ->pluck('name', 'id');
+        } elseif (Auth::user()->hasRole('Droguería')) {
+            $combo = User::where('name', 'LIKE', '%JL%')->pluck('name', 'id');
+        }
+        return view('order.index', compact('combo'));
     }
 
     public function filtro(Request $request)
@@ -55,7 +66,6 @@ class OrderController extends Controller
     }
     public function products($id, $idProduct)
     {
-        // dd(session('De'));
         if (session('De') == 'Farmacia') {
             $products = $this->products1($id, $idProduct);
             $combo = DB::table('inventaries')
@@ -64,7 +74,6 @@ class OrderController extends Controller
                 ->where('products.idCategory', $id)
                 ->where('inventaries.idUser', session('idPara'))
                 ->pluck('name', 'id');
-            // dd($combo);
         } else {
             $products = $this->products2($id, $idProduct);
             $combo = Product::where('idCategory', $id)->where('available', 1)->pluck('name', 'id');
@@ -90,7 +99,7 @@ class OrderController extends Controller
                 ->select('inventaries.id', 'inventaries.name', 'inventaries.price AS price_dg', 'inventaries.quantity', 'products.description', 'products.codigo', 'products.img', 'products.idCategory')
                 ->where('inventaries.idUser', session('idPara'))
                 ->where('products.idCategory', $id)
-                ->where('products.id', $idProduct)
+                ->where('inventaries.id', $idProduct)
                 ->orderBy('inventaries.name', 'ASC')
                 ->paginate(10);
         }
@@ -125,11 +134,10 @@ class OrderController extends Controller
 
     public function store(Request $request)
     {
-        // dd($request);
         for ($i = 0; $i < count($request->id); $i++) {
             if ($request->cant[$i] != null) {
                 if ($request->cliente == 'Farmacia') {
-                    $products = Inventary::where('idProduct', $request->id[$i])->first();
+                    $products = Inventary::where('id', $request->id[$i])->first();
                     $cant = $request->cant[$i];
                     if (empty($products)) {
                         return to_route('order.index');
@@ -195,7 +203,7 @@ class OrderController extends Controller
             ];
             $order = Order::create($item);
             $recibe = User::where('id', $request['idReceives'])->first();
-
+            // dd($recibe);
             for ($i = 0; $i < count($request['name']); $i++) {
                 $importe = 0;
                 $importe = $request['cant'][$i] * $request['price'][$i];
@@ -210,8 +218,8 @@ class OrderController extends Controller
                         'importe' => $importe,
                         'importe_bs' => str_replace(',', '', $request['importe_bs'][$i]),
                     ];
-                    if ($recibe->last_name == 'Drogueria') {
-                        $product = Inventary::where('idProduct', $request['idProduct'][$i])
+                    if ($recibe->last_name == 'Droguería') {
+                        $product = Inventary::where('id', $request['idProduct'][$i])
                             ->where('idUser', $request['idReceives'])
                             ->first();
                     } else {
@@ -235,6 +243,7 @@ class OrderController extends Controller
             DB::commit();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
             return redirect(url()->previous());
@@ -548,7 +557,7 @@ class OrderController extends Controller
     {
         $recibe = User::where('id', $receiver)->first();
         if ($recibe->last_name == 'Droguería') {
-            $stock = Inventary::where('idProduct', $dProduct)
+            $stock = Inventary::where('id', $dProduct)
                 ->where('idUser', $receiver)
                 ->first();
         } else {

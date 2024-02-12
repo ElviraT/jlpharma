@@ -43,7 +43,7 @@ class DashboardController extends Controller
                 ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))
                 ->groupBy('users.last_name')
                 ->get();
-        } elseif (Auth::user()->hasRole('Farmacia')) {
+        } elseif (Auth::user()->hasRole('Vendedor')) {
             $user = DB::table('pharmacies')
                 ->join('users', 'pharmacies.idUser', '=', 'users.id')
                 ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))

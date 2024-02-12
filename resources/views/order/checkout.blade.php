@@ -154,7 +154,7 @@
                                                         value="{{ number_format($importe * $dolar->monto, 2) }}" required>
                                                 @endforeach
                                                 <input type="hidden" name="total" value="{{ Cart::total() }}" required>
-                                                <input type="text" name="total_bs"
+                                                <input type="hidden" name="total_bs"
                                                     value="{{ number_format(Cart::total() * $dolar->monto, 2) }}"
                                                     required>
                                                 <input type="hidden" name="idSend" id="envia"
