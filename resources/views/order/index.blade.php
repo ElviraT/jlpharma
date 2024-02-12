@@ -66,8 +66,10 @@
                                                     'id' => 'idPara',
                                                 ]) !!}
                                             </div>
+                                            <input type="hidden" name="de" value="{{ auth()->user->last_name }}">
                                             <div class="col-4 mt-4">
-                                                <button type="submit" class="btn btn-primary mt-1">{{ 'Enviar' }}</button>
+                                                <button type="submit"
+                                                    class="btn btn-primary mt-1">{{ 'Enviar' }}</button>
                                             </div>
                                         </div>
                                     </div>

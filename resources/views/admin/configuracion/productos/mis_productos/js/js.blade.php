@@ -9,7 +9,7 @@
             $('.modal_product_id', modal).val(data.recordId);
             $.getJSON('mis-productos/' + data.recordId + '/edit', function(data) {
                 var obj = data[0];
-                $('#name', modal).val(obj.Product);
+                $('#name', modal).val(obj.name);
                 $('#price', modal).val(obj.price);
                 $('#quantity').val(obj.quantity);
                 $('#quantity_min').val(obj.quantity_min);

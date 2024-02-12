@@ -1,6 +1,16 @@
 @extends('layouts_new.base')
 @section('css')
     @include('admin.configuracion.productos.mis_productos.css.css')
+    <style>
+        .img {
+            width: 70px;
+            height: 70px;
+        }
+
+        .dos_lineas {
+            white-space: initial;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -32,7 +42,7 @@
                                 <tbody>
                                     @foreach ($product as $resultado)
                                         <tr>
-                                            <td>{{ $resultado->Product }}</td>
+                                            <td class="dos_lineas">{{ $resultado->name }}</td>
                                             <td>{{ number_format($resultado->price, 2) }}</td>
                                             <td>{{ $resultado->quantity }}</td>
                                             <td>

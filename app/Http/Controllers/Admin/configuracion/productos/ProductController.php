@@ -45,7 +45,7 @@ class ProductController extends Controller
                 return $product->category->name;
             })
             ->addColumn('image', function ($product) {
-                if (asset('storage/' . $product->img) != '') {
+                if (file_exists(asset('storage/' . $product->img))) {
                     return '<img src="' . asset('storage/' . $product->img) . '" alt="imagen" class="rounded-circle shadow-4-strong img" style="width:70px; height:70px;">';
                 } else {
                     return '<img src="' . asset('img/no-image.jpg') . '" alt="imagen" class="rounded-circle shadow-4-strong img" style="width:70px; height:70px;">';

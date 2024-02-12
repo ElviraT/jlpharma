@@ -306,7 +306,7 @@
                                     <a href="{{ route('mis_productos.index') }}"
                                         class="sidebar-link {{ @request()->routeIs('mis_productos') ? 'active' : ' ' }}"><i
                                             class="ri-arrow-right-s-line"></i><span class="hide-menu">
-                                            {{ __('menu.Product') }} </span></a>
+                                            {{ __('menu.Product') }}{{ ' Dg' }} </span></a>
                                 </li>
                             @endcan
                         </ul>

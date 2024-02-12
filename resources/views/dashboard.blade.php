@@ -128,7 +128,7 @@
                                 @endforelse
                             </tbody>
                         </table>
-                        <div>
+                        <div @if (count($solicitudes) == 0) hidden @endif>
                             <a class="theme-link font-14 font-medium d-flex align-items-center justify-content-center mt-20"
                                 href="{{ route('request.all') }}">
                                 {{ __('View All') }}<i class="ri-arrow-right-line ms-2"></i>

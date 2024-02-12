@@ -57,122 +57,67 @@
                         <hr>
                         <div class="row">
                             @foreach ($products['products'] as $pro)
-                                @if (isset($pro->img))
-                                    <div class="col-lg-4">
-                                        <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ asset('storage/' . str_replace('\\', '/', $pro->img)) }}"
-                                                alt="{{ $pro->name }}" class="card-img-top mx-auto"
-                                                style="height: 150px; width: 150px;display: block;">
+                                <div class="col-lg-4">
+                                    <div class="card sombra" style="margin-bottom: 20px; height: auto;">
+                                        <img src="@if (file_exists(asset('storage/' . $pro->img))) {{ asset('storage/' . str_replace('\\', '/', $pro->img)) }}@else{{ asset('img/no-image.jpg') }} @endif"
+                                            alt="{{ $pro->name }}" class="card-img-top mx-auto"
+                                            style="height: 150px; width: 150px;display: block;">
 
-                                            <div class="card-body">
-                                                <h6 class="card-title">{{ $pro->name }}</h6>
-                                                <div class="col-12">
-                                                    <p class="-b-expander -b-text-undexpanded">
-                                                        {{ $pro->description }}
-                                                    </p>
-
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <p><strong>{{ 'Precio:' }}</strong>
-                                                                @if ($products['de'] == 'Farmacia')
-                                                                    ${{ number_format($pro->price_dg, 2) }}
-                                                                @else
-                                                                    ${{ number_format($pro->price_cs, 2) }}
-                                                                @endif
-                                                            </p>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
-                                                                    type="number" id="cant{{ $pro->id }}"
-                                                                    min="0" class="labelmax form-control"
-                                                                    value="0" max="{{ $pro->quantity }}"
-                                                                    onchange="add_cant({{ $pro->id }})">
-                                                            </div>
-                                                        </div>
-                                                        @if (Auth::user()->hasRole('Vendedor'))
-                                                            <div class="col-12">
-                                                                <p><strong>{{ 'Stock:' }}</strong>
-                                                                    {{ $pro->quantity }}{{ ' und.' }}</p>
-                                                            </div>
-                                                            @if ($pro->rotacion == 1)
-                                                                <div class="col-12">
-                                                                    <span> {{ 'Rotación Especial' }}</span>
-                                                                </div>
-                                                            @endif
-                                                        @endif
-                                                    </div>
-                                                </div>
+                                        <div class="card-body">
+                                            <h6 class="card-title">{{ $pro->name }}</h6>
+                                            <div class="col-12">
+                                                <p class="-b-expander -b-text-undexpanded">
+                                                    {{ $pro->description }}
+                                                </p>
 
                                             </div>
-                                        </div>
-                                    </div>
-                                @else
-                                    <div class="col-lg-4">
-                                        <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                            <img src="{{ asset('storage/' . str_replace('\\', '/', $pro->product->img)) }}"
-                                                alt="producto" class="card-img-top mx-auto"
-                                                style="height: 150px; width: 150px;display: block;"
-                                                alt="{{ $pro->product->img }}">
-                                            <div class="card-body">
-                                                <h6 class="card-title">{{ $pro->product->name }}</h6>
-                                                <div class="col-12">
-                                                    <p class="-b-expander -b-text-undexpanded">
-                                                        {{ $pro->product->description }}
-                                                    </p>
-
-                                                </div>
-                                                <div class="col-12">
-                                                    <div class="row">
-                                                        <div class="col-6">
-                                                            <p><strong>{{ 'Precio:' }}</strong>
-                                                                @if ($products['de'] == 'Farmacia')
-                                                                    ${{ number_format($pro->price_dg, 2) }}
-                                                                @else
-                                                                    ${{ number_format($pro->price_cs, 2) }}
-                                                                @endif
-                                                            </p>
-                                                        </div>
-                                                        <div class="col-6">
-                                                            <div class="input-group">
-                                                                <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
-                                                                    type="number" id="cant{{ $pro->product->id }}"
-                                                                    min="1" class="form-control" value="1"
-                                                                    onchange="add_cant({{ $pro->product->id }})">
-                                                            </div>
-                                                        </div>
-                                                        @if (Auth::user()->hasRole('Vendedor'))
-                                                            <div class="col-12">
-                                                                <p><strong>{{ 'Stock:' }}</strong>
-                                                                    {{ $pro->quantity }}{{ ' und.' }}</p>
-                                                            </div>
-                                                            @if ($pro->product->rotacion == 1)
-                                                                <div class="col-12">
-                                                                    <span> {{ 'Rotación Especial' }}</span>
-                                                                </div>
-                                                            @endif
-                                                        @endif
+                                            <div class="col-12">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <p>
+                                                            <strong>{{ 'Precio:' }}</strong>
+                                                            ${{ number_format($pro->price_dg, 2) }}
+                                                        </p>
                                                     </div>
+                                                    <div class="col-6">
+                                                        <div class="input-group">
+                                                            <strong>{{ 'Cant:' }}</strong>&nbsp;&nbsp;<input
+                                                                type="number" id="cant{{ $pro->id }}" min="0"
+                                                                class="labelmax form-control" value=""
+                                                                max="{{ $pro->quantity }}"
+                                                                onchange="add_cant({{ $pro->id }})">
+                                                        </div>
+                                                    </div>
+                                                    @if (Auth::user()->hasRole('Vendedor'))
+                                                        <div class="col-12">
+                                                            <p><strong>{{ 'Stock:' }}</strong>
+                                                                {{ $pro->quantity }}{{ ' und.' }}</p>
+                                                        </div>
+                                                        @if (isset($pro->rotacion) && $pro->rotacion == 1)
+                                                            <div class="col-12">
+                                                                <span> {{ 'Rotación Especial' }}</span>
+                                                            </div>
+                                                        @endif
+                                                    @endif
                                                 </div>
                                             </div>
+
                                         </div>
                                     </div>
-                                @endif
+                                </div>
                             @endforeach
                             <div class="card-footer" align="center">
                                 @can('order.store')
                                     <form action="{{ route('order.store') }}" method="post">
                                         @csrf
                                         @foreach ($products['products'] as $item)
-                                            <input type="hidden" name="id[]" value="{{ $item->product->id }}">
-                                            <input type="hidden" name="cant[]" id="cantidad{{ $item->product->id }}"
-                                                value="0">
+                                            <input type="hidden" name="id[]" value="{{ $item->id }}">
+                                            <input type="hidden" name="cant[]" id="cantidad{{ $item->id }}"
+                                                value="">
                                         @endforeach
                                         <input type="hidden" name="cliente" value="{{ $products['de'] }}">
                                         <input type="hidden" name="idCategoria" value="{{ $products['categoria'] }}">
-                                        <input type="hidden" name="inventary" value="{{ $products['para'] }}">
+                                        <input type="hidden" name="para" value="{{ $products['para'] }}">
                                         <input type="submit" name="add" class="btn btn-outline-success" value="Agregar"
                                             onclick="loading_show()">
                                         <a href="{{ route('order.filtro') }}" class="btn btn-outline-secondary"

@@ -9,6 +9,7 @@ use App\Models\Inventary;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
+use App\Models\Rate;
 use App\Models\StatusPedido;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade as PDF;
@@ -32,155 +33,135 @@ class OrderController extends Controller
         $this->middleware('permission:order.state', ['only' => ['state']]);
     }
 
-    public function index(Request $request)
+    public function index()
     {
-        Session::put('idPara', '');
-        Session::put('idDe', '');
-        Session::put('De', '');
-        Cart::destroy();
-        if (Auth::user()->hasRole('Farmacia')) {
-            $combo = DB::table('users')
-                ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
-                ->select('users.id AS id', 'users.name AS name')
-                ->where('drugstorex_pharmacies.idPharmacy', Auth::user()->id)
-                ->where('drugstorex_pharmacies.permission', 1)
-                ->pluck('name', 'id');
-        } elseif (Auth::user()->hasRole('Drogueria')) {
-            $combo = User::where('last_name', 'JL')->pluck('name', 'id');
-        } else {
-            $combo = [];
+        if (session('orden') != '') {
+            Cart::destroy();
+            Session::forget('orden');
         }
-        return view('order.index', compact('combo'));
+        return view('order.index');
     }
 
     public function filtro(Request $request)
     {
-        session(['idPara' => $request->idPara]);
-        session(['idDe' => $request->idDe]);
-        session(['De' => $request->de]);
+        if (isset($request->de)) {
+            session(['idPara' => $request->idPara]);
+            session(['idDe' => $request->idDe]);
+            session(['De' => $request->de]);
+        }
         $categorias = Category::paginate(10);
 
         return view('order.filtro_producto', compact('categorias'));
     }
     public function products($id, $idProduct)
     {
-        if (Auth::user()->hasAnyRole('Farmacia')) {
+        // dd(session('De'));
+        if (session('De') == 'Farmacia') {
             $products = $this->products1($id, $idProduct);
+            $combo = DB::table('inventaries')
+                ->join('products', 'inventaries.idProduct', 'products.id')
+                ->select('inventaries.name AS name', 'inventaries.id AS id')
+                ->where('products.idCategory', $id)
+                ->where('inventaries.idUser', session('idPara'))
+                ->pluck('name', 'id');
+            // dd($combo);
         } else {
             $products = $this->products2($id, $idProduct);
+            $combo = Product::where('idCategory', $id)->where('available', 1)->pluck('name', 'id');
         }
-        $combo = Product::where('idCategory', $id)->where('available', 1)->pluck('name', 'id');
         session(['idCategory' => $id]);
-        $categoria = Session::get('idCategory');
+        $categoria = session('idCategory');
         return view('order.products', compact('products', 'combo', 'categoria'));
     }
 
     private function products1($id, $idProduct)
     {
-        $idPara = Session::get('idPara');
-        $idDe = Session::get('idDe');
-        $De = Session::get('De');
         if ($idProduct  == 'null') {
             $data['products'] = DB::table('inventaries')
                 ->join('products', 'inventaries.idProduct', 'products.id')
-                ->select('*')
-                ->where('inventaries.idUser', $idPara)
+                ->select('inventaries.id', 'inventaries.name', 'inventaries.price AS price_dg', 'inventaries.quantity', 'products.description', 'products.codigo', 'products.img', 'products.idCategory')
+                ->where('inventaries.idUser', session('idPara'))
                 ->where('products.idCategory', $id)
-                ->where('available', 1)
-                ->orderBy('name', 'ASC')
+                ->orderBy('inventaries.name', 'ASC')
                 ->paginate(10);
         } else {
             $data['products'] = DB::table('inventaries')
                 ->join('products', 'inventaries.idProduct', 'products.id')
-                ->select('*')
-                ->where('inventaries.idUser', $idPara)
+                ->select('inventaries.id', 'inventaries.name', 'inventaries.price AS price_dg', 'inventaries.quantity', 'products.description', 'products.codigo', 'products.img', 'products.idCategory')
+                ->where('inventaries.idUser', session('idPara'))
                 ->where('products.idCategory', $id)
                 ->where('products.id', $idProduct)
-                ->where('available', 1)
-                ->orderBy('name', 'ASC')
+                ->orderBy('inventaries.name', 'ASC')
                 ->paginate(10);
         }
 
-        $data['idde'] = $idDe;
-        $data['de'] = $De;
+        $data['idde'] = session('idDe');
+        $data['de'] = session('De');
         $data['categoria'] = $id;
-        $data['para'] = $idPara;
+        $data['para'] = session('idPara');
         return $data;
     }
     private function products2($id, $idProduct)
     {
-        $idPara = Session::get('idPara');
-        $idDe = Session::get('idDe');
-        $De = Session::get('De');
         if ($idProduct  == 'null') {
-
-            if ($De == 'Farmacia') {
-                $data['products'] = DB::table('inventaries')
-                    ->join('products', 'inventaries.idProduct', 'products.id')
-                    ->select('*')
-                    ->where('inventaries.idUser', $idPara)
-                    ->where('products.idCategory', $id)
-                    ->where('available', 1)
-                    ->orderBy('name', 'ASC')
-                    ->paginate(10);
-            } else {
-                $data['products'] = Product::where('idCategory', $id)
-                    ->where('available', 1)
-                    ->orderBy('name', 'ASC')
-                    ->paginate(10);
-            }
-        } else {
-            $data['products'] = DB::table('inventaries')
-                ->join('products', 'inventaries.idProduct', 'products.id')
-                ->select('*')
-                ->where('inventaries.idUser', $idPara)
-                ->where('products.idCategory', $id)
-                ->where('products.id', $idProduct)
+            $data['products'] = Product::where('idCategory', $id)
                 ->where('available', 1)
+                ->orderBy('name', 'ASC')
+                ->paginate(10);
+        } else {
+            $data['products'] = Product::where('idCategory', $id)
+                ->where('available', 1)
+                ->where('id', $idProduct)
                 ->orderBy('name', 'ASC')
                 ->paginate(10);
         }
 
-        $data['para'] = $idPara;
+        $data['idde'] = session('idDe');
+        $data['de'] = session('De');
         $data['categoria'] = $id;
-        $data['idde'] = $idDe;
-        $data['de'] = $De;
+        $data['para'] = session('idPara');
         return $data;
     }
 
     public function store(Request $request)
     {
-        if ($request->inventary != 0) {
-            $products = Inventary::where('idProduct', $request->id)->first();
-            $cant = $request->cant;
-            if (empty($products)) {
-                return to_route('order.index');
-            } else {
-                Cart::add(
-                    $products->id,
-                    $products->name,
-                    $cant,
-                    $products->price,
-                    ['image' => $products->product->img]
-                );
-            }
-        } else {
-            $products = Product::find($request->id);
-            $cant = $request->cant;
-            if (empty($products)) {
-                return to_route('order.index');
-            } else {
-                Cart::add(
-                    $products->id,
-                    $products->name,
-                    $cant,
-                    $products->price_dg,
-                    ['image' => $products->img]
-                );
+        // dd($request);
+        for ($i = 0; $i < count($request->id); $i++) {
+            if ($request->cant[$i] != null) {
+                if ($request->cliente == 'Farmacia') {
+                    $products = Inventary::where('idProduct', $request->id[$i])->first();
+                    $cant = $request->cant[$i];
+                    if (empty($products)) {
+                        return to_route('order.index');
+                    } else {
+                        Cart::add(
+                            $products->id,
+                            $products->name,
+                            $cant,
+                            $products->price,
+                            ['image' => $products->product->img]
+                        );
+                    }
+                } else {
+                    $products = Product::find($request->id[$i]);
+                    $cant = $request->cant[$i];
+                    if (empty($products)) {
+                        return to_route('order.index');
+                    } else {
+                        Cart::add(
+                            $products->id,
+                            $products->name,
+                            $cant,
+                            $products->price_dg,
+                            ['image' => $products->img]
+                        );
+                    }
+                }
             }
         }
-        Toastr::success('Producto agregado: ' . $products->name, 'Success');
-        return to_route('order.products', $request->idCategoria);
+        // dd($request->idCategoria);
+        Toastr::success('Producto agregado', 'Success');
+        return redirect('./order/products/' . $request->idCategoria . '/null');
     }
     public function update($id, $cant)
     {
@@ -190,43 +171,73 @@ class OrderController extends Controller
     public function checkout()
     {
         $status = StatusPedido::orderBy('orden', 'ASC')->get();
-        $combo = Auth::user()->getRoleNames();
-        $idReceives = Session::get('idPara');
-        $idSend = Session::get('idDe');
-        return view('order.checkout', compact('combo', 'idReceives', 'idSend', 'status'));
+        $idReceives = session('idPara');
+        $idSend = session('idDe');
+        $idCategory = session('idCategory');
+        $dolar = Rate::select('monto')->orderBy('id', 'DESC')->first();
+        return view('order.checkout', compact('idReceives', 'idSend', 'status', 'idCategory', 'dolar'));
     }
     public function send(Request $request)
     {
         $nombre = $this->getIniciales($request['nOrder']);
         $norden = strtoupper($nombre) . date('dmYHis');
         try {
+            DB::beginTransaction();
             $item = [
                 'nOrder' =>  $norden,
                 'idSend' => $request['idSend'],
                 'idReceives' => $request['idReceives'],
                 'idUser' => auth()->user()->id,
                 'total' => $request['total'],
+                'total_bs' => str_replace(',', '', $request['total_bs']),
                 'idStatus' => $request['idStatus'],
                 'observation' => $request['observation']
             ];
             $order = Order::create($item);
+            $recibe = User::where('id', $request['idReceives'])->first();
+
             for ($i = 0; $i < count($request['name']); $i++) {
-                $detalle = [
-                    'idOrder' => $order['id'],
-                    'idProduct' => $request['idProduct'][$i],
-                    'name' => $request['name'][$i],
-                    'cant' => $request['cant'][$i],
-                    'price' => $request['price'][$i],
-                    'importe' => $request['importe'][$i],
-                ];
-                OrderDetail::create($detalle);
+                $importe = 0;
+                $importe = $request['cant'][$i] * $request['price'][$i];
+                $comprobar = $this->comprobar_stock($request['idProduct'][$i], $request['cant'][$i], $request['idReceives']);
+                if ($comprobar) {
+                    $detalle = [
+                        'idOrder' => $order['id'],
+                        'idProduct' => $request['idProduct'][$i],
+                        'name' => $request['name'][$i],
+                        'cant' => $request['cant'][$i],
+                        'price' => $request['price'][$i],
+                        'importe' => $importe,
+                        'importe_bs' => str_replace(',', '', $request['importe_bs'][$i]),
+                    ];
+                    if ($recibe->last_name == 'Drogueria') {
+                        $product = Inventary::where('idProduct', $request['idProduct'][$i])
+                            ->where('idUser', $request['idReceives'])
+                            ->first();
+                    } else {
+                        $product = Product::where('id', $request['idProduct'][$i])->first();
+                    }
+                    $product->decrement('quantity', $request['cant'][$i]);
+                    OrderDetail::create($detalle);
+                } else {
+                    Toastr::error(__('Producto sin stock:' . $request['name'][$i]), 'error');
+                    DB::rollBack();
+                    return redirect(url()->previous());
+                }
             }
             $receiver = User::where('id', $request['idReceives'])->first();
             Mail::to($receiver->email)->send(new OrderMail($order));
             Cart::destroy();
+            Session::forget('idPara');
+            Session::forget('idDe');
+            Session::forget('De');
+            Session::forget('idCategory');
+            DB::commit();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
+            DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
+            return redirect(url()->previous());
         }
         return to_route('order.index');
     }
@@ -246,7 +257,6 @@ class OrderController extends Controller
                 $cont++;
             }
         }
-
         return $iniciales;
     }
     public function remove(Request $request)
@@ -265,7 +275,6 @@ class OrderController extends Controller
 
     public function pedido(Request $request)
     {
-
         return to_route('order.index');
     }
 
@@ -277,7 +286,7 @@ class OrderController extends Controller
     public function state($id)
     {
         $status = StatusPedido::orderBy('orden', 'ASC')->get();
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
             $order = Order::where('idStatus', $id)->paginate(10);
         } else {
             $order = Order::where('idUser', Auth::user()->id)->where('idStatus', $id)->paginate(10);
@@ -319,41 +328,236 @@ class OrderController extends Controller
         return $pdf->stream('pedido-' . $order['pedido']->nOrder . '.pdf');
         // return $pdf->download('pedido-' . $order['pedido']->nOrder . '.pdf');
     }
+    public function destroyCart($id)
+    {
+        if (Session::get('orden') != '') {
+            Cart::destroy();
+            Session::forget('orden');
+        }
+        return to_route('order.edit', $id);
+    }
     public function edit(Order $order)
     {
-        return view('order.edit', compact('order'));
+        $comporbar =  Cart::content()->groupBy('id');
+        if (count($comporbar) == 0) {
+            foreach ($order->detalle as $products) {
+                Cart::add(
+                    $products->idProduct,
+                    $products->name,
+                    $products->cant,
+                    $products->price,
+                    ['image' => $products->prod->img]
+                );
+            }
+        } else {
+            foreach (Cart::content() as $item) {
+                foreach ($order->detalle as $products) {
+                    if (!isset($comporbar[$products->idProduct])) {
+                        Cart::add(
+                            $products->idProduct,
+                            $products->name,
+                            $products->cant,
+                            $products->price,
+                            ['image' => $products->prod->img]
+                        );
+                    }
+                }
+            }
+        }
+        $idCategory = $order->detalle[0]->prod->idCategory;
+        $status = StatusPedido::orderBy('orden', 'ASC')->get();
+        session(['orden' => $order->id]);
+        $id = $order->id;
+        $dolar = Rate::select('monto')->orderBy('id', 'DESC')->first();
+        return view('order.edit', compact('idCategory', 'status', 'id', 'dolar'));
     }
-    public function update_pedido($id, $cant)
+    public function update_pedido($idOrder, $id, $cant, $idCar)
     {
-        $detalle = OrderDetail::where('id', $id)->first();
-
-        $total = 0;
-
-
-        $importe = ($cant * $detalle->price);
-        $data1 = [
-            'cant' => $cant,
-            'importe' => $importe,
-        ];
-
+        session(['idCar' => $idCar]);
+        Cart::update($idCar, $cant);
+        Session::put('idCar', '');
+        $ok = 'ACTUALIZADO';
+        return $ok;
+    }
+    public function aceptar(Request $request)
+    {
+        $order = Order::where('id', $request->id)->first();
+        $recibe = User::where('id', $order['idSend'])->first();
+        $detalle = OrderDetail::where('idOrder', $request->id)->get();
         try {
             DB::beginTransaction();
-            $detalle->update($data1);
-            $detalle2 = OrderDetail::where('idOrder', $detalle->idOrder)->get();
-            foreach ($detalle2 as $value) {
-                $total = $total + $value->importe;
+            if ($recibe->last_name == 'Droguería') {
+                for ($i = 0; $i < count($detalle); $i++) {
+
+                    $product = Inventary::where('idProduct', $detalle[$i]['idProduct'])
+                        ->where('idUser', $order['idSend'])
+                        ->first();
+                    if (isset($product)) {
+                        $product->increment('quantity', $detalle[$i]['cant']);
+                    } else {
+                        $inventary = new Inventary();
+                        $inventary->idProduct = $detalle[$i]['idProduct'];
+                        $inventary->name = $detalle[$i]['name'];
+                        $inventary->idUser = $order['idSend'];
+                        $inventary->quantity = $detalle[$i]['cant'];
+                        $inventary->save();
+                    }
+                }
             }
-            $data = [
-                'total' => $total
-            ];
-            $order = Order::find($detalle->idOrder);
-            $order->update($data);
+
+            $order->idStatus = $request['idStatus'];
+            $order->save();
             DB::commit();
-            $ok = 'ACTUALIZADO';
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return redirect(url()->previous());
+
+        // $order = Order::where('id', $request->id)->first();
+        // try {
+        //     DB::beginTransaction();
+
+        //     $order->idStatus = $request['idStatus'];
+        //     $order->save();
+        //     DB::commit();
+        //     Toastr::success(__('Successfully updated registration'), 'Success');
+        // } catch (\Illuminate\Database\QueryException $e) {
+        //     DB::rollBack();
+        //     Toastr::error(__('An error occurred please try again'), 'error');
+        // }
+        // return redirect(url()->previous());
+    }
+
+    public function cambiar(Request $request)
+    {
+        if (auth()->user()->unreadNotifications) {
+            $this->leer($request->leer);
+        }
+
+        $order = Order::find($request->id);
+        $order->idStatus = $request['idStatus'];
+        $order->save();
+        return redirect(url()->previous());
+    }
+    private function leer($id)
+    {
+        auth()->user()->unreadNotifications
+            ->when($id, function ($query) use ($id) {
+                return $query->where('id',  $id);
+            })->markAsRead();
+    }
+
+    public function rechazar(Request $request)
+    {
+        $order = Order::where('id', $request->id)->first();
+        $recibe = User::where('id', $order['idReceives'])->first();
+        $detalle = OrderDetail::where('idOrder', $request->id)->get();
+        try {
+            DB::beginTransaction();
+
+            $order->idStatus = $request['idStatus'];
+            $order->observation = $request->observation;
+            $order->save();
+            for ($i = 0; $i < count($detalle); $i++) {
+                if ($recibe->last_name == 'Droguería') {
+                    $product = Inventary::where('idProduct', $detalle[$i]['idProduct'])
+                        ->where('idUser', $order['idReceives'])
+                        ->first();
+                } else {
+                    $product = Product::where('id', $detalle[$i]['idProduct'])->first();
+                }
+                $product->increment('quantity', $detalle[$i]['cant']);
+            }
+            DB::commit();
+            Toastr::success(__('Successfully updated registration'), 'Success');
+        } catch (\Illuminate\Database\QueryException $e) {
+            DB::rollBack();
+            Toastr::error(__('An error occurred please try again'), 'error');
+        }
+        return redirect(url()->previous());
+    }
+    public function actualizar(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $orden = Order::where('id', $request->id)->first();
+            $recibe = User::where('id', $orden['idReceives'])->first();
+            for ($i = 0; $i < count($orden->detalle); $i++) {
+                if (isset($orden->detalle['idProduct'][$i])) {
+                    if ($recibe->last_name == 'Droguería') {
+                        $itemP = Inventary::where('idProduct', $orden->detalle['idProduct'][$i])
+                            ->where('idUser', $orden['idReceives'])
+                            ->first();
+                    } else {
+                        $itemP = Product::where('id', $orden->detalle['idProduct'][$i])->first();
+                    }
+                    $itemP->increment('quantity', $orden->detalle['cant'][$i]);
+                }
+            }
+            $delete = OrderDetail::where('idOrder', $orden->id);
+            $delete->delete();
+            $total = 0;
+            for ($i = 0; $i < count($request['name']); $i++) {
+                $importe = 0;
+                $importe = $request['cant'][$i] * $request['price'][$i];
+                $comprobar = $this->comprobar_stock($request['idProduct'][$i], $request['cant'][$i], $orden['idReceives']);
+                if ($comprobar) {
+                    $detalle = [
+                        'idOrder' => $orden['id'],
+                        'idProduct' => $request['idProduct'][$i],
+                        'name' => $request['name'][$i],
+                        'cant' => $request['cant'][$i],
+                        'price' => $request['price'][$i],
+                        'importe' => $importe,
+                        'importe_bs' => str_replace(',', '', $request['importe_bs'][$i]),
+                    ];
+
+                    // $product = Product::where('id', $request['idProduct'][$i])->first();
+                    $itemP->decrement('quantity', $request['cant'][$i]);
+                    $total = $total + $importe;
+                    OrderDetail::create($detalle);
+                } else {
+                    Toastr::error(__('Producto sin stock:' . $request['name'][$i]), 'error');
+                    DB::rollBack();
+                    return redirect(url()->previous());
+                }
+            }
+            $totales = [
+                'total' => $total,
+                'total_bs' => str_replace(',', '', $request['total_bs']),
+            ];
+            $orden->update($totales);
+            $orden->save();
+            DB::commit();
+            $receiver = User::where('id', $request['idReceives'])->first();
+            // Mail::to($receiver->email)->send(new OrderMail($orden));
+            Session::put('idCar', '');
+            Session::put('orden', '');
+            Cart::destroy();
+
+            Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
             DB::rollBack();
-            $ok = 'ERROR';
+            Toastr::error('Intente de nuevo', 'error');
         }
-        return $ok;
+        return to_route('order.state', $orden->idStatus);
+    }
+    private function comprobar_stock($dProduct, $cant, $receiver)
+    {
+        $recibe = User::where('id', $receiver)->first();
+        if ($recibe->last_name == 'Droguería') {
+            $stock = Inventary::where('idProduct', $dProduct)
+                ->where('idUser', $receiver)
+                ->first();
+        } else {
+            $stock = Product::where('id', $dProduct)->first();
+        }
+        if ($stock->quantity  < $cant) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

@@ -53,7 +53,7 @@
                                         <label class="control-label">Estado:</label>
                                     </div>
                                     <div class="col-8">
-                                        <span id="pedido"></span><br>
+                                        <span id="nopedido"></span><br>
                                         <span id="fecha"></span><br>
                                         <span id="estado"></span>
                                     </div>

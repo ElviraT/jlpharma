@@ -38,9 +38,7 @@ class ComboController extends Controller
     }
     public function pedido($pedido)
     {
-        // dd(is_numeric($pedido));
         if (is_numeric($pedido)) {
-
             $result = DB::table('users')
                 ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
                 ->select('users.id AS id', 'users.name AS name')
@@ -48,7 +46,11 @@ class ComboController extends Controller
                 ->where('drugstorex_pharmacies.permission', 1)
                 ->get();
         } else {
-            $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+            if ($pedido == 'JL') {
+                $result = User::select(['id', 'name'])->where('name', 'LIKE', '%' . $pedido . '%')->get();
+            } else {
+                $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+            }
         }
         return response()->json($result);
     }

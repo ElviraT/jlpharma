@@ -43,13 +43,15 @@ class DashboardController extends Controller
                 ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))
                 ->groupBy('users.last_name')
                 ->get();
-        } else {
+        } elseif (Auth::user()->hasRole('Farmacia')) {
             $user = DB::table('pharmacies')
                 ->join('users', 'pharmacies.idUser', '=', 'users.id')
                 ->select('users.last_name', DB::raw("COUNT(users.last_name) AS count"))
                 ->where('pharmacies.idZone', auth()->user()->seller->idZone)
                 ->groupBy('users.last_name')
                 ->get();
+        } else {
+            $user = [];
         }
         $rate = Rate::select('monto')->orderBy('id', 'DESC')->first();
         session(['rate' => $rate->monto]);

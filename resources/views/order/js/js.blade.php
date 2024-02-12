@@ -55,7 +55,7 @@
 
         var combo = $('#combo').val();
         if (combo == '["Drogueria"]') {
-            url = 'Latinfarma';
+            url = 'JL';
             $('.otro').attr('required', true);
         } else if (combo == '["Farmacia"]') {
             url = 'Droguería';
@@ -117,6 +117,7 @@
         var idDe = $(this).val();
         if (idDe != '') {
             $("#envia").val(idDe);
+            $('#idPara').val('').change();
             $('#idPara').attr('readonly', false);
         }
     });
@@ -225,7 +226,7 @@
                 $('#tel').text(data.order.telefono);
                 $('#email').text(data.order.email);
                 $('#dir').text(data.order.direccion);
-                $('#pedido').text(data.pedido.nOrder);
+                $('#nopedido').text(data.pedido.nOrder);
                 $('#fecha').text(fecha.toLocaleDateString("es-ES", options));
                 if (data.vendedor) {
                     $('#cedula').text(data.vendedor.dni);
