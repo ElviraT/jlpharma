@@ -15,7 +15,7 @@
                         <form action="{{ route('request.store') }}" method="post">
                             @csrf
                             <div class="row">
-                                @role(['Vendedor', 'SuperAdmin'])
+                                @if (Auth::hasAnyRole('Vendedor', 'SuperAdmin'))
                                     <div class="col-md-6 mb-3">
                                         <label for="zona">{{ __('menu.Pharmacy') }}</label>
                                         {!! Form::select('idPharmacy', $pharmacies, Auth::user()->id, [
@@ -24,7 +24,9 @@
                                             'id' => 'idPharmacy',
                                         ]) !!}
                                     </div>
-                                @endrole
+                                @else
+                                    <input type="hidden" name="idPharmacy" value="{{ Auth::user()->id }}">
+                                @endif
                                 <div class="col-md-6 mb-3">
                                     <label for="zona">{{ 'Droguerías' }}</label>
                                     {!! Form::select('idDrugstore', $drugstore, null, [
