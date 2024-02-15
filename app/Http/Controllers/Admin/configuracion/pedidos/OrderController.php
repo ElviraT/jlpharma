@@ -49,7 +49,10 @@ class OrderController extends Controller
                 ->pluck('name', 'id');
         } elseif (Auth::user()->hasRole('Droguería')) {
             $combo = User::where('name', 'LIKE', '%JL%')->pluck('name', 'id');
+        } else {
+            $combo = [];
         }
+
         return view('order.index', compact('combo'));
     }
 
