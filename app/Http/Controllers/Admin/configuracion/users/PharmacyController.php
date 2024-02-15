@@ -54,7 +54,7 @@ class PharmacyController extends Controller
             DB::beginTransaction();
             $data_user = [
                 "name" => $request['name'],
-                "last_name" => 'Farmacia',
+                "last_name" => 'Centro de Salud',
                 "dni" => $request['rif'],
                 "email" => $request['email'],
                 "password" => Hash::make('12345'),

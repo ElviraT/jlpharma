@@ -350,32 +350,32 @@ class OrderController extends Controller
     }
     public function edit(Order $order)
     {
-        $comporbar =  Cart::content()->groupBy('id');
-        if (count($comporbar) == 0) {
-            foreach ($order->detalle as $products) {
-                Cart::add(
-                    $products->idProduct,
-                    $products->name,
-                    $products->cant,
-                    $products->price,
-                    ['image' => $products->prod->img]
-                );
-            }
-        } else {
-            foreach (Cart::content() as $item) {
-                foreach ($order->detalle as $products) {
-                    if (!isset($comporbar[$products->idProduct])) {
-                        Cart::add(
-                            $products->idProduct,
-                            $products->name,
-                            $products->cant,
-                            $products->price,
-                            ['image' => $products->prod->img]
-                        );
-                    }
-                }
-            }
+        // $comporbar =  Cart::content()->groupBy('id');
+        // if (count($comporbar) == 0) {
+        foreach ($order->detalle as $products) {
+            Cart::add(
+                $products->idProduct,
+                $products->name,
+                $products->cant,
+                $products->price,
+                ['image' => $products->prod->img]
+            );
         }
+        // } else {
+        //     foreach (Cart::content() as $item) {
+        //         foreach ($order->detalle as $products) {
+        //             if (!isset($comporbar[$products->idProduct])) {
+        //                 Cart::add(
+        //                     $products->idProduct,
+        //                     $products->name,
+        //                     $products->cant,
+        //                     $products->price,
+        //                     ['image' => $products->prod->img]
+        //                 );
+        //             }
+        //         }
+        //     }
+        // }
         $idCategory = $order->detalle[0]->prod->idCategory;
         $status = StatusPedido::orderBy('orden', 'ASC')->get();
         session(['orden' => $order->id]);

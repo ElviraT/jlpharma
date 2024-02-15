@@ -62,7 +62,7 @@
         <div class="page-wrapper">
             <div class="col-12 p-2">
                 <div class="row saludo">
-                    <div class="col-lg-6 col-sm-12">
+                    <div class="col-lg-8 col-sm-12">
                         <span id="saludo">
                             <strong>{{ auth()->user()->name }}</strong>{{ __('Current Time') }}<span
                                 id="relojnumerico" class="reloj" onload="cargarReloj()">
@@ -70,7 +70,7 @@
                             </span>
                         </span>
                     </div>
-                    <div class="col-lg-6 col-sm-12" align="right">
+                    <div class="col-lg-4 col-sm-12" align="right">
                         <span><strong>{{ ' Tasa del día: ' }}</strong>{{ session('rate') }}</span>
                     </div>
                 </div>
