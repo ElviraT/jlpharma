@@ -48,14 +48,14 @@ class ProductController extends Controller
                 return '<img src="' . asset('storage/' . str_replace('\\', '/',  $product->img)) . '" alt="imagen" class="rounded-circle shadow-4-strong img" style="width:70px; height:70px;">';
             })
             ->addColumn('available', function ($product) {
-                if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+                if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
                     return '<input type="checkbox" name="available" id="idDis' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->available == 1 ? 'checked' : '') . ' onchange="activar(' . $product->id . ',' . $product->available . ')">';
                 } else {
                     return '<input type="checkbox" name="available" id="idDis' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->available == 1 ? 'checked' : '') . ' onchange="activar(' . $product->id . ',' . $product->available . ')" disabled>';
                 }
             })
             ->addColumn('rotacion', function ($product) {
-                if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma')) {
+                if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
                     return '<input type="checkbox" name="rotacion" id="idRot' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->rotacion == 1 ? 'checked' : '') . ' onchange="rotacion(' . $product->id . ',' . $product->rotacion . ')">';
                 } else {
                     return '<input type="checkbox" name="rotacion" id="idRot' . $product->id . '" data-toggle="toggle" data-style="ios" data-on="Si" data-off="No" data-onstyle="success" data-offstyle="danger" data-width="30" data-height="20" ' . ($product->rotacion == 1 ? 'checked' : '') . ' onchange="rotacion(' . $product->id . ',' . $product->rotacion . ')" disabled>';

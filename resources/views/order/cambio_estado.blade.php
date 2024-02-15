@@ -45,7 +45,7 @@
                                         <td>{{ $notification->data['cliente'] }}</td>
                                         <td>{{ $notification->data['vendedor'] }}</td>
                                         <td>
-                                            @if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma'))
+                                            @if (Auth::user()->hasAnyRole('SuperAdmin', 'JL'))
                                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                                     data-target="#cambiar_status"
                                                     data-record-id="{{ $notification->data['idPedido'] }}"

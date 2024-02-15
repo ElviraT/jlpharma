@@ -118,7 +118,7 @@
                                                 @endcan
                                             @endif
                                             &nbsp;
-                                            @if (Auth::user()->hasAnyRole('SuperAdmin', 'Latinfarma'))
+                                            @if (Auth::user()->hasAnyRole('SuperAdmin', 'JL'))
                                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                                     data-target="#cambiar_status" data-record-id="{{ $resultado->id }}"
                                                     data-record-orden="{{ $resultado->status->orden }} title="{{ __('Cambiar status') }}">
