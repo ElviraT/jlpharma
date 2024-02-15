@@ -59,7 +59,7 @@
                             @foreach ($products['products'] as $pro)
                                 <div class="col-lg-4">
                                     <div class="card sombra" style="margin-bottom: 20px; height: auto;">
-                                        <img src="@if (file_exists(asset('storage/' . $pro->img))) {{ asset('storage/' . str_replace('\\', '/', $pro->img)) }}@else{{ asset('img/no-image.jpg') }} @endif"
+                                        <img src="{{ asset('storage/' . str_replace('\\', '/', $pro->img)) }}"
                                             alt="{{ $pro->name }}" class="card-img-top mx-auto"
                                             style="height: 150px; width: 150px;display: block;">
 
