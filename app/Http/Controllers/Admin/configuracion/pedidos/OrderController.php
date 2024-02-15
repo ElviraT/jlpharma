@@ -427,20 +427,6 @@ class OrderController extends Controller
             Toastr::error(__('An error occurred please try again'), 'error');
         }
         return redirect(url()->previous());
-
-        // $order = Order::where('id', $request->id)->first();
-        // try {
-        //     DB::beginTransaction();
-
-        //     $order->idStatus = $request['idStatus'];
-        //     $order->save();
-        //     DB::commit();
-        //     Toastr::success(__('Successfully updated registration'), 'Success');
-        // } catch (\Illuminate\Database\QueryException $e) {
-        //     DB::rollBack();
-        //     Toastr::error(__('An error occurred please try again'), 'error');
-        // }
-        // return redirect(url()->previous());
     }
 
     public function cambiar(Request $request)
@@ -506,6 +492,7 @@ class OrderController extends Controller
                     } else {
                         $itemP = Product::where('id', $orden->detalle['idProduct'][$i])->first();
                     }
+                    dd($itemP);
                     $itemP->increment('quantity', $orden->detalle['cant'][$i]);
                 }
             }
