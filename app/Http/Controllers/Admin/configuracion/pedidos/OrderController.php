@@ -381,7 +381,7 @@ class OrderController extends Controller
         session(['orden' => $order->id]);
         $id = $order->id;
         $dolar = Rate::select('monto')->orderBy('id', 'DESC')->first();
-        return view('order.edit', compact('idCategory', 'status', 'id', 'dolar'));
+        return view('order.edit', compact('idCategory', 'status', 'id', 'dolar', 'order'));
     }
     public function update_pedido($idOrder, $id, $cant, $idCar)
     {
