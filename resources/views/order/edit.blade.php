@@ -116,7 +116,7 @@
                                             <div class="col-6">
                                                 <div class="col-md-12 mb-3">
                                                     <label>{{ 'Observación:' }}</label>
-                                                    <textarea name="observation" id="observation" rows="2" class="form-control" required>{{ $item->observation }}</textarea>
+                                                    <textarea name="observation" id="observation" rows="2" class="form-control" required>{{ $order->observation }}</textarea>
                                                 </div>
                                                 <div class="col-md-12">
                                                     <a href="{{ route('order.clear') }}"
