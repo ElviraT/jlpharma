@@ -19,7 +19,7 @@ return [
     'Zone' => 'Zona',
     'Drugstore' => 'Droguería',
     'Jluser' => 'Admin JL',
-    'Category' => 'Categorias',
+    'Category' => 'Categorías',
     'Speciality' => 'Especialidades',
     'Product' => 'Productos',
     'Seller' => 'Vendedores',
