@@ -353,7 +353,7 @@ class OrderController extends Controller
         // $comporbar =  Cart::content()->groupBy('id');
         // if (count($comporbar) == 0) {
         foreach ($order->detalle as $products) {
-            dd($products->prod);
+            dd($products);
             Cart::add(
                 $products->idProduct,
                 $products->name,
