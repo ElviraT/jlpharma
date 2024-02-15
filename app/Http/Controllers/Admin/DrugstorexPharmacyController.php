@@ -24,10 +24,10 @@ class DrugstorexPharmacyController extends Controller
     {
         if (Auth::user()->hasRole('Farmacia')) {
             $drugstore = DB::table('users')
-                ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')
-                ->select('users.id AS id', 'users.name AS name')
-                ->where('drugstorex_pharmacies.idPharmacy', auth()->user()->id)
-                ->where('drugstorex_pharmacies.permission', 0)
+                ->whereNotIn('id', function ($query) {
+                    $query->select('idDrugstore')
+                        ->from('drugstorex_pharmacies');
+                })
                 ->pluck('name', 'id');
         } else {
             $drugstore = User::where('last_name', 'Droguería')->where('status', 1)->pluck('name', 'id');
