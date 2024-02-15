@@ -23,7 +23,7 @@ class PermisoListener
      */
     public function handle(object $event): void
     {
-        User::where('last_name', 'Latinfarma')
+        User::where('last_name', 'JL')
             ->each(function (User $user) use ($event) {
                 Notification::send($user, new PermisoNotification($event->permiso));
             });
