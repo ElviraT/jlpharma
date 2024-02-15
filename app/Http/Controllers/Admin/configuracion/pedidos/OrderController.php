@@ -551,6 +551,7 @@ class OrderController extends Controller
 
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
+            dd($th);
             DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
         }
