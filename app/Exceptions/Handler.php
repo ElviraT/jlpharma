@@ -32,7 +32,7 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         //return response()->view('errors');
-        // dd($exception);
+        dd($exception);
         return parent::render($request, $exception);
     }
     /**
