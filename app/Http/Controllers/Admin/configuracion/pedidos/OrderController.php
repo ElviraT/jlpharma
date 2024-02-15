@@ -47,7 +47,7 @@ class OrderController extends Controller
                 ->where('drugstorex_pharmacies.idPharmacy', auth()->user()->id)
                 ->where('drugstorex_pharmacies.permission', 1)
                 ->pluck('name', 'id');
-        } elseif (Auth::user()->hasRole('Droguería')) {
+        } elseif (Auth::user()->hasRole('Drogueria')) {
             $combo = User::where('name', 'LIKE', '%JL%')->pluck('name', 'id');
         } else {
             $combo = [];
@@ -557,7 +557,7 @@ class OrderController extends Controller
 
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
-            dd($th);
+            // dd($th);
             DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
         }
