@@ -483,6 +483,7 @@ class OrderController extends Controller
             DB::beginTransaction();
             $orden = Order::where('id', $request->id)->first();
             $recibe = User::where('id', $orden['idReceives'])->first();
+            dd($orden->detalle);
             for ($i = 0; $i < count($orden->detalle); $i++) {
                 if (isset($orden->detalle['idProduct'][$i])) {
                     if ($recibe->last_name == 'Droguería') {
