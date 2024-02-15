@@ -51,7 +51,7 @@
 
                                                 <tr>
                                                     <td>
-                                                        <img src="{{ str_replace('\\', '/', '../storage/' . $item->options->image) }}"
+                                                        <img src="{{ asset(str_replace('\\', '/', 'storage/' . $item->options->image)) }}"
                                                             alt=""class="img-responsive" style="width: 55%;">
                                                     </td>
                                                     <td>
