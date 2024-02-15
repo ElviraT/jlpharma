@@ -483,18 +483,16 @@ class OrderController extends Controller
             DB::beginTransaction();
             $orden = Order::where('id', $request->id)->first();
             $recibe = User::where('id', $orden['idReceives'])->first();
-            dd($orden->detalle);
             for ($i = 0; $i < count($orden->detalle); $i++) {
-                if (isset($orden->detalle['idProduct'][$i])) {
+                if (isset($orden->detalle[$i]['idProduct'])) {
                     if ($recibe->last_name == 'Droguería') {
-                        $itemP = Inventary::where('idProduct', $orden->detalle['idProduct'][$i])
+                        $itemP = Inventary::where('idProduct', $orden->detalle[$i]['idProduct'])
                             ->where('idUser', $orden['idReceives'])
                             ->first();
                     } else {
-                        $itemP = Product::where('id', $orden->detalle['idProduct'][$i])->first();
+                        $itemP = Product::where('id', $orden->detalle[$i]['idProduct'])->first();
                     }
-                    dd($itemP);
-                    $itemP->increment('quantity', $orden->detalle['cant'][$i]);
+                    $itemP->increment('quantity', $orden->detalle[$i]['cant']);
                 }
             }
             $delete = OrderDetail::where('idOrder', $orden->id);
