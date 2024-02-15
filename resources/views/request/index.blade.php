@@ -15,7 +15,7 @@
                         <form action="{{ route('request.store') }}" method="post">
                             @csrf
                             <div class="row">
-                                @if (Auth::hasAnyRole('Vendedor', 'SuperAdmin'))
+                                @if (Auth::user()->hasAnyRole('Vendedor', 'SuperAdmin'))
                                     <div class="col-md-6 mb-3">
                                         <label for="zona">{{ __('menu.Pharmacy') }}</label>
                                         {!! Form::select('idPharmacy', $pharmacies, Auth::user()->id, [
