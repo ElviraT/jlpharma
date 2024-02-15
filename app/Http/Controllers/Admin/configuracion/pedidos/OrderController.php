@@ -525,9 +525,15 @@ class OrderController extends Controller
                         'importe' => $importe,
                         'importe_bs' => str_replace(',', '', $request['importe_bs'][$i]),
                     ];
-
+                    if ($recibe->last_name == 'Droguería') {
+                        $product = Inventary::where('id', $request['idProduct'][$i])
+                            ->where('idUser', $request['idReceives'])
+                            ->first();
+                    } else {
+                        $product = Product::where('id', $request['idProduct'][$i])->first();
+                    }
                     // $product = Product::where('id', $request['idProduct'][$i])->first();
-                    $itemP->decrement('quantity', $request['cant'][$i]);
+                    $product->decrement('quantity', $request['cant'][$i]);
                     $total = $total + $importe;
                     OrderDetail::create($detalle);
                 } else {
