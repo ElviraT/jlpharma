@@ -24,6 +24,7 @@ class DrugstorexPharmacyController extends Controller
     {
         if (Auth::user()->hasRole('Farmacia')) {
             $drugstore = DB::table('users')
+                ->where('last_name', 'Droguería')
                 ->whereNotIn('id', function ($query) {
                     $query->select('idDrugstore')
                         ->from('drugstorex_pharmacies');
