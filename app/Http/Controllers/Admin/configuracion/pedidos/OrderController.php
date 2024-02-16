@@ -300,6 +300,8 @@ class OrderController extends Controller
         $status = StatusPedido::orderBy('orden', 'ASC')->get();
         if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
             $order = Order::where('idStatus', $id)->paginate(10);
+        } elseif (Auth::user()->hasAnyRole('Drogueria')) {
+            $order = Order::where('idReceives', Auth::user()->id)->where('idStatus', $id)->paginate(10);
         } else {
             $order = Order::where('idUser', Auth::user()->id)->where('idStatus', $id)->paginate(10);
         }
