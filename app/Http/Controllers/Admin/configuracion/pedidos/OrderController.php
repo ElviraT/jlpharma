@@ -68,7 +68,7 @@ class OrderController extends Controller
     }
     public function products($id, $idProduct)
     {
-        if (session('De') == 'Farmacia') {
+        if (session('De') == 'Centro de Salud') {
             $products = $this->products1($id, $idProduct);
             $combo = DB::table('inventaries')
                 ->join('products', 'inventaries.idProduct', 'products.id')
