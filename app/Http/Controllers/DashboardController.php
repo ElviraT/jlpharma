@@ -28,11 +28,19 @@ class DashboardController extends Controller
                 ->groupBy('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color')
                 ->orderBy('orden', 'ASC')
                 ->get();
-        } else {
+        } elseif (Auth::user()->hasRole('Vendedor')) {
             $pedidos = DB::table('orders')
                 ->join('status_pedidos', 'orders.idStatus', '=', 'status_pedidos.id')
                 ->select('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color', DB::raw("COUNT(orders.nOrder) AS count"))
                 ->where('orders.idUser', auth()->user()->id)
+                ->groupBy('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color')
+                ->orderBy('orden', 'ASC')
+                ->get();
+        } else {
+            $pedidos = DB::table('orders')
+                ->join('status_pedidos', 'orders.idStatus', '=', 'status_pedidos.id')
+                ->select('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color', DB::raw("COUNT(orders.nOrder) AS count"))
+                ->where('orders.idReceives', auth()->user()->id)
                 ->groupBy('status_pedidos.id', 'status_pedidos.name', 'status_pedidos.color')
                 ->orderBy('orden', 'ASC')
                 ->get();
