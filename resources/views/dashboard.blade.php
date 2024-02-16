@@ -2,7 +2,7 @@
 
 @section('content')
     <div class="row">
-        @role(['SuperAdmin', 'JL', 'Vendedor'])
+        @role(['SuperAdmin', 'JL', 'Vendedor', 'Drogueria'])
             <div class="col-lg-12 margin-tb">
                 <div class="card sombra">
                     <div class="card-body border-top">
