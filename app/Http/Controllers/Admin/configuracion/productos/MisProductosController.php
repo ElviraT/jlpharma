@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Inventary;
 use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Http\Request;
+use Yajra\DataTables\DataTables;
 
 class MisProductosController extends Controller
 {
@@ -16,9 +17,17 @@ class MisProductosController extends Controller
     }
     public function index()
     {
-        $product = Inventary::where('idUser', auth()->user()->id)->get();
 
-        return view('admin.configuracion.productos.mis_productos.index', compact('product'));
+        return view('admin.configuracion.productos.mis_productos.index');
+    }
+    public function getProductData()
+    {
+        return DataTables::of(Inventary::orderBy('name', 'asc'))
+            ->addColumn('action', function ($product) {
+                return view('admin.configuracion.productos.mis_productos.partials.actions', compact('product'));
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
     public function edit($id)
     {

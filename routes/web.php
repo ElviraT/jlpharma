@@ -59,6 +59,8 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::resource('product', ProductController::class)->except(['show'])->names('product');
     Route::get('/get-product-data', [ProductController::class, 'getProductData'])->name('product.get-product-data');
     Route::resource('mis-productos', MisProductosController::class)->except(['show', 'update', 'create', 'destroy'])->names('mis_productos');
+    Route::get('product-dg/get-product-data', [MisProductosController::class, 'getProductData'])->name('mis_productos.get-product-data');
+
 
     Route::resource('seller', SellerController::class)->except(['show'])->names('seller');
 
