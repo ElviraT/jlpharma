@@ -58,10 +58,12 @@
                         <table id="AllDataTable" class="table table-bordered" width="100%">
                             <thead>
                                 <tr>
+                                    <th hidden>{{ __('Id') }}</th>
                                     <th>{{ __('No. Orden') }}</th>
                                     <th>{{ __('RIF') }}</th>
                                     <th>{{ __('Cliente') }}</th>
-                                    <th>{{ __('Fecha') }}</th>
+                                    <th>{{ __('Fecha') }} <a href="#" onclick="reload()">&nbsp;<i
+                                                class="ri-refresh-line"></i></a></th>
                                     <th>{{ __('Total') }}</th>
                                     <th>{{ __('Vendedor') }}</th>
                                     <th>{{ __('Action') }}</th>
@@ -70,6 +72,7 @@
                             <tbody>
                                 @foreach ($order as $resultado)
                                     <tr>
+                                        <td hidden>{{ $resultado->id }}</td>
                                         <td>{{ $resultado->nOrder }}</td>
                                         <td>{{ $resultado->userSend->dni }}</td>
                                         <td>{{ $resultado->userSend->name }}</td>
@@ -84,8 +87,8 @@
                                                     data-record-status="{{ $resultado->status->name }}">
                                                     <i class="ri-eye-line"></i>
                                                 </button>
+                                                &nbsp;
                                             @endcan
-                                            &nbsp;
                                             @if (Auth::user()->hasAnyRole('SuperAdmin', 'Vendedor'))
                                                 @can('order.edit')
                                                     @if ($resultado->status->orden == 1)
@@ -116,16 +119,16 @@
                                                         </button>
                                                     @endif
                                                 @endcan
+                                                &nbsp;
                                             @endif
-                                            &nbsp;
                                             @if (Auth::user()->hasAnyRole('SuperAdmin', 'JL'))
                                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal"
                                                     data-target="#cambiar_status" data-record-id="{{ $resultado->id }}"
                                                     data-record-orden="{{ $resultado->status->orden }} title="{{ __('Cambiar status') }}">
                                                     <i class="ri-draft-line"></i>
                                                 </button>
+                                                &nbsp;
                                             @endif
-                                            &nbsp;
                                             @can('order.aceptar')
                                                 <button type="button" class="btn btn-primary btn-sm" data-toggle="modal"
                                                     data-target="#confirm-aceptar" data-record-id="{{ $resultado->id }}"
@@ -133,8 +136,8 @@
                                                     data-record-title="{{ 'Aceptar el pedido de ' }}{{ $resultado->userSend->name }}">
                                                     <i class="ri-checkbox-line"></i>
                                                 </button>
+                                                &nbsp;
                                             @endcan
-                                            &nbsp;
                                             @can('order.rechazar')
                                                 <button type="button" class="btn btn-danger btn-sm" data-toggle="modal"
                                                     title="{{ __('Eliminar pedido') }}" data-target="#confirm-rechazar"
@@ -168,9 +171,23 @@
         function generar_pdf() {
             loading_show();
             var id = $('#id_pdf').val();
-            console.log(id);
             window.open('../../order/pdf/' + id, '_blank');
             loading_hide();
+        }
+
+        function reload() {
+            table = $('#AllDataTable').dataTable();
+            table.fnDestroy();
+            new DataTable('#AllDataTable', {
+                order: [
+                    [0, 'DESC']
+                ],
+                lengthChange: false,
+                responsive: true,
+                language: {
+                    url: "{{ asset('js/Spanish.json') }}",
+                },
+            });
         }
     </script>
 @endsection

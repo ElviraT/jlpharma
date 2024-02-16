@@ -73,7 +73,6 @@ class PharmacyController extends Controller
                 "idZone" => $request['idZone'],
             ];
             $pharmacy = Pharmacy::create($data_farmacia);
-            // dd($pharmacy);
             $data_contacto = [
                 "idPharmacy" => $pharmacy->id,
                 "name" => $request['namec'],
@@ -86,7 +85,6 @@ class PharmacyController extends Controller
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
-            // dd($e);
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }

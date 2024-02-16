@@ -215,7 +215,6 @@
                     minute: 'numeric',
                     hour12: true,
                 };
-                console.log(data);
                 var fecha = new Date(data.pedido.created_at);
                 $('#idTitle').append(data.pedido.nOrder);
                 $('#rif').text(data.order.rif);

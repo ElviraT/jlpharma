@@ -169,7 +169,6 @@ class OrderController extends Controller
                 }
             }
         }
-        // dd($request->idCategoria);
         Toastr::success('Producto agregado', 'Success');
         return redirect('./order/products/' . $request->idCategoria . '/null');
     }
@@ -205,7 +204,6 @@ class OrderController extends Controller
             ];
             $order = Order::create($item);
             $recibe = User::where('id', $request['idReceives'])->first();
-            // dd($recibe);
             for ($i = 0; $i < count($request['name']); $i++) {
                 $importe = 0;
                 $importe = $request['cant'][$i] * $request['price'][$i];
@@ -245,7 +243,6 @@ class OrderController extends Controller
             DB::commit();
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
-            dd($th);
             DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
             return redirect(url()->previous());
@@ -354,7 +351,6 @@ class OrderController extends Controller
         $comporbar =  Cart::content()->groupBy('id');
         if (count($comporbar) == 0) {
             foreach ($order->detalle as $products) {
-                // dd($products->prod);
                 Cart::add(
                     $products->idProduct,
                     $products->name,
@@ -545,7 +541,6 @@ class OrderController extends Controller
 
             Toastr::success('Pedido solicitado con exito', 'Success');
         } catch (\Throwable $th) {
-            // dd($th);
             DB::rollBack();
             Toastr::error('Intente de nuevo', 'error');
         }

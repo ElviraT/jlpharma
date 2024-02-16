@@ -37,7 +37,6 @@ class CreateRateCommand extends Command
         $context = stream_context_create($opts);
         $content = file_get_contents($url, false, $context);
         $valor = json_decode($content);
-        // dd($valor->price);
         $number = $valor->price; // Almacenamos el tercer número en una variable
         return $number;
     }

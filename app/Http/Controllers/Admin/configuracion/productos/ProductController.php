@@ -174,7 +174,6 @@ class ProductController extends Controller
     private function _eliminarArchivo($name)
     {
         $archivo = self::UPLOAD_PATH . '/' . $name;
-        // dd($archivo);
         Storage::disk('public')->delete([$archivo]);
         // return true;
     }

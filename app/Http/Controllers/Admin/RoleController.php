@@ -62,7 +62,6 @@ class RoleController extends Controller
         try {
             $role = Role::create(['name' => $request->input('name')]);
             $role->syncPermissions($request->permissions);
-            // dd($role);
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
             Toastr::error(__('An error occurred please try again'), 'error');
