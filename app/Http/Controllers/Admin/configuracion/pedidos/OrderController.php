@@ -39,7 +39,6 @@ class OrderController extends Controller
             Cart::destroy();
             Session::forget('orden');
         }
-        // Cart::destroy();
         if (Auth::user()->hasRole('Farmacia')) {
             $combo = DB::table('users')
                 ->join('drugstorex_pharmacies', 'users.id', '=', 'drugstorex_pharmacies.idDrugstore')

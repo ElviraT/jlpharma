@@ -57,7 +57,7 @@
         if (combo == '["Drogueria"]') {
             url = 'JL';
             $('.otro').attr('required', true);
-        } else if (combo == '["Farmacia"]') {
+        } else if (combo == '["Centro de Salud"]') {
             url = 'Droguería';
             $('.otro').attr('required', true);
         } else {
