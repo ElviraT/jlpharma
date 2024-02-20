@@ -60,7 +60,9 @@ Route::middleware(['auth', 'translate'])->group(function () {
     Route::get('/get-product-data', [ProductController::class, 'getProductData'])->name('product.get-product-data');
     Route::resource('mis-productos', MisProductosController::class)->except(['show', 'update', 'create', 'destroy'])->names('mis_productos');
     Route::get('product-dg/get-product-data', [MisProductosController::class, 'getProductData'])->name('mis_productos.get-product-data');
-
+    Route::get('/get-pharmacy-data', [PharmacyController::class, 'getPharmacyData'])->name('pharmacy.get-pharmacy-data');
+    Route::get('/get-drugstore-data', [DrugstoreController::class, 'getDrugstoreData'])->name('drugstore.get-drugstore-data');
+    Route::get('/get-seller-data', [SellerController::class, 'getSellerData'])->name('seller.get-seller-data');
 
     Route::resource('seller', SellerController::class)->except(['show'])->names('seller');
 

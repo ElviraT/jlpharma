@@ -24,7 +24,7 @@
                                             <legend>DE:</legend>
                                             <fieldset>
                                                 <label>
-                                                    <input type="radio" name="de" value="Centro de Salud">
+                                                    <input type="radio" name="de" value="Farmacia">
                                                     {{ 'Centro de Salud' }}
                                                 </label>
                                                 <label>

@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\DataTables;
 
 class PharmacyController extends Controller
 {
@@ -27,15 +28,7 @@ class PharmacyController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $pharmacy = Pharmacy::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
-        } else if (Auth::user()->hasAnyRole('Vendedor')) {
-            $pharmacy = Pharmacy::where('idstatus', 1)->where('idZone', Auth::user()->seller->idZone)->orderBy('id', 'ASC')->paginate(10);
-        } else {
-            $pharmacy = Pharmacy::where('idUser', auth()->user()->id)->where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
-        }
-
-        return view('admin.configuracion.usuarios.pharmacy.index', compact('pharmacy'));
+        return view('admin.configuracion.usuarios.pharmacy.index');
     }
     public function create()
     {
@@ -54,7 +47,7 @@ class PharmacyController extends Controller
             DB::beginTransaction();
             $data_user = [
                 "name" => $request['name'],
-                "last_name" => 'Centro de Salud',
+                "last_name" => 'Farmacia',
                 "dni" => $request['rif'],
                 "email" => $request['email'],
                 "password" => Hash::make('12345'),
@@ -73,6 +66,7 @@ class PharmacyController extends Controller
                 "idZone" => $request['idZone'],
             ];
             $pharmacy = Pharmacy::create($data_farmacia);
+            // dd($pharmacy);
             $data_contacto = [
                 "idPharmacy" => $pharmacy->id,
                 "name" => $request['namec'],
@@ -81,10 +75,11 @@ class PharmacyController extends Controller
                 "telephone2" => $request['telephone2'],
             ];
             Contact::create($data_contacto);
-            Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
+            // Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
+            dd($e);
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }
@@ -153,5 +148,25 @@ class PharmacyController extends Controller
         User::where('id', $pharmacy->idUser)->delete();
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('pharmacy.index');
+    }
+
+    public function getPharmacyData()
+    {
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $pharmacy = Pharmacy::where('idstatus', 1)->orderBy('id', 'ASC');
+        } else if (Auth::user()->hasAnyRole('Vendedor')) {
+            $pharmacy = Pharmacy::where('idstatus', 1)->where('idZone', Auth::user()->seller->idZone)->orderBy('id', 'ASC');
+        } else {
+            $pharmacy = Pharmacy::where('idUser', auth()->user()->id)->where('idstatus', 1)->orderBy('id', 'ASC');
+        }
+        return DataTables::of($pharmacy)
+            ->addColumn('action', function ($pharmacy) {
+                return view('admin.configuracion.usuarios.pharmacy.partials.actions', compact('pharmacy'));
+            })
+            ->addColumn('status', function ($pharmacy) {
+                return view('admin.configuracion.usuarios.pharmacy.partials.status', compact('pharmacy'));
+            })
+            ->rawColumns(['action', 'status'])
+            ->make(true);
     }
 }

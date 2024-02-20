@@ -13,6 +13,7 @@ use Brian2694\Toastr\Facades\Toastr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Mail;
 
 class DrugstoreController extends Controller
@@ -27,14 +28,7 @@ class DrugstoreController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $drugstore = Drugstore::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
-        } else if (Auth::user()->hasAnyRole('Vendedor')) {
-            $drugstore = Drugstore::where('idstatus', 1)->orderBy('id', 'ASC')->where('idZone', Auth::user()->seller->idZone)->paginate(10);
-        } else {
-            $drugstore = Drugstore::where('idUser', auth()->user()->id)->orderBy('id', 'ASC')->paginate(10);
-        }
-        return view('admin.configuracion.usuarios.drugstore.index', compact('drugstore'));
+        return view('admin.configuracion.usuarios.drugstore.index');
     }
     public function create()
     {
@@ -80,7 +74,7 @@ class DrugstoreController extends Controller
                 "telephone2" => $request['telephone2'],
             ];
             Contact::create($data_contacto);
-            Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
+            // Mail::to($request['email'])->send(new NuevoUsuarioMail($user));
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
@@ -152,5 +146,25 @@ class DrugstoreController extends Controller
         User::where('id', $drugstore->idUser)->delete();
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('drugstore.index');
+    }
+
+    public function getDrugstoreData()
+    {
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $drugstore = Drugstore::where('idstatus', 1)->orderBy('id', 'ASC');
+        } else if (Auth::user()->hasAnyRole('Vendedor')) {
+            $drugstore = Drugstore::where('idstatus', 1)->orderBy('id', 'ASC')->where('idZone', Auth::user()->seller->idZone);
+        } else {
+            $drugstore = Drugstore::where('idUser', auth()->user()->id)->orderBy('id', 'ASC');
+        }
+        return DataTables::of($drugstore)
+            ->addColumn('action', function ($drugstore) {
+                return view('admin.configuracion.usuarios.drugstore.partials.actions', compact('drugstore'));
+            })
+            ->addColumn('status', function ($drugstore) {
+                return view('admin.configuracion.usuarios.drugstore.partials.status', compact('drugstore'));
+            })
+            ->rawColumns(['action', 'status'])
+            ->make(true);
     }
 }

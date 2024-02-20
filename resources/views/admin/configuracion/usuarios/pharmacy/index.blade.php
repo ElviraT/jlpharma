@@ -1,4 +1,11 @@
 @extends('layouts_new.base')
+@section('css')
+    <style>
+        .dos_lineas {
+            white-space: initial;
+        }
+    </style>
+@endsection
 
 @section('content')
     <div class="container">
@@ -21,62 +28,19 @@
                     </div>
                 </div>
                 <div class="card sombra p-2">
-                    @if (count($pharmacy) == 0)
-                        <br>
-                        <p class="text-center">{{ __('No matching records found') }}</p>
-                    @else
-                        <div class="col-md-12 mt-3">
-                            <table id="AllDataTable" class="table table-bordered" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ 'RIF' }}</th>
-                                        <th>{{ 'Teléfono' }}</th>
-                                        <th>{{ 'Status' }}</th>
-                                        <th>{{ __('Action') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($pharmacy as $resultado)
-                                        <tr>
-                                            <td>{{ $resultado->name }}</td>
-                                            <td>{{ $resultado->rif }}</td>
-                                            <td>{{ $resultado->telefono }}</td>
-                                            <td>
-                                                <div style="background-color:{{ $resultado->status->color }} !important; color:#FFF; padding: 10px;"
-                                                    align="center">
-                                                    {{ $resultado->status->name }}</div>
-                                            </td>
-                                            <td>
-                                                @can('pharmacy.edit')
-                                                    <a href="{{ route('pharmacy.edit', $resultado) }}" type="button"
-                                                        class="btn-transition btn btn-outline-success btn-sm"
-                                                        title="{{ __('Edit Pharmacy') }}">
-                                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                            <i data-feather="edit-3" class="feather-icon"></i>
-                                                        </span>
-                                                    </a>
-                                                @endcan
-                                                @can('pharmacy.destroy')
-                                                    <a href="#" type="button" data-toggle="modal"
-                                                        data-target="#confirm-delete" data-record-id="{{ $resultado->id }}"
-                                                        data-record-title="{{ 'la farmacia ' }}{{ $resultado->name }}"
-                                                        data-action="{{ route('pharmacy.destroy', $resultado->id) }}"
-                                                        title="{{ __('Delete Pharmacy') }}"
-                                                        class="btn-transition btn btn-outline-danger btn-sm">
-                                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                            <i data-feather="trash-2" class="feather-icon"></i>
-                                                        </span>
-                                                    </a>
-                                                @endcan
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            {{ $pharmacy->links('vendor.pagination.bootstrap-5') }}
-                        </div>
-                    @endif
+                    <div class="col-md-12 mt-3">
+                        <table id="AllDataTable_Pharmacy" class="table table-bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Name') }}</th>
+                                    <th>{{ 'RIF' }}</th>
+                                    <th>{{ 'Teléfono' }}</th>
+                                    <th>{{ 'Status' }}</th>
+                                    <th>{{ __('Action') }}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

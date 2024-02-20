@@ -26,7 +26,7 @@ class CreateRateCommand extends Command
      */
     private function valor_dolar()
     {
-        $url = "https://exchange.vcoud.com/coins/dolar-bcv?gap=1w&base=usd"; // URL del banco central
+        $url = "https://pydolarvenezuela-api.vercel.app/api/v1/dollar/page?page=bcv"; // URL del banco central
         $opts = array(
             'ssl' => array(
                 'verify_peer' => false,
@@ -36,8 +36,9 @@ class CreateRateCommand extends Command
         );
         $context = stream_context_create($opts);
         $content = file_get_contents($url, false, $context);
+        // dd($content);
         $valor = json_decode($content);
-        $number = $valor->price; // Almacenamos el tercer número en una variable
+        $number = $valor->monitors->usd->price; // Almacenamos el tercer número en una variable
         return $number;
     }
     public function handle()

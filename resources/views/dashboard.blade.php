@@ -40,7 +40,11 @@
                                                 </div>
                                                 <div class="col-7" align="right">
                                                     <h3 class="font-medium mb-0">{{ $item2->count }}</h3>
-                                                    <span>{{ $item2->last_name }}</span>
+                                                    @if ($item2->last_name == 'Farmacia')
+                                                        <span>{{ 'Centros de Salud' }}</span>
+                                                    @else
+                                                        <span>{{ $item2->last_name }}</span>
+                                                    @endif
                                                 </div>
                                             </div>
                                         </div>

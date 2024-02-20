@@ -1,5 +1,11 @@
 @extends('layouts_new.base')
-
+@section('css')
+    <style>
+        .dos_lineas {
+            white-space: initial;
+        }
+    </style>
+@endsection
 @section('content')
     <div class="container">
         <div class="row justify-content-center">
@@ -21,60 +27,19 @@
                     </div>
                 </div>
                 <div class="card sombra p-2">
-                    @if (count($seller) == 0)
-                        <br>
-                        <p class="text-center">{{ __('No matching records found') }}</p>
-                    @else
-                        <div class="col-md-12 mt-3">
-                            <table id="AllDataTable" class="table table-bordered" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>{{ __('Name') }}</th>
-                                        <th>{{ 'Teléfono' }}</th>
-                                        <th>{{ 'Status' }}</th>
-                                        <th>{{ __('Action') }}</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($seller as $resultado)
-                                        <tr>
-                                            <td>{{ $resultado->name }}</td>
-                                            <td>{{ $resultado->telefono }}</td>
-                                            <td>
-                                                <div style="background-color:{{ $resultado->status->color }} !important; color:#FFF; padding: 10px;"
-                                                    align="center">
-                                                    {{ $resultado->status->name }}</div>
-                                            </td>
-                                            <td>
-                                                @can('seller.edit')
-                                                    <a href="{{ route('seller.edit', $resultado) }}" type="button"
-                                                        class="btn-transition btn btn-outline-success btn-sm"
-                                                        title="{{ __('Edit seller') }}">
-                                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                            <i data-feather="edit-3" class="feather-icon"></i>
-                                                        </span>
-                                                    </a>
-                                                @endcan
-                                                @can('seller.destroy')
-                                                    <a href="#" type="button" data-toggle="modal"
-                                                        data-target="#confirm-delete" data-record-id="{{ $resultado->id }}"
-                                                        data-record-title="{{ 'el vendedor ' }}{{ $resultado->name }}"
-                                                        data-action="{{ route('seller.destroy', $resultado->id) }}"
-                                                        title="{{ __('Delete seller') }}"
-                                                        class="btn-transition btn btn-outline-danger btn-sm">
-                                                        <span class="btn-icon-wrapper pr-2 opacity-7">
-                                                            <i data-feather="trash-2" class="feather-icon"></i>
-                                                        </span>
-                                                    </a>
-                                                @endcan
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                            {{ $seller->links('vendor.pagination.bootstrap-5') }}
-                        </div>
-                    @endif
+
+                    <div class="col-md-12 mt-3">
+                        <table id="AllDataTable_seller" class="table table-bordered" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>{{ __('Name') }}</th>
+                                    <th>{{ 'Teléfono' }}</th>
+                                    <th>{{ 'Status' }}</th>
+                                    <th>{{ __('Action') }}</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

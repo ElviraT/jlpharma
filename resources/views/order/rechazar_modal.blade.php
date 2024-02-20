@@ -28,7 +28,7 @@
                         </div>
                         <div class="col-12">
                             <label for="">{{ 'Observación' }}</label>
-                            <textarea name="observation" id="observation" rows="3" class="form-control"></textarea>
+                            <textarea name="observation" id="observation" rows="3" class="form-control" required></textarea>
                         </div>
                     </div>
                 </div>

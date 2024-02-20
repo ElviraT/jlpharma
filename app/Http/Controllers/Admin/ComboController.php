@@ -9,6 +9,7 @@ use App\Models\Parish;
 use App\Models\State;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class ComboController extends Controller
@@ -46,10 +47,31 @@ class ComboController extends Controller
                 ->where('drugstorex_pharmacies.permission', 1)
                 ->get();
         } else {
-            if ($pedido == 'JL') {
-                $result = User::select(['id', 'name'])->where('name', 'LIKE', '%' . $pedido . '%')->get();
+            if (Auth::user()->hasAnyRole('Vendedor') && $pedido == 'Droguería') {
+                $result = DB::table('users')
+                    ->join('drugstores', 'users.id', '=', 'drugstores.idUser')
+                    ->select('users.id AS id', 'users.name AS name')
+                    ->where('drugstores.idZone', auth()->user()->seller->idZone)
+                    ->where('users.status', 1)
+                    ->get();
+            }
+            if (Auth::user()->hasAnyRole('Vendedor') && $pedido == 'Farmacia') {
+                $result = DB::table('users')
+                    ->join('pharmacies', 'users.id', '=', 'pharmacies.idUser')
+                    ->select('users.id AS id', 'users.name AS name')
+                    ->where('pharmacies.idZone', auth()->user()->seller->idZone)
+                    ->where('users.status', 1)
+                    ->get();
+            }
+            if (Auth::user()->hasAnyRole('Vendedor') && $pedido == 'JL') {
+                $result = User::select(['id', 'name'])
+                    ->where('name', 'LIKE', '%' . $pedido . '%')
+                    ->where('status', 1)
+                    ->get();
             } else {
-                $result = User::select(['id', 'name'])->where('last_name', $pedido)->get();
+                $result = User::select(['id', 'name'])
+                    ->where('last_name', $pedido)
+                    ->get();
             }
         }
         return response()->json($result);

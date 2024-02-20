@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\DataTables;
 
 class SellerController extends Controller
 {
@@ -31,12 +32,7 @@ class SellerController extends Controller
 
     public function index(Request $request)
     {
-        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
-            $seller = Seller::where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
-        } else {
-            $seller = Seller::where('id', auth()->user()->seller->id)->where('idstatus', 1)->orderBy('id', 'ASC')->paginate(10);
-        }
-        return view('admin.configuracion.usuarios.sellers.index', compact('seller'));
+        return view('admin.configuracion.usuarios.sellers.index');
     }
     public function create()
     {
@@ -74,6 +70,7 @@ class SellerController extends Controller
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
+
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }
@@ -82,6 +79,7 @@ class SellerController extends Controller
 
     public function edit(Seller $seller)
     {
+        // dd($seller);
         $zones = DB::table('zones')
             ->join('cities', 'zones.idCity', '=', 'cities.id')
             ->select('zones.id', DB::raw("CONCAT(cities.name, ' - ' ,zones.name) AS name"))
@@ -116,6 +114,7 @@ class SellerController extends Controller
             DB::commit();
             Toastr::success(__('Successfully updated registration'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
+            // dd($e);
             DB::rollBack();
             Toastr::error(__('An error occurred please try again'), 'error');
         }
@@ -129,65 +128,21 @@ class SellerController extends Controller
         Toastr::success(__('Registry successfully deleted'), 'Success');
         return to_route('seller.index');
     }
-
-    public function aceptar(Request $request)
+    public function getSellerData()
     {
-        $order = Order::where('id', $request->id)->first();
-        try {
-            DB::beginTransaction();
-            foreach ($order->detalle as $value) {
-                if (Auth::user()->hasAnyRole('Drogueria', 'Farmacia')) {
-                    $stock = Inventary::where('name', $value->name)->where('idUser', $order['idReceives'])->first();
-                } else {
-                    $stock = Product::where('name', $value->name)->first();
-                }
-                if (empty($stock) || $stock->quantity < $value['cant']) {
-                    DB::rollBack();
-                    Toastr::error(__('No hay cantidad suficiente para uno de los productos'), 'error');
-                    return to_route('dashboard');
-                }
-                $data_inventary = [
-                    "idProduct" => $value['idProduct'],
-                    "name" => $value['name'],
-                    "idUser" => $order['idSend'],
-                    "quantity" => $value['cant']
-                ];
-                $inv = Inventary::where('idProduct', $value['idProduct'])->where('idUser', $order['idSend'])->first();
-                if (isset($inv)) {
-                    $inv->increment('quantity', $value['cant']);
-                } else {
-                    Inventary::create($data_inventary);
-                }
-
-                $order->idStatus = $request['idStatus'];
-                $order->save();
-
-                $stock->decrement('quantity', $value['cant']);
-            }
-            DB::commit();
-            Toastr::success(__('Successfully updated registration'), 'Success');
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollBack();
-            Toastr::error(__('An error occurred please try again'), 'error');
+        if (Auth::user()->hasAnyRole('SuperAdmin', 'JL')) {
+            $seller = Seller::where('idstatus', 1)->orderBy('id', 'ASC');
+        } else {
+            $seller = Seller::where('id', auth()->user()->seller->id)->where('idstatus', 1)->orderBy('id', 'ASC');
         }
-        return to_route('dashboard');
-    }
-
-    public function rechazar(Request $request)
-    {
-        $order = Order::where('id', $request->id)->first();
-        try {
-            DB::beginTransaction();
-
-            $order->idStatus = $request['idStatus'];
-            $order->observation = $request->observation;
-            $order->save();
-            DB::commit();
-            Toastr::success(__('Successfully updated registration'), 'Success');
-        } catch (\Illuminate\Database\QueryException $e) {
-            DB::rollBack();
-            Toastr::error(__('An error occurred please try again'), 'error');
-        }
-        return to_route('dashboard');
+        return DataTables::of($seller)
+            ->addColumn('action', function ($seller) {
+                return view('admin.configuracion.usuarios.sellers.partials.actions', compact('seller'));
+            })
+            ->addColumn('status', function ($seller) {
+                return view('admin.configuracion.usuarios.sellers.partials.status', compact('seller'));
+            })
+            ->rawColumns(['action', 'status'])
+            ->make(true);
     }
 }
