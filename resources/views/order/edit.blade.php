@@ -191,6 +191,7 @@
     @include('order.js.js')
     <script>
         function update(id) {
+            $('#actualizar_pedido').attr('disabled', 'disabled');
             var cant = $('#cantidad' + id).val();
             var idOrder = $('#envia').val();
             var idCar = $('#idCar' + id).val();
@@ -199,15 +200,24 @@
                 type: 'GET',
 
                 error: function(err) {
-                    console.log(err);
+                    toastr.error(err, 'Alerta de Stock');
                 },
 
                 success: function(options) {
+                    loading_show();
                     location.href = '../../order/' + idOrder + '/edit';
-                    console.log('OK');
+                    toastr.error(options, 'Alerta de Stock');
+                    loading_hide();
                 }
 
             });
         }
+        $('#actualizar_pedido').on('click', function() {
+            if ($('#observation').val() == '') {
+                loading_hide();
+                toastr.warning("La observación del pedido es obligatoria", "Advertencia");
+                return false;
+            }
+        });
     </script>
 @endsection

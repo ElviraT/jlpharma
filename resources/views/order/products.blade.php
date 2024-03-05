@@ -153,8 +153,15 @@
         });
 
         function add_cant(id) {
-            var cant = document.getElementById("cant" + id).value;
-            $('#cantidad' + id).val(cant);
+            let max = parseInt($('#cant' + id).attr('max'));
+            let valor = parseInt($('#cant' + id).val());
+            if (valor > max) {
+                $('#cant' + id).val(max);
+                $('#cantidad' + id).val(max);
+                toastr.error('El valor maximo es: <strong>' + max + '</strong>', 'Alerta de Stock');
+            } else {
+                $('#cantidad' + id).val(valor);
+            }
         }
 
         $('#idProduct').on('change', function() {

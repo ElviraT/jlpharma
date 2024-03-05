@@ -383,11 +383,15 @@ class OrderController extends Controller
     }
     public function update_pedido($idOrder, $id, $cant, $idCar)
     {
-        session(['idCar' => $idCar]);
-        Cart::update($idCar, $cant);
-        Session::put('idCar', '');
-        $ok = 'ACTUALIZADO';
-        return $ok;
+        $stock = Product::where('id', $id)->first();
+        if ($stock->quantity <  $cant) {
+            return "No hay suficiente stock para agregar este producto a la orden";
+        } else {
+            session(['idCar' => $idCar]);
+            Cart::update($idCar, $cant);
+            Session::put('idCar', '');
+            return 'Registro ACTUALIZADO con exito';
+        }
     }
     public function aceptar(Request $request)
     {

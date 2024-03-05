@@ -69,7 +69,7 @@
                                             <input type="hidden" name="de" value="{{ auth()->user()->last_name }}">
                                             <input type="hidden" name="idDe" value="{{ auth()->user()->id }}">
                                             <div class="col-4 mt-4">
-                                                <button type="submit"
+                                                <button type="submit" id="enviar"
                                                     class="btn btn-primary mt-1">{{ 'Enviar' }}</button>
                                             </div>
                                         </div>
@@ -85,4 +85,15 @@
 @endsection
 @section('js')
     @include('order.js.js')
+    <script>
+        $('#enviar').on('click', function() {
+            var input = $('#idDe').val();
+            var input2 = $('#idPara').val();
+            if (input == '' || input2 == '') {
+                toastr.error('Ingrese un nombre valido');
+                loading_hide();
+                return false;
+            }
+        });
+    </script>
 @endsection

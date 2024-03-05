@@ -210,5 +210,12 @@
 
             });
         }
+        $('#realizar_pedido').on('click', function() {
+            if ($('#observation').val() == '') {
+                loading_hide();
+                toastr.warning("La observación del pedido es obligatoria", "Advertencia");
+                return false;
+            }
+        });
     </script>
 @endsection
