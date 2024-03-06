@@ -70,9 +70,12 @@ class SellerController extends Controller
             DB::commit();
             Toastr::success(__('Record added successfully'), 'Success');
         } catch (\Illuminate\Database\QueryException $e) {
-
             DB::rollBack();
-            Toastr::error(__('An error occurred please try again'), 'error');
+            if ($e->getCode() == 23000) {
+                Toastr::error(__('Duplicate entry'), 'error');
+            } else {
+                Toastr::error(__('An error occurred please try again'), 'error');
+            }
         }
         return to_route('seller.index');
     }
